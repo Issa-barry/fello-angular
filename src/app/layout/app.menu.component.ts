@@ -121,7 +121,7 @@ export class AppMenuComponent implements OnInit {
                             {
                                 label: 'List',
                                 icon: 'pi pi-fw pi-list',
-                                routerLink: ['/page/crud']
+                                routerLink: ['/agence']
                             },
                          
                         ]

@@ -64,7 +64,7 @@ export class BankingDashboardComponent implements OnInit, OnDestroy {
                 paid: false,
                 date: '20/04/2022',
             },
-        ];
+        ]; 
     }
  
     
