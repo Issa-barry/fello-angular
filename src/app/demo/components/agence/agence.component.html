@@ -81,19 +81,19 @@
         <p-dialog [(visible)]="agenceDialog" [style]="{width: '450px'}" header="Agence Details" [modal]="true" class="p-fluid">
           <ng-template pTemplate="content"> 
                 <div class="field">
-                    <label for="name">Nom</label>
-                    <input type="text" pInputText id="name" [(ngModel)]="agence.nom_agence" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !product.name}"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !product.name">Name is required.</small>
+                    <label for="nom">Nom</label>
+                    <input type="text" pInputText id="nom" [(ngModel)]="agence.nom_agence" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.nom_agence}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.nom_agence">Le nom est obligatoire.</small>
                 </div>  
                  <div class="field">
-                    <label for="name">Phone</label>
-                    <input type="text" pInputText id="name" [(ngModel)]="agence.phone" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !product.name}"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !product.name">Name is required.</small>
+                    <label for="phone">Phone</label>
+                    <input type="text" pInputText id="phone" [(ngModel)]="agence.phone" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.phone}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.phone">Le numéro de téléphone est obligatoire.</small>
                 </div>  
                 <div class="field">
-                    <label for="name">Email</label>
-                    <input type="text" pInputText id="name" [(ngModel)]="agence.nom_agence" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !product.name}"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !product.name">Name is required.</small>
+                    <label for="email">Email</label>
+                    <input type="text" pInputText id="email" [(ngModel)]="agence.email" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.email}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.email">Name is required.</small>
                 </div>  
                 <div class="field">
                     <label for="status">Pays</label>
@@ -107,19 +107,20 @@
                     </p-dropdown>
                 </div>  
                 <div class="field">
-                    <label for="name">Adresse</label>
-                    <input type="text" pInputText id="name" [(ngModel)]="agence.adresse.adresse" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !product.name}"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !product.name">Name is required.</small>
+                    <label for="adresse">Adresse</label>
+                    <input type="text" pInputText id="adresse" [(ngModel)]="agence.adresse.adresse" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.adresse}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.adresse.adresse">L'adresse est obligatoire.</small>
                 </div>  
                 <div class="formgrid grid">
                     <div class="field col">
-                        <label for="price">Code_postall</label>
-                        <p-inputNumber id="price" [(ngModel)]="agence.adresse.code_postal"  ></p-inputNumber>
+                        <label for="code_postal">Code_postall</label>
+                        <p-inputNumber id="code_postal" [(ngModel)]="agence.adresse.code_postal"  ></p-inputNumber>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.adresse.code_postal">Le code postall est obligatoire.</small>
                     </div>
                     <div class="field col">
                     <label for="quantity">Ville</label>
-                    <input type="text" pInputText id="ville" [(ngModel)]="agence.adresse.ville" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !product.name}"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !product.name">Name is required.</small>
+                    <input type="text" pInputText id="ville" [(ngModel)]="agence.adresse.ville" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.ville}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.adresse.ville">La ville est obligatoire.</small>
                     </div>
                 </div>
             </ng-template>
