@@ -45,7 +45,6 @@ export class AgenceService {
     );
   }
 
-
   getAgenceById(id: number): Observable<Agence> {
     return this.http.get<Agence>(`${this.apiUrl}/${id}`);
   }
@@ -63,5 +62,9 @@ export class AgenceService {
       );
     }
     
-  
+    deleteAgence(id: number): Observable<void> {
+      return this.http.delete<void>(`${this.apiUrl}/${id}`, httpOption).pipe(
+        catchError(this.handleError<void>('deleteAgence'))
+      );
+    }
 } 

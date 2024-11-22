@@ -47,6 +47,13 @@ export class AgenceComponent implements OnInit {
     private messageService: MessageService, 
     private confirmationService: ConfirmationService) { 
     }
+    ngOnInit() {
+      this.getAllAgences(); 
+        this.optionPays = [
+            { label: 'GUINEE-CONAKRY', value: 'Guinée-Conakry' },
+            { label: 'FRANCE', value: 'France' },
+        ];
+    }
 
 getAllAgences(): void {
   this.agenceService.getAgences().subscribe({
@@ -59,39 +66,25 @@ getAllAgences(): void {
   });
 }
 
-
-editAgence(agence: Agence) {
-  this.agence = { ...agence };  // Copie de l'agence à éditer
-  this.agenceDialog = true;
+openNew() {
+  this.agence = new Agence();
+   this.submitted = false;
+   this.agenceDialog = true;
 }
 
-OpenEditAgence(agence: Agence) {
+openEditAgence(agence: Agence) {
 this.agence = { ...agence };  // Copie de l'agence à éditer
 this.agenceDialog = true;
 }
 
-  ngOnInit() {
-    this.getAllAgences(); 
-      this.optionPays = [
-          { label: 'GUINEE-CONAKRY', value: 'Guinée-Conakry' },
-          { label: 'FRANCE', value: 'France' },
-      ];
-  }
 
-  openNew() {
-     this.agence = new Agence();
-      this.submitted = false;
-      this.agenceDialog = true;
-  }
+openDeleteAgence(agence: Agence) {
+  this.agence = { ...agence };
+  this.deleteAgenceDialog = true;
+}
 
   deleteSelectedAgences() {
       this.deleteAgencesDialog = true;
-  }
-
-
-  deleteAgence(agence: Agence) {
-      this.deleteAgenceDialog = true;
-      this.agence = { ...agence };
   }
 
   confirmDeleteSelected() {
@@ -101,12 +94,41 @@ this.agenceDialog = true;
       this.selectedProducts = [];
   }
 
-  confirmDelete() {
-      this.deleteAgenceDialog = false;
-      this.products = this.products.filter(val => val.id !== this.product.id);
-      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
-      this.product = {};
-  }
+  confirmDelete( ) {
+    this.deleteAgenceDialog = false;
+      
+    if (this.agence.id !== undefined) { // Vérification que l'ID est défini
+        this.agenceService.deleteAgence(this.agence.id).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Agence supprimée avec succès',
+                    life: 3000
+                });
+                this.getAllAgences(); // Rechargez la liste des agences après suppression
+            },
+            error: (err) => {
+                console.error('Erreur lors de la suppression de l\'agence:', err);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: 'La suppression de l\'agence a échoué',
+                    life: 3000
+                });
+            }
+        });
+    } else {
+        console.error('Impossible de supprimer : ID d\'agence non défini.');
+        this.messageService.add({
+            severity: 'error',
+            summary: 'Erreur',
+            detail: 'Impossible de supprimer l\'agence : ID non défini.',
+            life: 3000
+        });
+    }
+}
+
 
   hideDialog() {
       this.agenceDialog = false;
@@ -163,28 +185,6 @@ this.agenceDialog = true;
         this.agenceDialog = false;
     }
 }
-
-
-  findIndexById(id: string): number {
-      let index = -1;
-      for (let i = 0; i < this.products.length; i++) {
-          if (this.products[i].id === id) {
-              index = i;
-              break;
-          }
-      }
-
-      return index;
-  }
-
-  createId(): string {
-      let id = '';
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      for (let i = 0; i < 5; i++) {
-          id += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return id;
-  }
 
   onGlobalFilter(table: Table, event: Event) {
       table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
