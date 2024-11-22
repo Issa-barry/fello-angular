@@ -134,7 +134,7 @@ export class AppMenuComponent implements OnInit {
                     {
                         label: 'Agence',
                         icon: 'pi pi-fw pi-id-card',
-                        routerLink: ['/uikit/formlayout']
+                        routerLink: ['/agence']
                     },
                     {
                         label: 'Contact',

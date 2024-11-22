@@ -16,12 +16,7 @@ import { Agence } from '../../models/agence';
   providers: [MessageService, ConfirmationService]
 })
 export class AgenceComponent implements OnInit {
-  productDialog: boolean = false;
-
-  deleteProductDialog: boolean = false;
-
-  deleteProductsDialog: boolean = false;
-
+  
   products: Product[] = [];
 
   product: Product = {};
@@ -38,9 +33,13 @@ export class AgenceComponent implements OnInit {
 
   
   agences: Agence[] = [];
+  selectedAgences: Agence[] = [];
   agence: Agence = new Agence();
   agenceDialog: boolean = false;
   optionPays: any[] = [];
+
+  deleteAgenceDialog: boolean = false;
+  deleteAgencesDialog: boolean = false;
 
   constructor(
     private agenceService: AgenceService,
@@ -49,58 +48,30 @@ export class AgenceComponent implements OnInit {
     private confirmationService: ConfirmationService) { 
     }
 
-    getAllAgences(): void {
-        this.agenceService.getAgences().subscribe({
-          next: (response) => {
-            this.agences = response;  // La réponse contient déjà l'adresse
-            console.log('Agences avec adresse:', this.agences);
-      
-            // Exemple d'accès à l'adresse
-            this.agences.forEach(agence => {
-              if (agence.adresse) {
-                console.log(`Adresse de ${agence.nom_agence}:`, agence.adresse);
-              } else {
-                console.warn(`Pas d'adresse pour l'agence: ${agence.nom_agence}`);
-              }
-            });
-          },
-          error: (err) => {
-            console.error('Erreur lors de la récupération des agences:', err);
-          }
-        });
-      }
-      
+getAllAgences(): void {
+  this.agenceService.getAgences().subscribe({
+    next: (response) => {
+      this.agences = response;   
+    },
+    error: (err) => {
+      console.error('Erreur lors de la récupération des agences:', err);
+    }
+  });
+}
 
-      
-  editAgence(agence: Agence) {
-    
-      this.agence = { ...agence };  // Copie de l'agence à éditer
-      this.agenceDialog = true;
-      
-      console.log("agence dialoé", agence);
-    
-  }
-  
+
+editAgence(agence: Agence) {
+  this.agence = { ...agence };  // Copie de l'agence à éditer
+  this.agenceDialog = true;
+}
+
+OpenEditAgence(agence: Agence) {
+this.agence = { ...agence };  // Copie de l'agence à éditer
+this.agenceDialog = true;
+}
 
   ngOnInit() {
     this.getAllAgences(); 
-      this.productService.getProducts().then(data => this.products = data);
- 
-  
-      this.cols = [
-          { field: 'product', header: 'Product' },
-          { field: 'price', header: 'Price' },
-          { field: 'category', header: 'Category' },
-          { field: 'rating', header: 'Reviews' },
-          { field: 'inventoryStatus', header: 'Status' }
-      ];
-
-      this.statuses = [
-        { label: 'INSTOCK', value: 'instock' },
-        { label: 'LOWSTOCK', value: 'lowstock' },
-        { label: 'OUTOFSTOCK', value: 'outofstock' }
-    ];
-
       this.optionPays = [
           { label: 'GUINEE-CONAKRY', value: 'Guinée-Conakry' },
           { label: 'FRANCE', value: 'France' },
@@ -113,30 +84,25 @@ export class AgenceComponent implements OnInit {
       this.agenceDialog = true;
   }
 
-  deleteSelectedProducts() {
-      this.deleteProductsDialog = true;
+  deleteSelectedAgences() {
+      this.deleteAgencesDialog = true;
   }
 
 
-  editProduct(product: Product) {
-      this.product = { ...product };
-      this.agenceDialog = true;
-  }
-
-  deleteProduct(product: Product) {
-      this.deleteProductDialog = true;
-      this.product = { ...product };
+  deleteAgence(agence: Agence) {
+      this.deleteAgenceDialog = true;
+      this.agence = { ...agence };
   }
 
   confirmDeleteSelected() {
-      this.deleteProductsDialog = false;
+      this.deleteAgencesDialog = false;
       this.products = this.products.filter(val => !this.selectedProducts.includes(val));
       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
       this.selectedProducts = [];
   }
 
   confirmDelete() {
-      this.deleteProductDialog = false;
+      this.deleteAgenceDialog = false;
       this.products = this.products.filter(val => val.id !== this.product.id);
       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Deleted', life: 3000 });
       this.product = {};
@@ -147,30 +113,57 @@ export class AgenceComponent implements OnInit {
       this.submitted = false;
   }
 
-  saveProduct() {
-      this.submitted = true;
+    
+  saveAgence() {
+    this.submitted = true;
 
-      if (this.product.name?.trim()) {
-          if (this.product.id) {
-              // @ts-ignore
-              this.product.inventoryStatus = this.product.inventoryStatus.value ? this.product.inventoryStatus.value : this.product.inventoryStatus;
-              this.products[this.findIndexById(this.product.id)] = this.product;
-              this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Updated', life: 3000 });
-          } else {
-              this.product.id = this.createId();
-              this.product.code = this.createId();
-              this.product.image = 'product-placeholder.svg';
-              // @ts-ignore
-              this.product.inventoryStatus = this.product.inventoryStatus ? this.product.inventoryStatus.value : 'INSTOCK';
-              this.products.push(this.product);
-              this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Product Created', life: 3000 });
-          }
+    if (this.agence.id) { // Modification
+        this.agenceService.updateAgence(this.agence.id, this.agence).subscribe({
+            next: () => {
+                this.getAllAgences(); 
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Agence modifiée avec succès',
+                    life: 3000
+                });
+            },
+            error: (err) => {
+                console.error('Erreur lors de la modification de l\'agence:', err);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: 'Modification de l\'agence échouée',
+                    life: 3000
+                });
+            }
+        });
+        this.agenceDialog = false;
+    } else { // Création
+        this.agenceService.createAgence(this.agence).subscribe({
+            next: () => {
+                 this.getAllAgences(); 
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Agence créée avec succès',
+                    life: 3000
+                });
+            },
+            error: (err) => {
+                console.error('Erreur lors de la création de l\'agence:', err);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: 'Création de l\'agence échouée',
+                    life: 3000
+                });
+            }
+        });
+        this.agenceDialog = false;
+    }
+}
 
-          this.products = [...this.products];
-          this.productDialog = false;
-          this.product = {};
-      }
-  }
 
   findIndexById(id: string): number {
       let index = -1;

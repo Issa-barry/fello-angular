@@ -39,38 +39,29 @@ export class AgenceService {
    };
  }
 
- getAgenceById(id: number): Observable<Agence> {
-  return this.http.get<Agence>(`${this.apiUrl}/${id}`);
-}
-
   getAgences(): Observable<Agence[]> {
     return this.http.get<{ data: Agence[] }>(this.apiUrl).pipe(
       map(response => response.data) // Extraire le tableau de 'data'
     );
   }
 
-  getAdresseById(adresseId: number): Observable<Adresse> {
-    return this.http.get<Adresse>(`${this.apiAdresse}/${adresseId}`);
+
+  getAgenceById(id: number): Observable<Agence> {
+    return this.http.get<Agence>(`${this.apiUrl}/${id}`);
   }
 
-  getAgenceWithAdresse(id: number): Observable<Agence> {
-    return this.getAgenceById(id).pipe(
-      switchMap((agence: Agence) => {
-        if (agence.adresse?.id) {
-          return this.getAdresseById(agence.adresse.id).pipe(
-            map((adresse: Adresse) => {
-              agence.adresse = adresse;
-              return agence;
-            })
-          );
-        } else {
-          return new Observable<Agence>((observer) => {
-            observer.error('Adresse ID manquante.');
-          });
-        }
-      })
-    );
-  }
-  
+    createAgence(agence: Agence): Observable<Agence>{
+      
+      return this.http.post<Agence>(`${this.apiUrl}`, agence, httpOption).pipe(
+        catchError(this.handleError('createAgence', agence))
+      );
+    }
+    
+    updateAgence(id: number, agence: Agence): Observable<Agence> {
+      return this.http.put<Agence>(`${this.apiUrl}/${id}`, agence, httpOption).pipe(
+        catchError(this.handleError<Agence>('updateAgence'))
+      );
+    }
+    
   
 } 

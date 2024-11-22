@@ -7,7 +7,7 @@ import { Adresse } from "./adresse";
     nom_agence: string;
     phone: string;
     email:string;
-    date_creation:string;
+    // date_creation?:Date;
     adresse: Adresse;
     statut:string;
     constructor()
@@ -15,8 +15,8 @@ import { Adresse } from "./adresse";
         this.nom_agence = "";
         this.phone = "";
         this.email = "";
-        this.date_creation ="";
-        this.statut="client";
+        // this.date_creation = new Date('9999-01-01T00:00:00');
+        this.statut="attente";
         this.adresse = new Adresse();
     }
 }
