@@ -6,7 +6,7 @@ const routerOptions: ExtraOptions = {
     anchorScrolling: 'enabled'
 };
 
-const routes: Routes = [
+const routes: Routes = [ 
     {
         path: '', component: AppLayoutComponent,
         children: [
@@ -20,6 +20,7 @@ const routes: Routes = [
             { path: 'ecommerce', data: { breadcrumb: 'E-Commerce' }, loadChildren: () => import('./demo/components/ecommerce/ecommerce.module').then(m => m.EcommerceModule) },
             { path: 'apps', data: { breadcrumb: 'Apps' }, loadChildren: () => import('./demo/components/apps/apps.module').then(m => m.AppsModule) },
             { path: 'agence', loadChildren: () => import('./demo/components/agence/agence.module').then(m => m.AgenceModule) },
+            { path: 'contact', loadChildren: () => import('./demo/components/contact/contact.module').then(m => m.ContactModule) },
         ]
     },
     { path: 'auth', data: { breadcrumb: 'Auth' }, loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },

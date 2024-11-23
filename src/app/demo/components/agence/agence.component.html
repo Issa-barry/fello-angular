@@ -113,9 +113,16 @@
                 <div class="formgrid grid">
                     <div class="field col">
                         <label for="code_postal">Code_postall</label>
-                        <input type="text" pInputText id="ville" [(ngModel)]="agence.adresse.code_postal" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.code_postal}"/>
+                        <!-- <p-inputNumber id="code_postal" [(ngModel)]="agence.adresse.code_postal" ></p-inputNumber> -->
+
+                        <input type="text" id="code_postal" [(ngModel)]="agence.adresse.code_postal" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.code_postal}"/>
                         <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.adresse.code_postal">Le code postall est obligatoire.</small>
                     </div>
+                    <div class="field col">
+                        <label for="quantity">Ville</label>
+                        <input type="text" pInputText id="ville" [(ngModel)]="agence.adresse.ville" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.ville}"/>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.adresse.ville">La ville est obligatoire.</small>
+                        </div>
                     <div class="field col">
                     <label for="quantity">Ville</label>
                     <input type="text" pInputText id="ville" [(ngModel)]="agence.adresse.ville" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.ville}"/>

@@ -1,8 +1,7 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { AgenceRoutingModule } from './agence-routing.module';
-import { ToastModule } from 'primeng/toast';
+import { ContactRoutingModule } from './contact-routing.module';
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
 import { FormsModule } from '@angular/forms';
@@ -16,20 +15,24 @@ import { DropdownModule } from 'primeng/dropdown';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
-import { AgenceComponent } from './agence.component'; 
+import { ToastModule } from 'primeng/toast';
+import { ContactComponent } from './contact.component';
+import { NewPasswordRoutingModule } from '../auth/newpassword/newpassword-routing.module';
+import { AppConfigModule } from 'src/app/layout/config/app.config.module';
+import { PasswordModule } from 'primeng/password';
 
 
 @NgModule({
+  declarations: [ContactComponent],
   imports: [
     CommonModule,
-    AgenceRoutingModule,
+    ContactRoutingModule,
     ToastModule,
     TableModule,
 		FileUploadModule,
 		FormsModule,
 		ButtonModule,
 		RippleModule,
-		ToastModule,
 		ToolbarModule,
 		RatingModule,
 		InputTextModule,
@@ -37,8 +40,13 @@ import { AgenceComponent } from './agence.component';
 		DropdownModule,
 		RadioButtonModule,
 		InputNumberModule,
-		DialogModule
-  ],
-  declarations: [AgenceComponent],
+		DialogModule,
+		NewPasswordRoutingModule,
+        InputTextModule,
+        RippleModule,
+        AppConfigModule,
+        PasswordModule
+  ]
 })
-export class AgenceModule { }
+export class ContactModule { }
+ 

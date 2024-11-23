@@ -27,7 +27,7 @@ export class AgenceComponent implements OnInit {
 
   cols: any[] = [];
 
-  statuses: any[] = [];
+  statuses: any[] = []; 
 
   rowsPerPageOptions = [5, 10, 20];
 
@@ -37,9 +37,9 @@ export class AgenceComponent implements OnInit {
   agence: Agence = new Agence();
   agenceDialog: boolean = false;
   optionPays: any[] = [];
-
   deleteAgenceDialog: boolean = false;
   deleteAgencesDialog: boolean = false;
+  apiErrors: { [key: string]: string[] } = {};
 
   constructor(
     private agenceService: AgenceService,
@@ -58,12 +58,19 @@ export class AgenceComponent implements OnInit {
 getAllAgences(): void {
   this.agenceService.getAgences().subscribe({
     next: (response) => {
-      this.agences = response;   
+      this.agences = response;  
+      console.log(this.agences);
+       
     },
     error: (err) => {
       console.error('Erreur lors de la récupération des agences:', err);
     }
   });
+}
+
+hideDialog() {
+  this.agenceDialog = false;
+  this.submitted = false;
 }
 
 openNew() {
@@ -94,7 +101,7 @@ openDeleteAgence(agence: Agence) {
       this.selectedProducts = [];
   }
 
-  confirmDelete( ) {
+  confirmDelete( ) { 
     this.deleteAgenceDialog = false;
       
     if (this.agence.id !== undefined) { // Vérification que l'ID est défini
@@ -130,12 +137,41 @@ openDeleteAgence(agence: Agence) {
 }
 
 
-  hideDialog() {
-      this.agenceDialog = false;
-      this.submitted = false;
-  }
-
+isFormInvalid(): boolean {
+  return (
+      !this.agence.nom_agence ||
+      !this.agence.phone ||
+      !this.agence.email ||
+      !this.agence.adresse ||
+      !this.agence.adresse.adresse ||
+      !this.agence.adresse.code_postal ||
+      !this.agence.adresse.ville
+  );
+}
     
+handleApiErrors(err: any): void {
+  if (err.error && err.error.errors) {
+      this.apiErrors = err.error.errors; // Associer les erreurs aux champs
+      Object.keys(err.error.errors).forEach((key) => {
+          const errorMessages = err.error.errors[key];
+          this.messageService.add({
+              severity: 'error',
+              summary: `Erreur sur le champ ${key}`,
+              detail: errorMessages.join(', '),
+              life: 5000
+          });
+      });
+  } else {
+      this.apiErrors = {}; // Réinitialiser
+      this.messageService.add({
+          severity: 'error',
+          summary: 'Erreur',
+          detail: 'Une erreur inattendue s\'est produite.',
+          life: 5000
+      });
+  }
+}
+
   saveAgence() {
     this.submitted = true;
 
@@ -162,6 +198,7 @@ openDeleteAgence(agence: Agence) {
         });
         this.agenceDialog = false;
     } else { // Création
+      
         this.agenceService.createAgence(this.agence).subscribe({
             next: () => {
                  this.getAllAgences(); 

@@ -14,7 +14,7 @@ const httpOption = {
       'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT',
    
   })
-};
+}; 
 
 @Injectable({
   providedIn: 'root'
@@ -34,7 +34,6 @@ export class AgenceService {
    return (error: any): Observable<T> => {
      console.error(error);
      this.log(`${operation} failed: ${error.message}`);
-
      return of(result as T);
    };
  }
@@ -50,9 +49,8 @@ export class AgenceService {
   }
 
     createAgence(agence: Agence): Observable<Agence>{
-      
       return this.http.post<Agence>(`${this.apiUrl}`, agence, httpOption).pipe(
-        catchError(this.handleError('createAgence', agence))
+        catchError(this.handleError('le service createAgence à detecté une erreur sur les données transmises', agence))
       );
     }
     

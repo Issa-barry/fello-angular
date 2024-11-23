@@ -3,6 +3,8 @@ import { Message } from './message';
 
 export interface Contact {
     id: number;
+    reference:string;
+    civilite:string;
     nom: string;
     prenom: string;
     phone: string;
@@ -11,6 +13,6 @@ export interface Contact {
     password:string;
     password_confirmation:string;
     role:string;
-    status: string;
-    adresse_id: Adresse;
+    statut: string;
+    adresse: Adresse;
 }
