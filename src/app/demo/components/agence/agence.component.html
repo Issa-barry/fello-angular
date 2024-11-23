@@ -1,0 +1,163 @@
+<div class="grid">
+    <div class="col-12"> 
+        <div class="card px-6 py-6">
+            <p-toast></p-toast>
+            <p-toolbar styleClass="mb-4">
+                <ng-template pTemplate="left">
+                    <div class="my-2">
+                        <button pButton pRipple label="Nouveau" icon="pi pi-plus" class="p-button-primaray mr-2" (click)="openNew()"></button>
+                        <button pButton pRipple label="" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedAgences()" [disabled]="!selectedProducts || !selectedProducts.length"></button>
+                    </div>
+                </ng-template>
+
+                <ng-template pTemplate="right">
+                    <!-- <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload> -->
+                    <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
+                </ng-template>
+            </p-toolbar>
+            <!-- <p-table #dt [value]="agences" [columns]="cols" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['name','country.name','representative.name','status']" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedProducts" selectionMode="multiple" [rowHover]="true" dataKey="id"> -->
+
+            <p-table #dt [value]="agences" [columns]="cols" responsiveLayout="scroll" [rows]="10"     >
+                <ng-template pTemplate="caption">
+                    <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
+                        <h5 class="m-0">Manage Products</h5>
+                        <span class="block mt-2 md:mt-0 p-input-icon-left">
+                            <i class="pi pi-search"></i>
+                            <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
+                        </span>
+                    </div>
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 3rem">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th pSortableColumn="reference">Reference <p-sortIcon field="reference"></p-sortIcon></th>
+                        <th pSortableColumn="nom_agence">Nom <p-sortIcon field="nom_agence"></p-sortIcon></th>
+                         <!-- <th pSortableColumn="phone">Phone <p-sortIcon field="phone"></p-sortIcon></th> -->
+                         <th pSortableColumn="adresse.adresse">Adresse <p-sortIcon field="adresse.adresse"></p-sortIcon></th>
+                         <th pSortableColumn="inventoryStatus">Status <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
+                         <th>Action</th>
+                        <th></th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-agence>
+                    <tr> 
+                        <td>
+                            <p-tableCheckbox [value]="product"></p-tableCheckbox>
+                        </td>
+                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">Reference</span>
+                            {{agence.reference}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Nom</span>
+                            {{agence.nom_agence}}
+                        </td> 
+                        <!-- <td style="width:14%; min-width:8rem;">
+                            <span class="p-column-title">Phone</span>
+                            {{agence.phone}}
+                        </td> -->
+                        <td style="width:14%; min-width:8rem;">
+                            <span class="p-column-title">Adresse</span>
+                            {{agence.adresse.adresse}}
+                        </td>
+                        <td style="width:14%; min-width: 10rem;"><span class="p-column-title">Status</span>
+                                <span [class]="'product-badge status-'">
+                                    {{agence.statut.toLowerCase()}}
+                                </span>
+                        </td>
+                        <td>
+                            <div class="flex">
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="openEditAgence(agence)"></button>
+                                <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="openDeleteAgence(agence)"></button>
+                            </div>
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+
+        <p-dialog [(visible)]="agenceDialog" [style]="{width: '450px'}" header="Agence Details" [modal]="true" class="p-fluid">
+          <ng-template pTemplate="content"> 
+                <div class="field">
+                    <label for="nom">Nom</label>
+                    <input type="text" pInputText id="nom" [(ngModel)]="agence.nom_agence" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.nom_agence}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.nom_agence">Le nom est obligatoire.</small>
+                </div>  
+                 <div class="field">
+                    <label for="phone">Phone</label>
+                    <input type="text" pInputText id="phone" [(ngModel)]="agence.phone" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.phone}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.phone">Le numéro de téléphone est obligatoire.</small>
+                </div>  
+                <div class="field">
+                    <label for="email">Email</label>
+                    <input type="text" pInputText id="email" [(ngModel)]="agence.email" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.email}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.email">Name is required.</small>
+                </div>  
+                <div class="field">
+                    <label for="status">Pays</label>
+                    <p-dropdown [(ngModel)]="agence.adresse.pays" inputId="inventoryStatus" optionValue="label" [options]="optionPays" placeholder="Select">
+                        <!-- <ng-template pTemplate="selectedItem">
+                            <span *ngIf="product && product.inventoryStatus" [class]="'product-badge status-' + product.inventoryStatus.toString().toLowerCase()">{{product.inventoryStatus}}</span>
+                        </ng-template> -->
+                        <ng-template let-option pTemplate="item">
+                            <span [class]="'product-badge status-' + option.value">{{option.label}}</span>
+                        </ng-template>
+                    </p-dropdown>
+                </div>  
+                <div class="field">
+                    <label for="adresse">Adresse</label>
+                    <input type="text" pInputText id="adresse" [(ngModel)]="agence.adresse.adresse" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.adresse}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.adresse.adresse">L'adresse est obligatoire.</small>
+                </div>  
+                <div class="formgrid grid">
+                    <div class="field col">
+                        <label for="code_postal">Code_postall</label>
+                        <!-- <p-inputNumber id="code_postal" [(ngModel)]="agence.adresse.code_postal" ></p-inputNumber> -->
+
+                        <input type="text" id="code_postal" [(ngModel)]="agence.adresse.code_postal" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.code_postal}"/>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.adresse.code_postal">Le code postall est obligatoire.</small>
+                    </div>
+                    <div class="field col">
+                        <label for="quantity">Ville</label>
+                        <input type="text" pInputText id="ville" [(ngModel)]="agence.adresse.ville" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.ville}"/>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.adresse.ville">La ville est obligatoire.</small>
+                        </div>
+                    <div class="field col">
+                    <label for="quantity">Ville</label>
+                    <input type="text" pInputText id="ville" [(ngModel)]="agence.adresse.ville" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.ville}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.adresse.ville">La ville est obligatoire.</small>
+                    </div>
+                    
+                </div>
+            </ng-template>
+
+            <ng-template pTemplate="footer">
+                <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+                <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveAgence()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteAgenceDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span *ngIf="product">Êtes-vous sûr de vouloir supprimer l'agence : <b>{{agence.nom_agence}}</b> ?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteAgenceDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDelete()"></button>
+            </ng-template>
+        </p-dialog>
+
+        <p-dialog [(visible)]="deleteAgencesDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
+            <div class="flex align-items-center justify-content-center">
+                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
+                <span>Are you sure you want to delete selected products?</span>
+            </div>
+            <ng-template pTemplate="footer">
+                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteAgencesDialog = false"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDeleteSelected()"></button>
+            </ng-template>
+        </p-dialog> 
+    </div>
+</div>

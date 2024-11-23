@@ -1,7 +1,7 @@
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
-
+ 
 @Injectable()
 export class DeviseService {
     private apiUrl = 'http://127.0.0.1:8000/api/devises'; // Remplacez par l'URL de votre API
