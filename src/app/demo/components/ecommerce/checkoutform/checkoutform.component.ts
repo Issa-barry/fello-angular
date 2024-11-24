@@ -9,7 +9,7 @@ export class CheckoutFormComponent {
 
     value: string = '';
 
-    checked: boolean = true;
+    checked: boolean = true; 
 
     checked2: boolean = true;
 

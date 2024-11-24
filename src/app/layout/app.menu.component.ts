@@ -17,12 +17,12 @@ export class AppMenuComponent implements OnInit {
                 items: [ 
                     {
                         label: 'Statistique-RH',
-                        icon: 'pi pi-fw pi-home',
+                        icon: 'pi pi-fw pi-chart-bar',
                         routerLink: ['/']
                     },
                     {
                         label: 'Chiffre-d\'affaire',
-                        icon: 'pi pi-fw pi-image',
+                        icon: 'pi pi-fw pi-chart-line',
                         routerLink: ['/dashboard-banking']
                     }
                 ]
@@ -31,47 +31,26 @@ export class AppMenuComponent implements OnInit {
                 label: 'MENU',
                 icon: 'pi pi-fw pi-star-fill',
                 items: [
-                    // {
-                    //     label: 'Transfert',
-                    //     icon: 'pi pi-fw pi-user',
-                    //     items: [
-                    //         {
-                    //             label: 'Envoie',
-                    //             icon: 'pi pi-fw pi-arrow-up-right',
-                    //             routerLink: ['transfert/envoie']
-                    //         }, 
-                    //         {
-                    //             label: 'Retait',
-                    //             icon: 'pi pi-fw pi-arrow-down-left',
-                    //             routerLink: ['transfert/retrait']
-                    //         },
-                    //         {
-                    //             label: 'List',
-                    //             icon: 'pi pi-fw pi-list',
-                    //             routerLink: ['transfert/liste']
-                    //         },
-                         
-                    //     ]
-                    // },
+                    
                     {
                         label: 'Transfert',
-                        icon: 'pi pi-fw pi-id-card',
+                        icon: 'pi pi-fw pi-arrow-right-arrow-left',
                         routerLink: ['/transfert']
                     },
                     {
                         label: 'Facturation',
-                        icon: 'pi pi-fw pi-id-card',
+                        icon: 'pi pi-fw pi-calculator',
                         routerLink: ['/uikit/formlayout']
                     },
                     {
-                        label: 'Agence',
-                        icon: 'pi pi-fw pi-id-card',
-                        routerLink: ['/agence']
+                        label: 'Contact',
+                        icon: 'pi pi-fw pi-users',
+                        routerLink: ['/contact']
                     },
                     {
-                        label: 'Contact',
-                        icon: 'pi pi-fw pi-id-card',
-                        routerLink: ['/contact']
+                        label: 'Agence',
+                        icon: 'pi pi-fw pi-map-marker',
+                        routerLink: ['/agence']
                     },
                     {
                         label: 'Parametre',

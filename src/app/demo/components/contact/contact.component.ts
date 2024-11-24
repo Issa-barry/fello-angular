@@ -3,7 +3,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { Product } from '../../api/product';
-import { ProductService } from '../../service/product.service';
+import { ProductService } from '../../service/product.service'; 
 import { Contact } from '../../models/contact';
 import { ContactService } from '../../service/contact/contact.service';
 
@@ -70,7 +70,6 @@ export class ContactComponent implements OnInit{
       next: (response) => {
         this.contacts = response;   
         console.log(this.contacts);
-        
       },
       error: (err) => {
         console.error('Erreur lors de la récupération des contacts:', err);
