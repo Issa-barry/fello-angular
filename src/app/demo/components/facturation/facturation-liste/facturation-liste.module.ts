@@ -19,6 +19,7 @@ import { TableDemoRoutingModule } from '../../uikit/table/tabledemo-routing.modu
 import { FacturationListeComponent } from './facturation-liste.component';
 import { ToolbarModule } from 'primeng/toolbar';
 import { FileUploadModule } from 'primeng/fileupload';
+import { SplitButtonModule } from 'primeng/splitbutton';
  
 
 @NgModule({
@@ -41,6 +42,7 @@ import { FileUploadModule } from 'primeng/fileupload';
 		ToastModule,
     ToolbarModule,
     FileUploadModule,
+    SplitButtonModule,
   ]
 })
 export class FacturationListeModule { }

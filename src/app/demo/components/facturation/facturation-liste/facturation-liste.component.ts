@@ -4,7 +4,7 @@ import { CustomerService } from 'src/app/demo/service/customer.service';
 import { Product } from 'src/app/demo/api/product';
 import { ProductService } from 'src/app/demo/service/product.service';
 import { Table } from 'primeng/table';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
 
 interface expandedRows {
   [key: string]: boolean;
@@ -51,9 +51,16 @@ export class FacturationListeComponent implements OnInit {
 
     @ViewChild('filter') filter!: ElementRef;
 
+    //filtre 
+    itemsFiltre: MenuItem[] = [];
+
     constructor(private customerService: CustomerService, private productService: ProductService) { }
 
     ngOnInit() {
+      this.itemsFiltre = [
+        { label: 'Payé', },
+        { label: 'Partiel',}
+    ];
         this.customerService.getCustomersLarge().then(customers => {
             this.customers1 = customers;
             this.loading = false;
