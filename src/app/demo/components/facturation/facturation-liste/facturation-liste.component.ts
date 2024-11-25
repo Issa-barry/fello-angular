@@ -5,11 +5,12 @@ import { Product } from 'src/app/demo/api/product';
 import { ProductService } from 'src/app/demo/service/product.service';
 import { Table } from 'primeng/table';
 import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
+import { Router } from '@angular/router';
 
 interface expandedRows {
   [key: string]: boolean;
 }
-
+ 
 @Component({
   selector: 'app-facturation-liste',
   standalone: false,
@@ -54,7 +55,10 @@ export class FacturationListeComponent implements OnInit {
     //filtre 
     itemsFiltre: MenuItem[] = [];
 
-    constructor(private customerService: CustomerService, private productService: ProductService) { }
+    constructor(
+        public router: Router,
+        private customerService: CustomerService, 
+        private productService: ProductService) { }
 
     ngOnInit() {
       this.itemsFiltre = [
@@ -145,6 +149,11 @@ export class FacturationListeComponent implements OnInit {
     clear(table: Table) {
         table.clear();
         this.filter.nativeElement.value = '';
+    }
+
+    // iba
+    goToDetail(){
+      this.router.navigate(['/dashboard/facturation/detail'])  
     }
   
 }
