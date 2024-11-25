@@ -135,4 +135,4 @@ export class TableDemoComponent implements OnInit {
         this.filter.nativeElement.value = '';
     }
     
-}
+}  

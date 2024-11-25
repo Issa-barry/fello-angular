@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { LayoutService } from './service/app.layout.service';
+import { Router } from '@angular/router';
 
 @Component({
     selector: 'app-profilemenu',
@@ -7,7 +8,10 @@ import { LayoutService } from './service/app.layout.service';
 })
 export class AppProfileSidebarComponent {
 
-    constructor(public layoutService: LayoutService) { }
+    constructor(
+        public router: Router,
+        public layoutService: LayoutService
+    ) { }
 
     get visible(): boolean {
         return this.layoutService.state.profileSidebarVisible;
@@ -15,5 +19,9 @@ export class AppProfileSidebarComponent {
 
     set visible(_val: boolean) {
         this.layoutService.state.profileSidebarVisible = _val;
+    }
+
+    onLogOut(){
+       this.router.navigate(['/']);
     }
 }
