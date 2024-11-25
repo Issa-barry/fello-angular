@@ -40,7 +40,7 @@ export class AppMenuComponent implements OnInit {
                     {
                         label: 'Facturation',
                         icon: 'pi pi-fw pi-calculator',
-                        routerLink: ['/dashboard/uikit/formlayout']
+                        routerLink: ['/dashboard/facturation']
                     },
                     {
                         label: 'Contact',
