@@ -4,19 +4,25 @@ import { CustomerService } from 'src/app/demo/service/customer.service';
 import { Product } from 'src/app/demo/api/product';
 import { ProductService } from 'src/app/demo/service/product.service';
 import { Table } from 'primeng/table';
-import { MessageService, ConfirmationService } from 'primeng/api';
+import { MessageService, ConfirmationService, MenuItem } from 'primeng/api';
+import { Router } from '@angular/router';
 
 interface expandedRows {
-    [key: string]: boolean;
+  [key: string]: boolean;
 }
-
+ 
 @Component({
-    templateUrl: './tabledemo.component.html',
-    providers: [MessageService, ConfirmationService]
+  selector: 'app-facturation-liste',
+  standalone: false,
+  // imports: [],
+  templateUrl: './facturation-liste.component.html',
+  styleUrl: './facturation-liste.component.scss',
+  providers: [MessageService, ConfirmationService]
 })
-export class TableDemoComponent implements OnInit {
 
-    customers1: Customer[] = [];
+export class FacturationListeComponent implements OnInit {
+
+  customers1: Customer[] = [];
 
     customers2: Customer[] = [];
 
@@ -46,9 +52,19 @@ export class TableDemoComponent implements OnInit {
 
     @ViewChild('filter') filter!: ElementRef;
 
-    constructor(private customerService: CustomerService, private productService: ProductService) { }
+    //filtre 
+    itemsFiltre: MenuItem[] = [];
+
+    constructor(
+        public router: Router,
+        private customerService: CustomerService, 
+        private productService: ProductService) { }
 
     ngOnInit() {
+      this.itemsFiltre = [
+        { label: 'Payé', },
+        { label: 'Partiel',}
+    ];
         this.customerService.getCustomersLarge().then(customers => {
             this.customers1 = customers;
             this.loading = false;
@@ -134,5 +150,10 @@ export class TableDemoComponent implements OnInit {
         table.clear();
         this.filter.nativeElement.value = '';
     }
-    
-}   
+
+    // iba
+    goToDetail(){
+      this.router.navigate(['/dashboard/facturation/detail'])  
+    }
+  
+}

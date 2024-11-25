@@ -1,8 +1,9 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+
+import { FacturationListeRoutingModule } from './facturation-liste-routing.module';
+
 import { FormsModule } from '@angular/forms';
-import { TableDemoComponent } from './tabledemo.component';
-import { TableDemoRoutingModule } from './tabledemo-routing.module';
 import { TableModule } from 'primeng/table';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
@@ -14,24 +15,35 @@ import { ProgressBarModule } from 'primeng/progressbar';
 import { ToastModule } from 'primeng/toast';
 import { SliderModule } from 'primeng/slider';
 import { RatingModule } from 'primeng/rating';
+import { TableDemoRoutingModule } from '../../uikit/table/tabledemo-routing.module';
+import { FacturationListeComponent } from './facturation-liste.component';
+import { ToolbarModule } from 'primeng/toolbar';
+import { FileUploadModule } from 'primeng/fileupload';
+import { SplitButtonModule } from 'primeng/splitbutton';
+ 
 
 @NgModule({
-	imports: [
-		CommonModule,
-		TableDemoRoutingModule,
+  declarations: [FacturationListeComponent],
+  imports: [
+    CommonModule,
+    FacturationListeRoutingModule,
+    TableDemoRoutingModule,
 		FormsModule,
 		TableModule,
 		RatingModule,
 		ButtonModule,
 		SliderModule,
-		InputTextModule, 
+		InputTextModule,
 		ToggleButtonModule,
 		RippleModule,
 		MultiSelectModule,
 		DropdownModule, 
 		ProgressBarModule,
-		ToastModule
-	],
-	declarations: [TableDemoComponent]
+		ToastModule,
+    ToolbarModule,
+    FileUploadModule,
+    SplitButtonModule,
+  ]
 })
-export class TableDemoModule { }
+export class FacturationListeModule { }
+ 
