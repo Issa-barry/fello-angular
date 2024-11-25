@@ -1,8 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { BehaviorSubject, Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { catchError, map } from 'rxjs/operators';
 import { environment } from 'src/environements/environment.dev';
+import { Router } from '@angular/router';
 
 const httpOption = {
   headers: new HttpHeaders({
@@ -19,11 +20,14 @@ const httpOption = {
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = `${environment.apiDev}/login`;
+  private apiUrl = `${environment.apiDev}`;
   private currentUserSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
 
-  constructor(private http: HttpClient) {
+  constructor(
+    public router: Router,
+    private http: HttpClient
+  ) {
     this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('currentUser') || '{}'));
     this.currentUser = this.currentUserSubject.asObservable();
   }
@@ -45,7 +49,7 @@ export class AuthService {
 
   //
   login(credentials: { email: string, password: string }) {
-    return this.http.post<any>(this.apiUrl, credentials)
+    return this.http.post<any>(this.apiUrl+'/login', credentials)
       .pipe(map(user => {
         localStorage.setItem('currentUser', JSON.stringify(user));
         this.currentUserSubject.next(user);
@@ -53,9 +57,24 @@ export class AuthService {
       }));
   }
 
-  logout() {
-    localStorage.removeItem('currentUser');
-    this.currentUserSubject.next(null);
+  
+
+  // Fonction de logout
+  logout(): Observable<any> {
+    // Récupérer le token d'authentification depuis le localStorage
+    const token = this.currentUserValue?.token;
+
+    // Si le token existe, ajouter l'en-tête Authorization avec le token
+    const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
+
+    return this.http.post<any>(`${this.apiUrl}/logout`, {}, { headers }).pipe(
+      map(() => {
+        localStorage.removeItem('currentUser'); // Retirer l'utilisateur du localStorage
+        this.currentUserSubject.next(null); // Réinitialiser l'utilisateur actuel
+        this.router.navigate(['/auth/login']); // Rediriger vers la page de login
+      }),
+      catchError(this.handleError('logout'))
+    );
   }
 
   getUserRole(): string {
@@ -65,4 +84,5 @@ export class AuthService {
   isAuthenticated(): boolean {
     return !!this.currentUserValue?.token;
   }
+
 }
