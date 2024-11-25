@@ -20,7 +20,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
         CheckboxModule,
         DropdownModule,
         InputTextModule,
-        InputNumberModule,
+        InputNumberModule, 
         ButtonModule,
         RippleModule,
         InputGroupModule,

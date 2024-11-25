@@ -7,7 +7,7 @@ const routerOptions: ExtraOptions = {
 };
 
 const routes: Routes = [ 
-    {
+    { 
         path: '', component: AppLayoutComponent,
         children: [
             { path: '', loadChildren: () => import('./demo/components/dashboards/dashboards.module').then(m => m.DashboardsModule) },
@@ -21,12 +21,13 @@ const routes: Routes = [
             { path: 'apps', data: { breadcrumb: 'Apps' }, loadChildren: () => import('./demo/components/apps/apps.module').then(m => m.AppsModule) },
             { path: 'agence', loadChildren: () => import('./demo/components/agence/agence.module').then(m => m.AgenceModule) },
             { path: 'contact', loadChildren: () => import('./demo/components/contact/contact.module').then(m => m.ContactModule) },
+            { path: 'transfert',data: { breadcrumb: 'Transfert' }, loadChildren: () => import('./demo/components/transfert/transfert.module').then(m => m.TransfertModule) },
         ]
     },
     { path: 'auth', data: { breadcrumb: 'Auth' }, loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },
     { path: 'landing', loadChildren: () => import('./demo/components/landing/landing.module').then(m => m.LandingModule) },
     { path: 'notfound', loadChildren: () => import('./demo/components/notfound/notfound.module').then(m => m.NotfoundModule) },
-    { path: '**', redirectTo: '/notfound' }
+     { path: '**', redirectTo: '/notfound' }
 ];
 
 @NgModule({
