@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { AppLayoutComponent } from './layout/app.layout.component';
+import { authGuard } from './demo/guards/auth.guard';
 
 const routerOptions: ExtraOptions = {
     anchorScrolling: 'enabled'
@@ -8,7 +9,9 @@ const routerOptions: ExtraOptions = {
 
 const routes: Routes = [ 
     { 
-        path: 'dashboard', component: AppLayoutComponent,
+        path: 'dashboard', 
+        component: AppLayoutComponent,
+        canActivate: [authGuard],
         children: [
             { path: 'dashboard', loadChildren: () => import('./demo/components/dashboards/dashboards.module').then(m => m.DashboardsModule) },
             { path: '', loadChildren: () => import('./demo/components/dashboards/dashboards.module').then(m => m.DashboardsModule) },

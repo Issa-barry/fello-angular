@@ -60,22 +60,6 @@ export class AppMenuComponent implements OnInit {
                 ]
             }, 
              
-            // {
-            //     label: 'Autre',
-            //     icon: 'pi pi-fw pi-download',
-            //     items: [
-            //         {
-            //             label: 'Parametre',
-            //             icon: 'pi pi-fw pi-cog',
-            //             routerLink: ['/uikit/formlayout']
-            //         },
-            //         {
-            //             label: 'Documentation',
-            //             icon: 'pi pi-fw pi-info-circle',
-            //             routerLink: ['/documentation']
-            //         }
-            //     ]
-            // }
         ];
     }
 }
