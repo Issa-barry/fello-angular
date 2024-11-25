@@ -8,8 +8,9 @@ const routerOptions: ExtraOptions = {
 
 const routes: Routes = [ 
     { 
-        path: '', component: AppLayoutComponent,
+        path: 'dashboard', component: AppLayoutComponent,
         children: [
+            { path: 'dashboard', loadChildren: () => import('./demo/components/dashboards/dashboards.module').then(m => m.DashboardsModule) },
             { path: '', loadChildren: () => import('./demo/components/dashboards/dashboards.module').then(m => m.DashboardsModule) },
             { path: 'uikit', data: { breadcrumb: 'UI Kit' }, loadChildren: () => import('./demo/components/uikit/uikit.module').then(m => m.UIkitModule) },
             { path: 'utilities', data: { breadcrumb: 'Utilities' }, loadChildren: () => import('./demo/components/utilities/utilities.module').then(m => m.UtilitiesModule) },
@@ -24,10 +25,11 @@ const routes: Routes = [
             { path: 'transfert',data: { breadcrumb: 'Transfert' }, loadChildren: () => import('./demo/components/transfert/transfert.module').then(m => m.TransfertModule) },
         ]
     },
+    { path: '', loadChildren: () => import('./demo/components/landing/landing.module').then(m => m.LandingModule) },
     { path: 'auth', data: { breadcrumb: 'Auth' }, loadChildren: () => import('./demo/components/auth/auth.module').then(m => m.AuthModule) },
     { path: 'landing', loadChildren: () => import('./demo/components/landing/landing.module').then(m => m.LandingModule) },
     { path: 'notfound', loadChildren: () => import('./demo/components/notfound/notfound.module').then(m => m.NotfoundModule) },
-     { path: '**', redirectTo: '/notfound' }
+    { path: '**', redirectTo: '/notfound' }
 ];
 
 @NgModule({

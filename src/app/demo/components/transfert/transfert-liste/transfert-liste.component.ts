@@ -63,11 +63,11 @@ export class TransfertListeComponent implements OnInit {
       this.getAllTransferts();
   }
   goToTransfertEnvoie() {
-    this.router.navigate(['/transfert/envoie']);
+    this.router.navigate(['/dashboard/transfert/envoie']);
   }
 
   goToTransfertRetrait() {
-    this.router.navigate(['/transfert/retrait']);
+    this.router.navigate(['/dashboard/transfert/retrait']);
   }
   
   getAllTransferts(): void {
