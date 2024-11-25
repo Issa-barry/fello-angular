@@ -24,7 +24,7 @@ import { RatingModule } from 'primeng/rating';
 		RatingModule,
 		ButtonModule,
 		SliderModule,
-		InputTextModule,
+		InputTextModule, 
 		ToggleButtonModule,
 		RippleModule,
 		MultiSelectModule,

@@ -8,7 +8,8 @@ import { FacturationRoutingModule } from './facturation-routing.module';
   declarations: [],
   imports: [
     CommonModule,
-    FacturationRoutingModule
+    FacturationRoutingModule, 
+ 
   ]
 })
 export class FacturationModule { }
