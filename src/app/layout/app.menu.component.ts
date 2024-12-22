@@ -51,15 +51,31 @@ export class AppMenuComponent implements OnInit {
                         label: 'Agence',
                         icon: 'pi pi-fw pi-map-marker',
                         routerLink: ['/dashboard/agence']
-                    },
+                    }, 
+                ]
+            }, 
+            {
+                label: 'AUTRE',
+                icon: 'pi pi-cog',
+                items: [
                     {
                         label: 'Parametre',
                         icon: 'pi pi-fw pi-cog',
-                        routerLink: ['/dashboard/parametre']
-                    },
+                        items: [
+                            {
+                                label: 'Générale',
+                                icon: 'pi pi-fw pi-globe',
+                                routerLink: ['/dashboard/parametre']
+                            },
+                            {
+                                label: 'Role',
+                                icon: 'pi pi-fw pi-lock-open',
+                                routerLink: ['/dashboard/parametre/role']
+                            }, 
+                        ]
+                    }, 
                 ]
-            }, 
-             
+            },
         ];
     }
 }

@@ -2,18 +2,22 @@ import { Component, OnInit } from '@angular/core';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
-import { Product } from '../../api/product';
-import { ProductService } from '../../service/product.service'; 
-import { Contact } from '../../models/contact';
-import { ContactService } from '../../service/contact/contact.service';
+import { Product } from '../../../api/product';
+import { ProductService } from '../../../service/product.service'; 
+import { Contact } from '../../../models/contact';
+import { ContactService } from '../../../service/contact/contact.service';
+
 
 @Component({
-  selector: 'app-contact',
-  templateUrl: './contact.component.html',
-  styleUrl: './contact.component.scss',
+  selector: 'app-role',
+  standalone: false,
+  // imports: [],
+  templateUrl: './role.component.html',
+  styleUrl: './role.component.scss',
   providers: [MessageService, ConfirmationService]
 })
-export class ContactComponent implements OnInit{
+export class RoleComponent implements OnInit{
+
   contacts : Contact[] = [];
   contact: Contact = new Contact();
   optionPays: any[] = [];
@@ -41,6 +45,7 @@ export class ContactComponent implements OnInit{
     { }
 
 
+  
   ngOnInit() {
         this.getAllContacts();
         
@@ -261,4 +266,6 @@ confirmDelete( ) {
   onGlobalFilter(table: Table, event: Event) {
       table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
+
 }
+ 
