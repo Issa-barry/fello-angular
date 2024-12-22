@@ -10,14 +10,14 @@
                 </ng-template>
 
                 <ng-template pTemplate="right">
-                    <button pButton pRipple label="Sauvegarder" icon="pi pi-save" class="p-button-help" (click)="dt.exportCSV()"></button>
+                    <!-- <button pButton pRipple label="Sauvegarder" icon="pi pi-save" class="p-button-help" (click)="dt.exportCSV()"></button> -->
                 </ng-template>
             </p-toolbar>
 
             <p-table #dt [value]="roles" [columns]="cols" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['name']" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Liste de {first} / {last} des {totalRecords} roles" [(selection)]="selectedRoles" selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Roles & Permissions</h5>
+                        <h5 class="m-0">Roles</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
@@ -27,40 +27,29 @@
                 <ng-template pTemplate="header">
                     <tr>
                         <th style="width: 3rem">
-                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                            <!-- <p-tableHeaderCheckbox></p-tableHeaderCheckbox> -->
+                             <span></span>
                         </th>
                         <th pSortableColumn="reference">Role </th>
-                        <th pSortableColumn="nom">Afficher</th>
-                        <th pSortableColumn="nom">Créer</th>
-                         <th pSortableColumn="prenom">Modifier</th>
-                         <th pSortableColumn="statut">Supprimer</th>
-                         <th>Action</th>
+                        <th pSortableColumn="nom">Description</th>
+                          <th>Action</th>
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-role>
-                    <tr>
+                    <tr style="cursor: pointer;" (click)="onGoToDetail(role.id)">
                         <td>
                             <p-tableCheckbox [value]="role"></p-tableCheckbox>
                         </td>
-                        <td style="width:14%; min-width:10rem;">
+                        <td style="width:30%; min-width:15rem; cursor: pointer;">
                             <span class="p-column-title">Name</span>
                             {{role.name}}
                         </td>
-                        <td>
-                            <p-tableCheckbox [value]="role"></p-tableCheckbox>
-                        </td> 
-                        <td>
-                            <p-tableCheckbox [value]="role"></p-tableCheckbox>
-                        </td> 
-                        <td>
-                            <p-tableCheckbox [value]="role"></p-tableCheckbox>
-                        </td> 
-                        <td>
-                            <p-tableCheckbox [value]="role"></p-tableCheckbox>
-                        </td> 
+                        <td style="width:50%; min-width:15rem;">
+                            <span class="p-column-title">description</span> 
+                        </td>   
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-primary mr-2" (click)="onGoToDetail(role.id)"></button>
+                                <!-- <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-primary mr-2" (click)="onGoToDetail(role.id)"></button> -->
                                 <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editRole(role)"></button>
                                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteRole(role)"></button>
                             </div>
