@@ -33,7 +33,7 @@ export class ContactService {
       this.log(`${operation} failed: ${error.message}`);
       return of(result as T);
     };
-  } 
+  }  
 
   getContacts(): Observable<Contact[]> {
     return this.http.get<{ data: Contact[] }>(this.apiUrl).pipe(

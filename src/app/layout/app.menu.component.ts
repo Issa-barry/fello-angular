@@ -68,9 +68,9 @@ export class AppMenuComponent implements OnInit {
                                 routerLink: ['/dashboard/parametre']
                             },
                             {
-                                label: 'Role',
+                                label: 'Role & Permission',
                                 icon: 'pi pi-fw pi-lock-open',
-                                routerLink: ['/dashboard/parametre/role']
+                                routerLink: ['/dashboard/parametre/role-liste']
                             }, 
                         ]
                     }, 

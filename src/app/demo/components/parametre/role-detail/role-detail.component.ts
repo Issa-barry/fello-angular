@@ -4,23 +4,26 @@ import { Table } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { Product } from '../../../api/product';
 import { ProductService } from '../../../service/product.service'; 
-// import { Role } from '../../../models/role';
 import { Role } from 'src/app/demo/models/Role';
 import { RolePermissionService } from 'src/app/demo/service/rolePermission/role-permission.service';
+import { ActivatedRoute, Router } from '@angular/router';
 
 
 @Component({
-  selector: 'app-role',
+  selector: 'app-role-detail',
   standalone: false,
   // imports: [],
-  templateUrl: './role.component.html',
-  styleUrl: './role.component.scss',
+  templateUrl: './role-detail.component.html',
+  styleUrl: './role-detail.component.scss',
   providers: [MessageService, ConfirmationService]
 })
-export class RoleComponent implements OnInit{
-
+export class RoleDetailComponent implements OnInit {
+  
   roles : Role[] = [];
   role: Role = new Role();
+  roleAgerer: Role = new Role();
+  id: number = this.activatedRoute.snapshot.params['id'];
+
   optionPays: any[] = [];
   roleDialog: boolean = false;  
   deleteRoleDialog: boolean = false;
@@ -41,6 +44,8 @@ export class RoleComponent implements OnInit{
   product: Product = {};
 
   constructor(
+    private router: Router,
+    private activatedRoute: ActivatedRoute,
     private rolePermissionService: RolePermissionService,
     private productService: ProductService, 
     private messageService: MessageService, 
@@ -51,6 +56,7 @@ export class RoleComponent implements OnInit{
   
   ngOnInit() {
         this.getAllRoles();
+        this.GetRoleById();
         
         this.optionPays = [
           { label: 'GUINEE-CONAKRY', value: 'Guinée-Conakry' },
@@ -78,12 +84,24 @@ export class RoleComponent implements OnInit{
     this.rolePermissionService.getRoles().subscribe({
       next: (response) => {
         this.roles = response;   
-        console.log("Roles :", this.roles);
       },
       error: (err) => {
         console.error('Erreur lors de la récupération des roles:', err);
       }
     });
+  }
+
+  GetRoleById(): void{
+    this.rolePermissionService.getRoleById(this.id).subscribe({
+       next: (response) => {
+        this.roleAgerer = response;   
+        console.log("Le Role :", this.roleAgerer);
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération du role:', err);
+      }
+    });
+      
   }
 
 
@@ -229,18 +247,13 @@ confirmDelete( ) {
       return index;
   }
 
-  createId(): string {
-      let id = '';
-      const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
-      for (let i = 0; i < 5; i++) {
-          id += chars.charAt(Math.floor(Math.random() * chars.length));
-      }
-      return id;
-  } 
-
+ 
   onGlobalFilter(table: Table, event: Event) {
       table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
+  
+  onGoToRoleListe(){
+    this.router.navigate(['/dashboard/parametre/role-liste'])
+  }
 
 }
- 

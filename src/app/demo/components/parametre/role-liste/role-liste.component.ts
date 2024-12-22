@@ -4,21 +4,21 @@ import { Table } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { Product } from '../../../api/product';
 import { ProductService } from '../../../service/product.service'; 
-// import { Role } from '../../../models/role';
 import { Role } from 'src/app/demo/models/Role';
 import { RolePermissionService } from 'src/app/demo/service/rolePermission/role-permission.service';
+import { Router } from '@angular/router';
 
 
 @Component({
-  selector: 'app-role',
+  selector: 'app-role-liste',
   standalone: false,
   // imports: [],
-  templateUrl: './role.component.html',
-  styleUrl: './role.component.scss',
+  templateUrl: './role-liste.component.html',
+  styleUrl: './role-liste.component.scss',
   providers: [MessageService, ConfirmationService]
 })
-export class RoleComponent implements OnInit{
-
+export class RoleListeComponent implements OnInit {
+  
   roles : Role[] = [];
   role: Role = new Role();
   optionPays: any[] = [];
@@ -41,6 +41,7 @@ export class RoleComponent implements OnInit{
   product: Product = {};
 
   constructor(
+    private router : Router,
     private rolePermissionService: RolePermissionService,
     private productService: ProductService, 
     private messageService: MessageService, 
@@ -242,5 +243,7 @@ confirmDelete( ) {
       table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
 
+  onGoToDetail(id : number){
+     this.router.navigate(['/dashboard/parametre/role-detail', id])
+  }
 }
- 

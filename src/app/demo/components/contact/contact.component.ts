@@ -65,6 +65,7 @@ export class ContactComponent implements OnInit{
           { label: 'OUTOFSTOCK', value: 'outofstock' }
       ];
   }
+  
   getAllContacts(): void {
     this.contactService.getContacts().subscribe({
       next: (response) => {

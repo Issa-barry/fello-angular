@@ -25,7 +25,7 @@ export class DevisesService {
 
   private log(log: string){
     console.info(log)
-  }
+  } 
 
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {
