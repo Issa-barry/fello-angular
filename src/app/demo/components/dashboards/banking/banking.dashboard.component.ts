@@ -1,6 +1,5 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription, debounceTime } from 'rxjs';
-import { DeviseService } from 'src/app/demo/service/devise.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { MessageService } from 'primeng/api';
 
@@ -25,8 +24,9 @@ export class BankingDashboardComponent implements OnInit, OnDestroy {
 
     subscription: Subscription;
 
-    constructor(private layoutService: LayoutService, 
-                private deviseService: DeviseService) {
+    constructor(
+        private layoutService: LayoutService, 
+                ) {
         this.subscription = this.layoutService.configUpdate$
             .pipe(debounceTime(25))
             .subscribe((config) => {
@@ -35,7 +35,7 @@ export class BankingDashboardComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.fetchDevises();
+       
         this.initChart();
 
         this.payments = [
@@ -68,18 +68,7 @@ export class BankingDashboardComponent implements OnInit, OnDestroy {
     }
  
     
-    fetchDevises(): void {
-        this.deviseService.getDevises().subscribe({
-          next: (response) => {
-             this.devises = response.data; 
-            console.log('Devises:', this.devises);
-          },
-          error: (error) => {
-            console.error('Erreur lors de la récupération des devises:', error);
-          }
-        });
-      }
-      
+   
 
 
 //   private showError(summary: string, detail: string): void {

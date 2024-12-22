@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { ExtraOptions, RouterModule, Routes } from '@angular/router';
 import { AppLayoutComponent } from './layout/app.layout.component';
+import { authGuard } from './demo/guards/auth.guard';
 
 const routerOptions: ExtraOptions = {
     anchorScrolling: 'enabled'
@@ -8,7 +9,9 @@ const routerOptions: ExtraOptions = {
 
 const routes: Routes = [ 
     { 
-        path: 'dashboard', component: AppLayoutComponent,
+        path: 'dashboard', 
+        component: AppLayoutComponent,
+        canActivate: [authGuard],
         children: [
             { path: 'dashboard', loadChildren: () => import('./demo/components/dashboards/dashboards.module').then(m => m.DashboardsModule) },
             { path: '', loadChildren: () => import('./demo/components/dashboards/dashboards.module').then(m => m.DashboardsModule) },
@@ -24,6 +27,7 @@ const routes: Routes = [
             { path: 'contact', loadChildren: () => import('./demo/components/contact/contact.module').then(m => m.ContactModule) },
             { path: 'transfert',data: { breadcrumb: 'Transfert' }, loadChildren: () => import('./demo/components/transfert/transfert.module').then(m => m.TransfertModule) },
             { path: 'facturation', loadChildren: () => import('./demo/components/facturation/facturation.module').then(m => m.FacturationModule) },
+            { path: 'parametre', loadChildren: () => import('./demo/components/parametre/parametre.module').then(m => m.ParametreModule) },
         ]
     },
     { path: '', loadChildren: () => import('./demo/components/landing/landing.module').then(m => m.LandingModule) },

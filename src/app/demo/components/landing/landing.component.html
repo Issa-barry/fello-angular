@@ -56,15 +56,41 @@
                     </a>
                 </li>
             
-                <li class="flex align-items-center">
+                <!-- <li class="flex align-items-center">
                     <button pButton pRipple type="button" pStyleClass="@grandparent" enterFromClass="ng-hidden"
                         enterActiveClass="px-fadein" leaveToClass="ng-hidden" label="Connexion"
                         class="m-0 mt-3 md:mt-0 md:ml-5 white-space-nowrap"
                         (click)="goToLogin()">
                     </button>
-                </li>
+                </li> -->
+                <!-- Connexion ou Dashboard -->
+    <li class="flex align-items-center">
+        <ng-container *ngIf="!isLoggedIn; else dashboardLink">
+            <button pButton pRipple 
+                    type="button" 
+                    pStyleClass="@grandparent" 
+                    enterFromClass="ng-hidden"
+                    enterActiveClass="px-fadein" 
+                    leaveToClass="ng-hidden" 
+                    label="Connexion"
+                    class="m-0 mt-3 md:mt-0 md:ml-5 white-space-nowrap"
+                    (click)="goToLogin()">
+            </button>
+        </ng-container>
+        <ng-template #dashboardLink>
+            <button pButton pRipple 
+                    type="button" 
+                    pStyleClass="@grandparent" 
+                    enterFromClass="ng-hidden"
+                    enterActiveClass="px-fadein" 
+                    leaveToClass="ng-hidden" 
+                    label="Dashboard"
+                    class="m-0 mt-3 md:mt-0 md:ml-5 white-space-nowrap"
+                    (click)="goToDashboard()">
+            </button>
+        </ng-template>
+    </li>
             </ul>
-         
         </div>
        
         <div class="py-4 px-4 mx-0 md:mx-6 lg:mx-8 lg:px-8 z-2">
