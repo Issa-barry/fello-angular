@@ -8,6 +8,7 @@ import { CustomerService } from '../../service/customer.service';
 import { ProductService } from '../../service/product.service';
 import { Customer, Representative } from '../../api/customer';
 import { Product } from '../../api/product';
+import { AuthService } from '../../service/auth/auth.service';
 
 interface expandedRows {
     [key: string]: boolean;
@@ -21,11 +22,12 @@ interface expandedRows {
 export class LandingComponent implements OnDestroy,OnInit {
 
     subscription: Subscription;
-
     darkMode: boolean = false;
+    isLoggedIn: boolean = false; 
    
 
     constructor(
+        private authService:AuthService,
         private customerService: CustomerService,
          private productService: ProductService,
          public router: Router,
@@ -71,10 +73,10 @@ export class LandingComponent implements OnDestroy,OnInit {
 
 
     ngOnInit() {
+        this.isLoged();
         this.customerService.getCustomersLarge().then(customers => {
             this.customers1 = customers;
             this.loading = false;
-
             // @ts-ignore
             this.customers1.forEach(customer => customer.date = new Date(customer.date));
         });
@@ -157,9 +159,29 @@ export class LandingComponent implements OnDestroy,OnInit {
         this.filter.nativeElement.value = '';
     }
     
-   //Navigation by iba
-    goToLogin(){
-        this.router.navigate(['/auth/login'])
+    isLoged(){
+        if (this.authService.isAuthenticated()) {
+            this.isLoggedIn = true;
+        } else {
+            this.isLoggedIn = false;
+        }
     }
+    
+    goToLogin() {
+        if (this.authService.isAuthenticated()) {
+            this.router.navigate(['/dashboard']);
+        } else {
+            this.router.navigate(['/auth/login']); 
+        }
+    }
+
+    goToDashboard() {
+        if (this.authService.isAuthenticated()) {
+            this.router.navigate(['/dashboard']);
+        } else {
+            this.router.navigate(['/auth/login']); 
+        }
+      }
+
 }
  

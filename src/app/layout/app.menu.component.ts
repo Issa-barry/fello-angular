@@ -55,7 +55,7 @@ export class AppMenuComponent implements OnInit {
                     {
                         label: 'Parametre',
                         icon: 'pi pi-fw pi-cog',
-                        routerLink: ['/dashboard/uikit/formlayout']
+                        routerLink: ['/dashboard/parametre']
                     },
                 ]
             }, 

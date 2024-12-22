@@ -29,12 +29,11 @@ import { AgenceComponent } from './agence.component';
 		FormsModule,
 		ButtonModule,
 		RippleModule,
-		ToastModule,
 		ToolbarModule,
 		RatingModule,
 		InputTextModule,
 		InputTextareaModule,
-		DropdownModule,
+		DropdownModule, 
 		RadioButtonModule,
 		InputNumberModule,
 		DialogModule

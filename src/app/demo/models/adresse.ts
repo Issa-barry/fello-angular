@@ -9,13 +9,13 @@ export class Adresse {
     region:string; 
     constructor()
     {
-        this.pays = "";
-        this.adresse = "";
+        this.pays = "test";
+        this.adresse = "test";
         this.complement_adresse = "";
-        this.ville ="";
-        this.code_postal = this.toString(""); 
-        this.quartier = "";
-        this.region = "";
+        this.ville ="test";
+        this.code_postal = this.toString("6666"); 
+        this.quartier = "test";
+        this.region = "test";
     }
 
     // Méthode pour transformer un champ en chaîne

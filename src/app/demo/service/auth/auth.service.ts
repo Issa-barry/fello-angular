@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from 'src/environements/environment.dev';
 import { Router } from '@angular/router';
+import { Contact } from '../../models/contact';
 
 const httpOption = {
   headers: new HttpHeaders({
@@ -23,6 +24,7 @@ export class AuthService {
   private apiUrl = `${environment.apiDev}`;
   private currentUserSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
+
 
   constructor(
     public router: Router,
@@ -56,30 +58,45 @@ export class AuthService {
         return user;
       }));
   }
+ 
+  register(contact: Contact): Observable<any> {
+    return this.http.post<any>(`${this.apiUrl}/users`, contact, httpOption).pipe(
+        map((response) => {
+            console.log('Inscription réussie :', response);
+            return response;
+        }),
+        catchError(this.handleError('register', null))
+    );
+}
 
-  
 
-  // Fonction de logout
   logout(): Observable<any> {
-    // Récupérer le token d'authentification depuis le localStorage
     const token = this.currentUserValue?.token;
 
-    // Si le token existe, ajouter l'en-tête Authorization avec le token
     const headers = new HttpHeaders().set('Authorization', `Bearer ${token}`);
 
     return this.http.post<any>(`${this.apiUrl}/logout`, {}, { headers }).pipe(
       map(() => {
-        localStorage.removeItem('currentUser'); // Retirer l'utilisateur du localStorage
-        this.currentUserSubject.next(null); // Réinitialiser l'utilisateur actuel
-        this.router.navigate(['/auth/login']); // Rediriger vers la page de login
+        localStorage.removeItem('currentUser'); 
+        this.currentUserSubject.next(null); 
+        this.router.navigate(['/auth/login']); 
       }),
       catchError(this.handleError('logout'))
     );
   }
 
+
+
+
+
   getUserRole(): string {
     return this.currentUserValue?.role || 'client';
   }
+
+  getUserInfo(): any {
+    return this.currentUserValue; // Retourne l'utilisateur actuellement stocké
+}
+
 
   isAuthenticated(): boolean {
     return !!this.currentUserValue?.token;

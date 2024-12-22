@@ -9,8 +9,7 @@ import { TagModule } from 'primeng/tag';
 import { TooltipModule } from 'primeng/tooltip';
 import { BankingDashboardComponent } from './banking.dashboard.component';
 import { BankingDashboardRoutingModule } from './banking.dashboard-routing.module';
-import { DeviseService } from 'src/app/demo/service/devise.service';
-
+ 
 @NgModule({
     imports: [
         CommonModule,
@@ -24,6 +23,6 @@ import { DeviseService } from 'src/app/demo/service/devise.service';
         BankingDashboardRoutingModule
     ],
     declarations: [BankingDashboardComponent],
-    providers: [DeviseService] // Ajouter ic
+    providers: [ ]
 })
 export class BankingDashboardModule { }

@@ -256,7 +256,7 @@ confirmDelete( ) {
           id += chars.charAt(Math.floor(Math.random() * chars.length));
       }
       return id;
-  }
+  } 
 
   onGlobalFilter(table: Table, event: Event) {
       table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
