@@ -19,6 +19,9 @@ import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
 import { AppConfigModule } from 'src/app/layout/config/app.config.module';
  import { RoleDetailComponent } from './role-detail.component';
+import { TreeDemoRoutingModule } from '../../uikit/tree/treedemo-routing.module';
+import { TreeTableModule } from 'primeng/treetable';
+import { TreeModule } from 'primeng/tree';
  
 @NgModule({
   declarations: [RoleDetailComponent],
@@ -27,22 +30,24 @@ import { AppConfigModule } from 'src/app/layout/config/app.config.module';
     RoleDetailRoutingModule,
     ToastModule,
     TableModule,
-		FileUploadModule,
-		FormsModule,
-		ButtonModule,
-		RippleModule,
-		ToolbarModule,
-		RatingModule,
-		InputTextModule,
-		InputTextareaModule,
-		DropdownModule,
-		RadioButtonModule,
-		InputNumberModule,
-		DialogModule, 
+	FileUploadModule,
+	FormsModule,
+	ButtonModule,
+	RippleModule,
+	ToolbarModule,
+	RatingModule,
+	InputTextModule,
+	InputTextareaModule,
+	DropdownModule,
+	RadioButtonModule,
+	InputNumberModule,
+	DialogModule, 
     InputTextModule,
     RippleModule,
-    AppConfigModule,
-     
+    AppConfigModule,  
+	TreeDemoRoutingModule, 
+	TreeModule,
+	TreeTableModule,
   ]
 })
 export class RoleDetailModule { }

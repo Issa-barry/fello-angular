@@ -5,8 +5,8 @@ import { ToastModule } from 'primeng/toast';
 import { Product } from '../../../api/product';
 import { ProductService } from '../../../service/product.service'; 
 import { Role } from 'src/app/demo/models/Role';
-import { RolePermissionService } from 'src/app/demo/service/rolePermission/role-permission.service';
 import { Router } from '@angular/router';
+import { RoleService } from 'src/app/demo/service/role/role.service';
 
 
 @Component({
@@ -42,7 +42,7 @@ export class RoleListeComponent implements OnInit {
 
   constructor(
     private router : Router,
-    private rolePermissionService: RolePermissionService,
+    private roleService: RoleService,
     private productService: ProductService, 
     private messageService: MessageService, 
     private confirmationService: ConfirmationService) 
@@ -76,7 +76,7 @@ export class RoleListeComponent implements OnInit {
   }
 
   getAllRoles(): void {
-    this.rolePermissionService.getRoles().subscribe({
+    this.roleService.getRoles().subscribe({
       next: (response) => {
         this.roles = response;   
         console.log("Roles :", this.roles);
@@ -94,7 +94,7 @@ export class RoleListeComponent implements OnInit {
 
     if (this.role.id) { // Modification
          
-      this.rolePermissionService.updateRole(this.role.id, this.role).subscribe({
+      this.roleService.updateRole(this.role.id, this.role).subscribe({
         next: () => {
              this.getAllRoles(); 
             this.messageService.add({
@@ -117,7 +117,7 @@ export class RoleListeComponent implements OnInit {
     this.roleDialog = false;
 
     } else { // Création 
-        this.rolePermissionService.createRole(this.role).subscribe({
+        this.roleService.createRole(this.role).subscribe({
             next: () => {
                 this.getAllRoles(); 
                 this.messageService.add({
@@ -181,7 +181,7 @@ confirmDelete( ) {
   this.deleteRoleDialog = false;
   
   if (this.role.id !== undefined) { // Vérification que l'ID est défini
-      this.rolePermissionService.deleteRole(this.role.id).subscribe({
+      this.roleService.deleteRole(this.role.id).subscribe({
           next: () => {
               this.messageService.add({
                   severity: 'success',

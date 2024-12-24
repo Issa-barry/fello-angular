@@ -3,7 +3,7 @@ import { Injectable } from '@angular/core';
 import { environment } from 'src/environements/environment.dev';
 import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
 import { Role } from '../../models/Role';
-
+ 
 const httpOption = {
   headers: new HttpHeaders({
       'Content-Type': 'application/json',
@@ -17,9 +17,9 @@ const httpOption = {
 @Injectable({
   providedIn: 'root'
 })
-export class RolePermissionService {
+export class RoleService {
   private apiUrlRole = `${environment.apiDev}/roles`;
-   
+     
   constructor(private http: HttpClient) { }
 
   private log(log: string){
@@ -33,19 +33,26 @@ export class RolePermissionService {
       return of(result as T);
     };
   } 
- 
+  
   getRoles(): Observable<Role[]> {
     return this.http.get<{ data: Role[] }>(this.apiUrlRole).pipe(
       map(response => response.data) 
     );
   }
 
-  getRoleById(id: number): Observable<Role> {
-    return this.http.get<{data : Role}>(`${this.apiUrlRole}/${id}`).pipe(
+  getRoleById(id: number): Observable<any> {
+    return this.http.get<{data : any}>(`${this.apiUrlRole}/${id}`).pipe(
       map(response => response.data),
-      catchError(this.handleError<Role>('getRoleById'))
+      catchError(this.handleError<any>('getRoleById'))
     );
   }
+
+  // getRoleById(id: number): Observable<Role> {
+  //   return this.http.get<{data : Role}>(`${this.apiUrlRole}/${id}`).pipe(
+  //     map(response => response.data),
+  //     catchError(this.handleError<Role>('getRoleById'))
+  //   );
+  // }
    
   createRole(role: Role): Observable<Role>{
     return this.http.post<Role>(`${this.apiUrlRole}`, role, httpOption).pipe(
@@ -65,4 +72,5 @@ export class RolePermissionService {
       catchError(this.handleError<void>('deleteRole'))
     );
   }
+    
 }

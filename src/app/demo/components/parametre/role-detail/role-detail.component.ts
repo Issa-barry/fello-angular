@@ -1,12 +1,14 @@
 import { Component, OnInit } from '@angular/core';
-import { ConfirmationService, MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService, TreeNode } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { ToastModule } from 'primeng/toast';
 import { Product } from '../../../api/product';
 import { ProductService } from '../../../service/product.service'; 
 import { Role } from 'src/app/demo/models/Role';
-import { RolePermissionService } from 'src/app/demo/service/rolePermission/role-permission.service';
-import { ActivatedRoute, Router } from '@angular/router';
+ import { ActivatedRoute, Router } from '@angular/router';
+import { Permission } from 'src/app/demo/models/Permission';
+import { PermissionService } from 'src/app/demo/service/permission/permission.service';
+import { RoleService } from 'src/app/demo/service/role/role.service';
 
 
 @Component({
@@ -18,236 +20,78 @@ import { ActivatedRoute, Router } from '@angular/router';
   providers: [MessageService, ConfirmationService]
 })
 export class RoleDetailComponent implements OnInit {
-  
-  roles : Role[] = [];
-  role: Role = new Role();
-  roleAgerer: Role = new Role();
-  id: number = this.activatedRoute.snapshot.params['id'];
 
-  optionPays: any[] = [];
-  roleDialog: boolean = false;  
-  deleteRoleDialog: boolean = false;
-  deleteRolesDialog: boolean = false;
+  roleId: number = this.activatedRoute.snapshot.params['id'];
   submitted: boolean = false;
-  cols: any[] = [];
-  statuses: any[] = [];
-  
- 
-
   rowsPerPageOptions = [5, 10, 20];
-  // selectedRoles: Role[] = [];
+
+  role: Role = new Role();  
+  selectedRoles: Role[] = [];    
+  cols: any[] = []; 
  
+  permissions: any[] = [];  
+  permission: any = {};
+  selectedPermissions: any[] = []; 
 
-  selectedRoles: Product[] = [];
-  products: Product[] = [];
-
-  product: Product = {};
+  rolePermissions: any[] = [];  
+  rolepermission: any = {};
 
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
-    private rolePermissionService: RolePermissionService,
+    private roleService: RoleService,
+    private permissionService: PermissionService,
     private productService: ProductService, 
     private messageService: MessageService, 
     private confirmationService: ConfirmationService) 
     { }
 
-
-  
   ngOnInit() {
-        this.getAllRoles();
-        this.GetRoleById();
-        
-        this.optionPays = [
-          { label: 'GUINEE-CONAKRY', value: 'Guinée-Conakry' },
-          { label: 'FRANCE', value: 'France' },
-      ];
-
-      this.productService.getProducts().then(data => this.products = data);
-
-      this.cols = [
-          { field: 'product', header: 'Product' },
-          { field: 'price', header: 'Price' },
-          { field: 'category', header: 'Category' },
-          { field: 'rating', header: 'Reviews' },
-          { field: 'inventoryStatus', header: 'Status' }
-      ];
-
-      this.statuses = [
-          { label: 'INSTOCK', value: 'instock' },
-          { label: 'LOWSTOCK', value: 'lowstock' },
-          { label: 'OUTOFSTOCK', value: 'outofstock' }
-      ];
+        this.getAllPermissions();
+        this.getRoleById(this.roleId);
+        this.getRolePermissionsById(this.roleId);
   }
 
-  getAllRoles(): void {
-    this.rolePermissionService.getRoles().subscribe({
+  // PERMISSIONS
+  getRolePermissionsById(id: number): void {
+    this.permissionService.getRolePermissions(id).subscribe({
       next: (response) => {
-        this.roles = response;   
-      },
-      error: (err) => {
-        console.error('Erreur lors de la récupération des roles:', err);
-      }
-    });
-  }
-
-  GetRoleById(): void{
-    this.rolePermissionService.getRoleById(this.id).subscribe({
-       next: (response) => {
-        this.roleAgerer = response;   
-        console.log("Le Role :", this.roleAgerer);
-      },
-      error: (err) => {
-        console.error('Erreur lors de la récupération du role:', err);
-      }
-    });
-      
-  }
-
-
-
-  saveRole() {
-    this.submitted = true;
-
-    if (this.role.id) { // Modification
-         
-      this.rolePermissionService.updateRole(this.role.id, this.role).subscribe({
-        next: () => {
-             this.getAllRoles(); 
-            this.messageService.add({
-                severity: 'success',
-                summary: 'Succès',
-                detail: 'Role modifié avec succès',
-                life: 3000
-            });
+        this.rolePermissions = response;  
+        console.log(this.rolePermissions);
+        // this.selectedPermissions = this.rolePermissions.map(permission => permission.name);
         },
-        error: (err) => {
-            console.error('Erreur lors de la création de l\'role:', err);
-            this.messageService.add({
-                severity: 'error',
-                summary: 'Erreur',
-                detail: 'Modification de l\'role échouée',
-                life: 3000
-            });
-        }
-    });
-    this.roleDialog = false;
-
-    } else { // Création 
-        this.rolePermissionService.createRole(this.role).subscribe({
-            next: () => {
-                this.getAllRoles(); 
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès',
-                    detail: 'Role créée avec succès',
-                    life: 3000
-                });
-            },
-            error: (err) => {
-                console.error('Erreur lors de la création de l\'role:', err);
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Erreur',
-                    detail: 'Création de l\'role échouée',
-                    life: 3000
-                });
-            }
-        });
-        this.roleDialog = false; 
-    }
-}
-  //Fin role
-
-
-  openNew() {
-      this.product = {};
-      this.submitted = false;
-      this.roleDialog = true;
-  }
-
-  deleteSelectedRoles() {
-      this.deleteRolesDialog = true;
-  }
-
-  editRole(role: Role) {
-    this.role = { ...role };
-    this.roleDialog = true;
-}
-
-// editRole(product: Product) {
-//   this.product = { ...product };
-//   this.roleDialog = true;
-// }
-
-  deleteRole(role: Role) {
-      this.deleteRoleDialog = true;
-      this.role = { ...role };
-  }
-
-  confirmDeleteSelected() {
-      this.deleteRolesDialog = false;
-      this.products = this.products.filter(val => !this.selectedRoles.includes(val));
-      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-      this.selectedRoles = [];
-  }
-
- 
-
-confirmDelete( ) { 
-  this.deleteRoleDialog = false;
-  
-  if (this.role.id !== undefined) { // Vérification que l'ID est défini
-      this.rolePermissionService.deleteRole(this.role.id).subscribe({
-          next: () => {
-              this.messageService.add({
-                  severity: 'success',
-                  summary: 'Succès',
-                  detail: 'Role supprimée avec succès',
-                  life: 3000
-              });
-              this.getAllRoles(); // Rechargez la liste des roles après suppression
-          },
-          error: (err) => {
-              console.error('Erreur lors de la suppression de l\'role:', err);
-              this.messageService.add({
-                  severity: 'error',
-                  summary: 'Erreur',
-                  detail: 'La suppression de l\'role a échoué',
-                  life: 3000
-              });
-          }
-      });
-  } else {
-      console.error('Impossible de supprimer : ID d\'role non défini.');
-      this.messageService.add({
-          severity: 'error',
-          summary: 'Erreur',
-          detail: 'Impossible de supprimer l\'role : ID non défini.',
-          life: 3000
-      });
-  }
-}
-
-  hideDialog() {
-      this.roleDialog = false;
-      this.submitted = false;
-  }
-
- 
-  findIndexById(id: string): number {
-      let index = -1;
-      for (let i = 0; i < this.products.length; i++) {
-          if (this.products[i].id === id) {
-              index = i;
-              break;
-          }
+      error: (err) => {
+        console.error('Erreur lors de la récupération des permissions:', err);
       }
-
-      return index;
+    });
   }
 
- 
+  
+  getAllPermissions(): void {
+    this.permissionService.getPermissions().subscribe({
+      next: (response) => {
+        this.permissions = response;  
+       },
+      error: (err) => {
+        console.error('Erreur lors de la récupération des permissions:', err);
+      }
+    });
+  }
+
+  // ROLE
+
+  getRoleById(id: number): void {
+    this.roleService.getRoleById(id).subscribe({
+      next: (response) => {
+        this.role = response;  
+        },
+      error: (err) => {
+        console.error('Erreur lors de la récupération des permissions:', err);
+      }
+    });
+  }
+
+  
   onGlobalFilter(table: Table, event: Event) {
       table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
@@ -255,5 +99,11 @@ confirmDelete( ) {
   onGoToRoleListe(){
     this.router.navigate(['/dashboard/parametre/role-liste'])
   }
+
+  saveSelectedPermissions(): void {
+    console.log('Permissions sélectionnées:', this.selectedPermissions);
+    // Vous pouvez maintenant utiliser la variable `selectedPermissions` pour effectuer des actions
+  }
+
 
 }
