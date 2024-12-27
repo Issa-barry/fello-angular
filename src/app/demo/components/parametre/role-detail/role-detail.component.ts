@@ -25,17 +25,14 @@ export class RoleDetailComponent implements OnInit {
   submitted: boolean = false;
   rowsPerPageOptions = [5, 10, 20];
 
-  role: Role = new Role();  
-  selectedRoles: Role[] = [];    
-  cols: any[] = []; 
- 
+  role: Role = new Role();    
+  
   permissions: any[] = [];  
   permission: any = {};
   selectedPermissions: any[] = []; 
 
-  rolePermissions: any[] = [];  
-  rolepermission: any = {};
-
+  rolePermissions: any = {};  
+ 
   constructor(
     private router: Router,
     private activatedRoute: ActivatedRoute,
@@ -51,14 +48,15 @@ export class RoleDetailComponent implements OnInit {
         this.getRoleById(this.roleId);
         this.getRolePermissionsById(this.roleId);
   }
-
-  // PERMISSIONS
+/**************************************************** *
+* PERMISSIONS
+/*********************************** */
   getRolePermissionsById(id: number): void {
     this.permissionService.getRolePermissions(id).subscribe({
       next: (response) => {
         this.rolePermissions = response;  
-        console.log(this.rolePermissions);
-        // this.selectedPermissions = this.rolePermissions.map(permission => permission.name);
+         console.log("permission du role :", this.rolePermissions.role.permissions); 
+         this.selectedPermissions = [...this.rolePermissions.role.permissions];
         },
       error: (err) => {
         console.error('Erreur lors de la récupération des permissions:', err);
@@ -66,6 +64,27 @@ export class RoleDetailComponent implements OnInit {
     });
   }
 
+  // isPermissionSelected(permission: { id: number }): boolean {
+  //   return this.rolePermissions?.role?.permissions?.some((p: { id: number }) => p.id === permission.id);
+  // }
+  
+
+  
+/**************************************************** *
+* ROLE
+/*********************************** */
+
+    getRoleById(id: number): void {
+      this.roleService.getRoleById(id).subscribe({
+        next: (response) => {
+          this.role = response;  
+          // console.log("Le role :", this.role); 
+          },
+        error: (err) => {
+          console.error('Erreur lors de la récupération des permissions:', err);
+        }
+      });
+    }
   
   getAllPermissions(): void {
     this.permissionService.getPermissions().subscribe({
@@ -78,18 +97,7 @@ export class RoleDetailComponent implements OnInit {
     });
   }
 
-  // ROLE
 
-  getRoleById(id: number): void {
-    this.roleService.getRoleById(id).subscribe({
-      next: (response) => {
-        this.role = response;  
-        },
-      error: (err) => {
-        console.error('Erreur lors de la récupération des permissions:', err);
-      }
-    });
-  }
 
   
   onGlobalFilter(table: Table, event: Event) {
@@ -102,7 +110,6 @@ export class RoleDetailComponent implements OnInit {
 
   saveSelectedPermissions(): void {
     console.log('Permissions sélectionnées:', this.selectedPermissions);
-    // Vous pouvez maintenant utiliser la variable `selectedPermissions` pour effectuer des actions
   }
 
 

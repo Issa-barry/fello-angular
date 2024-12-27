@@ -40,10 +40,10 @@ export class RoleService {
     );
   }
 
-  getRoleById(id: number): Observable<any> {
-    return this.http.get<{data : any}>(`${this.apiUrlRole}/${id}`).pipe(
+  getRoleById(id: number): Observable<Role> {
+    return this.http.get<{data : Role}>(`${this.apiUrlRole}/${id}`).pipe(
       map(response => response.data),
-      catchError(this.handleError<any>('getRoleById'))
+      catchError(this.handleError<Role>('getRoleById'))
     );
   }
 

@@ -14,7 +14,17 @@
               </ng-template>
           </p-toolbar>
 
-          <p-table #dt [value]="permissions | keyvalue" [columns]="cols" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['name']" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Liste de {first} / {last} des {totalRecords} roles" [(selection)]="selectedPermissions" selectionMode="multiple" [rowHover]="true" dataKey="id">
+          <p-table #dt [value]="permissions | keyvalue"   
+                   responsiveLayout="scroll"  
+                   [globalFilterFields]="['name']" 
+                   [rows]="10" [paginator]="true" 
+                   [rowsPerPageOptions]="[10,20,30]" 
+                   [showCurrentPageReport]="true" 
+                   currentPageReportTemplate="Liste de {first} / {last} des {totalRecords} roles"
+                   [(selection)]="selectedPermissions" 
+                   selectionMode="multiple" 
+                   [rowHover]="true" 
+                   dataKey="id">
               <ng-template pTemplate="caption">
                   <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                       <h5 class="m-0">Permissions du Role :  <span class="text-primary">{{ role.name }}</span> </h5>
@@ -38,7 +48,12 @@
                       <td style="width:50%; min-width:15rem; font-weight: 700;">{{rowData.key}} </td>
                       <td style="width:50%; min-width:15rem;" *ngFor="let permission of rowData.value">
                           {{ permission.name }} 
-                          <p-tableCheckbox [value]="permission" ></p-tableCheckbox>
+                          <p-tableCheckbox 
+                          [value]="permission" 
+                           
+                          >
+
+                          </p-tableCheckbox>
                           <!-- <p-tableCheckbox [value]="permission" [(ngModel)]="selectedPermissions"></p-tableCheckbox> -->
                       </td>
                   </tr>

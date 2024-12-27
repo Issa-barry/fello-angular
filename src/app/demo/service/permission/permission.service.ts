@@ -39,15 +39,22 @@ export class PermissionService {
     );
   }
  
+  //
   getRolesPermissions(): Observable<Role[]> {
-    return this.http.get<{ data: Role[] }>(this.apiUrl+'/roles-permissions-liste').pipe(
-      map(response => response.data) 
+    return this.http.get<{ data: Role[]}>(this.apiUrl+'/roles-permissions-liste').pipe(
+      map(response => {
+        // console.log('Réponse API brute :', response);
+        return response.data
+      }) 
     );
   } 
 
+  //Les permissions d'un role
   getRolePermissions(id: number): Observable<Role[]> {
     return this.http.get<{ data: Role[] }>(`${this.apiUrl}/role/${id}/permissions`).pipe( 
-      map(response => response.data) 
+      map(response => {
+        return response.data
+      }) 
     );
   } 
 
