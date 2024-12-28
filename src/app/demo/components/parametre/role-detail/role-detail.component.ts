@@ -52,46 +52,75 @@ export class RoleDetailComponent implements OnInit {
 /**************************************************** *
 * PERMISSIONS
 /*********************************** */
-  getRolePermissionsById(id: number): void {
-    this.permissionService.getRolePermissions(id).subscribe({
-      next: (response) => {
-        this.rolePermissions = response;  
-        //  console.log("permission du role :", this.rolePermissions.role.permissions); 
-         this.selectedPermissions = [...this.rolePermissions.role.permissions];//pre selection des permission (celà sert a les cocher en IHM)
+
+saveSelectedPermissions(): void {
+  // console.log('Permissions sélectionnées:', this.selectedPermissions);
+   this.revokeNonSelectedPermissions();
+   this.assignManyPermissionToRole(this.roleId)
+}
+
+  getDataNonSelected(): void {
+    const dataNonSelected = this.rolePermissions.role.permissions.filter(
+      (permission: Permission) =>
+        !this.selectedPermissions.some(selected => selected.id === permission.id)
+    );
+    console.log("Données non sélectionnées :", dataNonSelected);
+  }
+  
+  // revokeRolePermission(id:number): void {
+  //   // let dataToRevoke = 
+  //   //   {
+  //   //     "permission": permission 
+  //   // }
+
+  // //   this.permissionService.revokeRolePermissions(id, dataToRevoke).subscribe({
+  // //     next: () => {
+  // //          console.log("permission revoké");  
+  // //          this.getAllPermissions(); 
+  // //     },
+  // //     error: (err) => {
+  // //         console.error('Erreur lors de la révocation de la permission:', err);
+  // //         this.messageService.add({
+  // //             severity: 'error',
+  // //             summary: 'Erreur',
+  // //             detail: 'La révocation de permission a échouée',
+  // //             life: 3000
+  // //         });
+  // //     }
+  // //  });
+  // }
+
+  revokeNonSelectedPermissions(): void {
+    // Filtrer les permissions non sélectionnées
+    const dataNonSelected = this.rolePermissions.role.permissions.filter(
+      (permission: Permission) =>
+        !this.selectedPermissions.some(selected => selected.id === permission.id)
+    );
+  
+    console.log("Données non sélectionnées :", dataNonSelected);
+  
+    // Révoquer chaque permission
+    dataNonSelected.forEach((permission: Permission) => {
+      const dataToRevoke = { permission: permission.name };
+  
+      this.permissionService.revokeRolePermissions(this.roleId, dataToRevoke).subscribe({
+        next: () => {
+          console.log(`Permission révoquée : ${permission.name}`);
         },
-      error: (err) => {
-        console.error('Erreur lors de la récupération des permissions:', err);
-      }
+        error: (err) => {
+          console.error(`Erreur lors de la révocation de la permission ${permission.name}:`, err);
+        }
+      });
     });
   }
-
-  revokeRolePermission(id:number, permission: Permission): void {
-    let dataToRevoke = 
-      {
-        "permission": permission 
-    }
-    this.permissionService.revokeRolePermissions(id, dataToRevoke).subscribe({
-      next: () => {
-           console.log("permission revoké");  
-           this.getAllPermissions(); 
-      },
-      error: (err) => {
-          console.error('Erreur lors de la révocation de la permission:', err);
-          this.messageService.add({
-              severity: 'error',
-              summary: 'Erreur',
-              detail: 'La révocation de permission a échouée',
-              life: 3000
-          });
-      }
-   });
-  }
- 
+  
   assignManyPermissionToRole(id:number): void {
     let dataToAssigne = {
       permissions: this.selectedPermissions.map(permission => permission.name)
     };
 
+    console.log('Permissions a assigner:', this.selectedPermissions);
+    
     this.permissionService.assigneRolePermissions(id, dataToAssigne).subscribe({
       next: () => {
          this.getAllPermissions();  
@@ -108,12 +137,21 @@ export class RoleDetailComponent implements OnInit {
     });
   }
 
-  saveSelectedPermissions(): void {
-    // console.log('Permissions sélectionnées:', this.selectedPermissions);
-    //  this.revokeRolePermission(this.roleId, this.rolePermissions.role.permissions[1].name);
-    // this.assignManyPermissionToRole(this.roleId)
+  getRolePermissionsById(id: number): void {
+    this.permissionService.getRolePermissions(id).subscribe({
+      next: (response) => {
+        this.rolePermissions = response;  
+        //  console.log("permission du role :", this.rolePermissions.role.permissions); 
+         this.selectedPermissions = [...this.rolePermissions.role.permissions];//pre selection des permission (celà sert a les cocher en IHM)
+        },
+      error: (err) => {
+        console.error('Erreur lors de la récupération des permissions:', err);
+      }
+    });
   }
-  
+
+ 
+
 /**************************************************** *
 * ROLE
 /*********************************** */
