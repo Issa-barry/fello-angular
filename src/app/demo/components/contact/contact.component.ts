@@ -85,7 +85,7 @@ export class ContactComponent implements OnInit{
          
       this.contactService.updateContact(this.contact.id, this.contact).subscribe({
         next: () => {
-             this.getAllContacts(); 
+            this.getAllContacts(); 
             this.messageService.add({
                 severity: 'success',
                 summary: 'Succès',
