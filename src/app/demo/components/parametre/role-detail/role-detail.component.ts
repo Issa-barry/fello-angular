@@ -29,9 +29,10 @@ export class RoleDetailComponent implements OnInit {
   
   permissions: any[] = [];  
   permission: any = {};
-  selectedPermissions: any[] = []; 
+  selectedPermissions: Permission[] = []; 
 
   rolePermissions: any = {};  
+  permissionToRevoke: Permission = new Permission();  
  
   constructor(
     private router: Router,
@@ -55,8 +56,8 @@ export class RoleDetailComponent implements OnInit {
     this.permissionService.getRolePermissions(id).subscribe({
       next: (response) => {
         this.rolePermissions = response;  
-         console.log("permission du role :", this.rolePermissions.role.permissions); 
-         this.selectedPermissions = [...this.rolePermissions.role.permissions];
+        //  console.log("permission du role :", this.rolePermissions.role.permissions); 
+         this.selectedPermissions = [...this.rolePermissions.role.permissions];//pre selection des permission (celà sert a les cocher en IHM)
         },
       error: (err) => {
         console.error('Erreur lors de la récupération des permissions:', err);
@@ -64,11 +65,54 @@ export class RoleDetailComponent implements OnInit {
     });
   }
 
-  // isPermissionSelected(permission: { id: number }): boolean {
-  //   return this.rolePermissions?.role?.permissions?.some((p: { id: number }) => p.id === permission.id);
-  // }
-  
+  revokeRolePermission(id:number, permission: Permission): void {
+    let dataToRevoke = 
+      {
+        "permission": permission 
+    }
+    this.permissionService.revokeRolePermissions(id, dataToRevoke).subscribe({
+      next: () => {
+           console.log("permission revoké");  
+           this.getAllPermissions(); 
+      },
+      error: (err) => {
+          console.error('Erreur lors de la révocation de la permission:', err);
+          this.messageService.add({
+              severity: 'error',
+              summary: 'Erreur',
+              detail: 'La révocation de permission a échouée',
+              life: 3000
+          });
+      }
+   });
+  }
+ 
+  assignManyPermissionToRole(id:number): void {
+    let dataToAssigne = {
+      permissions: this.selectedPermissions.map(permission => permission.name)
+    };
 
+    this.permissionService.assigneRolePermissions(id, dataToAssigne).subscribe({
+      next: () => {
+         this.getAllPermissions();  
+      },
+      error: (err) => {
+          console.error('Erreur lors de l\'assignation de la permission:', err);
+          this.messageService.add({
+              severity: 'error',
+              summary: 'Erreur',
+              detail: 'Assignation de role a échouée',
+              life: 3000
+          });
+      }
+    });
+  }
+
+  saveSelectedPermissions(): void {
+    // console.log('Permissions sélectionnées:', this.selectedPermissions);
+    //  this.revokeRolePermission(this.roleId, this.rolePermissions.role.permissions[1].name);
+    // this.assignManyPermissionToRole(this.roleId)
+  }
   
 /**************************************************** *
 * ROLE
@@ -108,9 +152,6 @@ export class RoleDetailComponent implements OnInit {
     this.router.navigate(['/dashboard/parametre/role-liste'])
   }
 
-  saveSelectedPermissions(): void {
-    console.log('Permissions sélectionnées:', this.selectedPermissions);
-  }
 
 
 }

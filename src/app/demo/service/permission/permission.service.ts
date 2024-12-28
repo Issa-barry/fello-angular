@@ -58,5 +58,21 @@ export class PermissionService {
     );
   } 
 
+    //revoqué permissions d'un role
+    revokeRolePermissions(idRole: number, data: any): Observable<any>{
+          return this.http.post<any>(`${this.apiUrl}/roles/${idRole}/revoke-permission`, data, httpOption).pipe(
+            catchError(this.handleError('le service revokeRole à detecté une erreur sur les données transmises', data))
+          );
+    }
+
+     //Assigner permissions à un role
+    assigneRolePermissions(idRole: number, data: { permissions: string[] }): Observable<any>{
+      return this.http.post<any>(`${this.apiUrl}/roles/${idRole}/assign-permissions`, data, httpOption).pipe(
+        catchError(this.handleError('le service revokeRole à detecté une erreur sur les données transmises', data))
+      );
+}
+
+
+        
 }
  
