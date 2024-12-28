@@ -27,7 +27,7 @@ export class AppMenuComponent implements OnInit {
                     }
                 ]
             },
-            {
+            { 
                 label: 'MENU',
                 icon: 'pi pi-fw pi-star-fill',
                 items: [

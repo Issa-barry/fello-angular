@@ -177,4 +177,6 @@ export class RoleDetailComponent implements OnInit {
     onGoToRoleListe() {
         this.router.navigate(['/dashboard/parametre/role-liste']);
     }
+
+    
 }

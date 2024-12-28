@@ -36,15 +36,15 @@
                     </tr>
                 </ng-template>
                 <ng-template pTemplate="body" let-role>
-                    <tr style="cursor: pointer;" (click)="onGoToDetail(role.id)">
+                    <tr style="cursor: pointer;">
                         <td>
                             <p-tableCheckbox [value]="role"></p-tableCheckbox>
                         </td>
-                        <td style="width:30%; min-width:15rem; cursor: pointer;">
+                        <td style="width:30%; min-width:15rem; cursor: pointer;" (click)="onGoToDetail(role.id)">
                             <span class="p-column-title">Name</span>
                             {{role.name}}
                         </td>
-                        <td style="width:50%; min-width:15rem;">
+                        <td style="width:50%; min-width:15rem;" (click)="onGoToDetail(role.id)">
                             <span class="p-column-title">description</span> 
                         </td>   
                         <td>

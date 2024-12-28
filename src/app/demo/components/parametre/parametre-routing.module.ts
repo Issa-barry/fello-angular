@@ -3,10 +3,10 @@ import { RouterModule, Routes } from '@angular/router';
 import { GeneralComponent } from './general/general.component';
 
 const routes: Routes = [
-  { path: '', component: GeneralComponent }, 
-  { path: 'general', loadChildren: () => import('./general/general.module').then(m => m.GeneralModule) },
-  { path: 'role-liste', loadChildren: () => import('./role-liste/role-liste.module').then(m => m.RoleListeModule) },
-  { path: 'role-detail/:id', loadChildren: () => import('./role-detail/role-detail.module').then(m => m.RoleDetailModule) }
+  { path: '', data: {breadcrumb: 'Parametre'}, component: GeneralComponent }, 
+  { path: 'general', data: {breadcrumb: 'Général'}, loadChildren: () => import('./general/general.module').then(m => m.GeneralModule) },
+  { path: 'role-liste',data: {breadcrumb: 'Paramétre/Role/Liste'}, loadChildren: () => import('./role-liste/role-liste.module').then(m => m.RoleListeModule) },
+  { path: 'role-detail/:id',data: {breadcrumb: 'Paramétre > Role > détail'}, loadChildren: () => import('./role-detail/role-detail.module').then(m => m.RoleDetailModule) }
 ];
 
 @NgModule({
