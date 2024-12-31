@@ -16,7 +16,7 @@
 
           <p-table #dt [value]="permissions | keyvalue"   
                    responsiveLayout="scroll"  
-                   [globalFilterFields]="['name']" 
+                   [globalFilterFields]="['key']" 
                    [rows]="10" [paginator]="true" 
                    [rowsPerPageOptions]="[10,20,30]" 
                    [showCurrentPageReport]="true" 
@@ -36,11 +36,11 @@
               </ng-template>
               <ng-template pTemplate="header">
                   <tr>  
-                      <th pSortableColumn="reference">Model</th>
-                      <th pSortableColumn="name">Afficher</th>
-                      <th pSortableColumn="name">créer</th>
-                      <th pSortableColumn="name">Modifier</th>
-                      <th pSortableColumn="name">Supprimer</th> 
+                      <th pSortableColumn="name">Model</th>
+                      <th pSortableColumn="afficher">Afficher</th>
+                      <th pSortableColumn="créer">créer</th>
+                      <th pSortableColumn="modifier">Modifier</th>
+                      <th pSortableColumn="supprimer">Supprimer</th> 
                   </tr>
               </ng-template>
                <ng-template  pTemplate="body" let-rowData>
