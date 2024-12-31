@@ -19,6 +19,7 @@ import { RoleService } from 'src/app/demo/service/role/role.service';
     providers: [MessageService, ConfirmationService],
 })
 export class RoleDetailComponent implements OnInit {
+    isAdmin: boolean = false;
     roleId: number = this.activatedRoute.snapshot.params['id'];
     submitted: boolean = false;
     rowsPerPageOptions = [5, 10, 20];
@@ -53,6 +54,15 @@ export class RoleDetailComponent implements OnInit {
 /*********************************** */
 
     saveSelectedPermissions(): void {
+        if(this.isAdmin){
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Eurreur',
+                detail: 'Erreur : Vous ne pouvez pas modifier les permissions d\'un Admin. Ceci est géré uniquement coté back-end technique.',
+                life: 3000
+            });
+            return;
+        }
         this.revokeNonSelectedPermissions();
         this.assignManyPermissionToRole(this.roleId);
         this.getAllPermissions();
@@ -64,6 +74,27 @@ export class RoleDetailComponent implements OnInit {
       });
       
     }
+
+    assignManyPermissionToRole(id: number): void {
+        let dataToAssigne = {
+            permissions: this.selectedPermissions.map(
+                (permission) => permission.name
+            ),
+        };
+        this.permissionService
+            .assigneRolePermissions(id, dataToAssigne).subscribe({
+                next: () => {this.getAllPermissions();},
+                error: (err) => {console.error("Erreur lors de l'assignation de la permission:",err);
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Erreur',
+                        detail: 'Assignation de role a échouée',
+                        life: 3000,
+                    });
+                },
+            });
+    }
+
 
     revokeNonSelectedPermissions(): void {
         // Filtrer les permissions non sélectionnées
@@ -91,33 +122,7 @@ export class RoleDetailComponent implements OnInit {
         });
     }
 
-    assignManyPermissionToRole(id: number): void {
-        let dataToAssigne = {
-            permissions: this.selectedPermissions.map(
-                (permission) => permission.name
-            ),
-        };
-        this.permissionService
-            .assigneRolePermissions(id, dataToAssigne)
-            .subscribe({
-                next: () => {
-                    this.getAllPermissions();
-                },
-                error: (err) => {
-                    console.error(
-                        "Erreur lors de l'assignation de la permission:",
-                        err
-                    );
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: 'Erreur',
-                        detail: 'Assignation de role a échouée',
-                        life: 3000,
-                    });
-                },
-            });
-    }
-
+   
     getRolePermissionsById(id: number): void {
         this.permissionService.getRolePermissions(id).subscribe({
             next: (response) => {
@@ -143,6 +148,9 @@ export class RoleDetailComponent implements OnInit {
         this.roleService.getRoleById(id).subscribe({
             next: (response) => {
                 this.role = response; 
+
+                // Vérifiez si le rôle est "Admin"
+                this.isAdmin = this.role.name === 'Admin';
             },
             error: (err) => {
                 console.error(
