@@ -19,6 +19,7 @@ import { RoleService } from 'src/app/demo/service/role/role.service';
 })
 export class RoleListeComponent implements OnInit {
   
+    isAdmin: boolean = false;
   roles : Role[] = [];
   role: Role = new Role();
   optionPays: any[] = [];
@@ -171,7 +172,7 @@ export class RoleListeComponent implements OnInit {
   confirmDeleteSelected() {
       this.deleteRolesDialog = false;
       this.products = this.products.filter(val => !this.selectedRoles.includes(val));
-      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
+      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Role Deleted', life: 3000 });
       this.selectedRoles = [];
   }
 
@@ -179,7 +180,6 @@ export class RoleListeComponent implements OnInit {
 
 confirmDelete( ) { 
   this.deleteRoleDialog = false;
-  
   if (this.role.id !== undefined) { // Vérification que l'ID est défini
       this.roleService.deleteRole(this.role.id).subscribe({
           next: () => {
@@ -202,7 +202,6 @@ confirmDelete( ) {
           }
       });
   } else {
-      console.error('Impossible de supprimer : ID d\'role non défini.');
       this.messageService.add({
           severity: 'error',
           summary: 'Erreur',

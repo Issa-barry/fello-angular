@@ -39,7 +39,7 @@ export class RoleService {
       map(response => response.data) 
     );
   }
-
+ 
   getRoleById(id: number): Observable<Role> {
     return this.http.get<{data : Role}>(`${this.apiUrlRole}/${id}`).pipe(
       map(response => response.data),

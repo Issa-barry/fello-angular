@@ -31,7 +31,7 @@ export class AppProfileSidebarComponent {
   logout() {
     this.authService.logout().subscribe({
       next: () => {
-        console.log('Utilisateur déconnecté');
+        this.router.navigate(['/auth/login']); 
       },
       error: (err) => {
         console.error('Erreur de déconnexion', err);
