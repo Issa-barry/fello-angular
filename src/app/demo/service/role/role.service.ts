@@ -32,13 +32,19 @@ export class RoleService {
       this.log(`${operation} failed: ${error.message}`);
       return of(result as T);
     };
-  } 
+  }  
   
   getRoles(): Observable<Role[]> {
     return this.http.get<{ data: Role[] }>(this.apiUrlRole).pipe(
       map(response => response.data) 
     );
   }
+  // getRoles(): Observable<Role[]> {
+  //   return this.http.get<{ roles: Role[] }>(this.apiUrlRole).pipe(
+  //     map(response => response.roles) // Changez "data" par "roles"
+  //   );
+  // }
+  
  
   getRoleById(id: number): Observable<Role> {
     return this.http.get<{data : Role}>(`${this.apiUrlRole}/${id}`).pipe(

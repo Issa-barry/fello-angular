@@ -4,6 +4,7 @@ import { BehaviorSubject, Observable, of } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from 'src/environements/environment.dev';
 import { Router } from '@angular/router';
+import { TokenService } from '../token/token.service';
 
 const httpOption = {
   headers: new HttpHeaders({
@@ -19,7 +20,10 @@ export class AuthService {
   private currentUserSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
 
-  constructor(public router: Router, private http: HttpClient) {
+  constructor(
+               public router: Router,
+            private http: HttpClient,
+            private tokenService: TokenService) {
     const storedUser = localStorage.getItem('access_token');
     this.currentUserSubject = new BehaviorSubject<any>(storedUser ? { access_token: storedUser } : null);
     this.currentUser = this.currentUserSubject.asObservable();
@@ -40,25 +44,20 @@ export class AuthService {
   login(credentials: { email: string; password: string }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
       map((response) => {
-        // Sauvegarder le token d'accès dans localStorage
-        localStorage.setItem('access_token', response.access_token);
+        this.tokenService.storeToken(response.access_token);
         this.currentUserSubject.next({ access_token: response.access_token });
         return response;
       }),
       catchError(this.handleError('login', null))
     );
   }
-
-  // logout(): void {
-  //   // Supprimer le token d'accès lors de la déconnexion
-  //   localStorage.removeItem('access_token');
-  //   this.currentUserSubject.next(null);
-  //   this.router.navigate(['/auth/login']);
-  // }
+ 
   logout(): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/logout`, {}).pipe(
       map(() => {
-        localStorage.removeItem('access_token'); 
+        this.tokenService.clearToken();
+        this.currentUserSubject.next(null);
+        this.router.navigate(['/auth/login']);
       }),
       catchError(this.handleError('logout'))
     );
@@ -76,10 +75,22 @@ export class AuthService {
   }
 
   isAuthenticated(): boolean {
-    return !!localStorage.getItem('access_token'); // Vérifier si le token est présent dans localStorage
+    return this.tokenService.hasToken();
   }
 
   getUserInfo(): any {
     return this.currentUserValue; // Retourne l'utilisateur actuellement stocké
+  }
+
+  verifyToken(): Observable<boolean> {
+    return this.tokenService.verifyToken().pipe(
+      map((isValid) => {
+        if (!isValid) {
+          this.currentUserSubject.next(null);
+          this.router.navigate(['/auth/login']);
+        }
+        return isValid;
+      })
+    );
   }
 }

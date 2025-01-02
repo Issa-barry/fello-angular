@@ -80,7 +80,7 @@ export class RoleListeComponent implements OnInit {
     this.roleService.getRoles().subscribe({
       next: (response) => {
         this.roles = response;   
-        console.log("Roles :", this.roles);
+        console.log("Roles :", response);
       },
       error: (err) => {
         console.error('Erreur lors de la récupération des roles:', err);
