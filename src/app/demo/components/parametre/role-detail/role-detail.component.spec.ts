@@ -20,4 +20,4 @@ describe('RoleDetailComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-});
+}); 

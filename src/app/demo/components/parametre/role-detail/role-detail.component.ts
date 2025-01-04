@@ -20,6 +20,8 @@ import { RoleService } from 'src/app/demo/service/role/role.service';
 })
 export class RoleDetailComponent implements OnInit {
     isAdmin: boolean = false;
+    loading: boolean = true; // Pour afficher un état de chargement
+
     roleId: number = this.activatedRoute.snapshot.params['id'];
     submitted: boolean = false;
     rowsPerPageOptions = [5, 10, 20];
@@ -52,17 +54,52 @@ export class RoleDetailComponent implements OnInit {
 /**************************************************** *
 * PERMISSIONS
 /*********************************** */
+getAllPermissions(): void {
+    this.permissionService.getPermissions().subscribe({
+        next: (response) => {
+            this.permissions = response;
+            console.log("les permis", this.permissions);
+            this.loading = false; // Désactiver l'état de chargement
+        },
+        error: (err) => {
+            console.error( 'Erreur lors de la récupération des permissions:', err );
+            this.loading = false; // Désactiver l'état de chargement
+        },
+    });
+}
+
+   
+getRolePermissionsById(id: number): void {
+    this.permissionService.getRolePermissions(id).subscribe({
+        next: (response) => {
+            this.rolePermissions = response; 
+            console.log("permission du role2",this.rolePermissions);
+            
+            this.selectedPermissions = [
+                ...this.rolePermissions,
+            ]; //pre selection des permissions (celà sert à les cocher en IHM)
+        },
+        error: (err) => {
+            console.error(
+                'Erreur lors de la récupération des permissions:',
+                err
+            );
+        },
+    });
+}
+
 
     saveSelectedPermissions(): void {
-        if(this.isAdmin){
-            this.messageService.add({
-                severity: 'error',
-                summary: 'Eurreur',
-                detail: 'Erreur : Vous ne pouvez pas modifier les permissions d\'un Admin. Ceci est géré uniquement coté back-end technique.',
-                life: 3000
-            });
-            return;
-        }
+        // if(this.isAdmin){
+        //     this.messageService.add({
+        //         severity: 'error',
+        //         summary: 'Eurreur',
+        //         detail: 'Erreur : Vous ne pouvez pas modifier les permissions d\'un Admin. Ceci est géré uniquement coté back-end technique.',
+        //         life: 3000
+        //     });
+        //     return;
+        // }
+
         this.revokeNonSelectedPermissions();
         this.assignManyPermissionToRole(this.roleId);
         this.getAllPermissions();
@@ -98,7 +135,7 @@ export class RoleDetailComponent implements OnInit {
 
     revokeNonSelectedPermissions(): void {
         // Filtrer les permissions non sélectionnées
-        const dataNonSelected = this.rolePermissions.role.permissions.filter(
+        const dataNonSelected = this.rolePermissions.filter(
             (permission: Permission) =>
                 !this.selectedPermissions.some(
                     (selected) => selected.id === permission.id
@@ -122,23 +159,6 @@ export class RoleDetailComponent implements OnInit {
         });
     }
 
-   
-    getRolePermissionsById(id: number): void {
-        this.permissionService.getRolePermissions(id).subscribe({
-            next: (response) => {
-                this.rolePermissions = response; 
-                this.selectedPermissions = [
-                    ...this.rolePermissions.role.permissions,
-                ]; //pre selection des permissions (celà sert à les cocher en IHM)
-            },
-            error: (err) => {
-                console.error(
-                    'Erreur lors de la récupération des permissions:',
-                    err
-                );
-            },
-        });
-    }
 
 /**************************************************** *
 * ROLE
@@ -161,19 +181,7 @@ export class RoleDetailComponent implements OnInit {
         });
     }
 
-    getAllPermissions(): void {
-        this.permissionService.getPermissions().subscribe({
-            next: (response) => {
-                this.permissions = response;
-            },
-            error: (err) => {
-                console.error(
-                    'Erreur lors de la récupération des permissions:',
-                    err
-                );
-            },
-        });
-    }
+  
 
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal(

@@ -19,18 +19,19 @@ export class AuthService {
   private apiUrl = `${environment.apiDev}`;
   private currentUserSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
+  private   userId = "";
 
   constructor(
-               public router: Router,
-            private http: HttpClient,
-            private tokenService: TokenService) {
+    public router: Router,
+    private http: HttpClient,
+    private tokenService: TokenService) {
     const storedUser = localStorage.getItem('access_token');
     this.currentUserSubject = new BehaviorSubject<any>(storedUser ? { access_token: storedUser } : null);
     this.currentUser = this.currentUserSubject.asObservable();
   }
 
   public get currentUserValue(): any {
-    return this.currentUserSubject.value;
+    return this.currentUser;
   }
 
   private handleError<T>(operation = 'operation', result?: T) {
@@ -40,11 +41,14 @@ export class AuthService {
       return of(result as T);
     };
   }
-
+ 
   login(credentials: { email: string; password: string }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
       map((response) => {
         this.tokenService.storeToken(response.access_token);
+         this.userId = response.user.id;
+         this.setUserId(this.userId);
+        localStorage.setItem('user_id', this.userId);
         this.currentUserSubject.next({ access_token: response.access_token });
         return response;
       }),
@@ -81,6 +85,15 @@ export class AuthService {
   getUserInfo(): any {
     return this.currentUserValue; // Retourne l'utilisateur actuellement stocké
   }
+
+  setUserId(id: string) {
+    this.userId = id;
+  }
+
+  getUserId() {
+   return localStorage.getItem('user_id');
+  }
+
 
   verifyToken(): Observable<boolean> {
     return this.tokenService.verifyToken().pipe(

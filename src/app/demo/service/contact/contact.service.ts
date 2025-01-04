@@ -19,7 +19,7 @@ const httpOption = {
   providedIn: 'root'
 })
 export class ContactService {
-  private apiUrl = `${environment.apiDev}/users`;
+  private apiUrl = `${environment.apiDev}`;
 
   constructor(private http: HttpClient) { }
 
@@ -36,13 +36,13 @@ export class ContactService {
   }  
 
   getContacts(): Observable<Contact[]> {
-    return this.http.get<{ data: Contact[] }>(this.apiUrl).pipe(
+    return this.http.get<{ data: Contact[] }>(this.apiUrl+"/users").pipe(
       map(response => response.data) 
     );
   }
 
   getContactById(id: number): Observable<Contact> {
-    return this.http.get<Contact>(`${this.apiUrl}/${id}`);
+    return this.http.get<Contact>(`${this.apiUrl}/users/${id}`);
   }
 
   createContact(contact: Contact): Observable<Contact>{
@@ -53,13 +53,13 @@ export class ContactService {
   
    
   updateContact(id: number, contact: Contact): Observable<Contact> {
-    return this.http.put<Contact>(`${this.apiUrl}/${id}`, contact, httpOption).pipe(
+    return this.http.put<Contact>(`${this.apiUrl}/users/${id}`, contact, httpOption).pipe(
       catchError(this.handleError<Contact>('updateContact'))
     );
   }
   
   deleteContact(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/${id}`, httpOption).pipe(
+    return this.http.delete<void>(`${this.apiUrl}/users/${id}`, httpOption).pipe(
       catchError(this.handleError<void>('deleteContact'))
     );
   }

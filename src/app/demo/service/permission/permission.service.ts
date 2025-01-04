@@ -14,7 +14,7 @@ const httpOption = {
    
   })
 }; 
-@Injectable({
+@Injectable({ 
   providedIn: 'root'
 })
 export class PermissionService {
@@ -39,7 +39,7 @@ export class PermissionService {
     );
   }
  
-  //
+  //Permissions de tous les roles
   getRolesPermissions(): Observable<Role[]> {
     return this.http.get<{ data: Role[]}>(this.apiUrl+'/roles-permissions-liste').pipe(
       map(response => {
@@ -49,14 +49,27 @@ export class PermissionService {
     );
   } 
 
-  //Les permissions d'un role
-  getRolePermissions(id: number): Observable<Role[]> {
-    return this.http.get<{ data: Role[] }>(`${this.apiUrl}/role/${id}/permissions`).pipe( 
-      map(response => {
-        return response.data
-      }) 
-    );
-  } 
+  //Les permissions d'un role : ancien
+  // getRolePermissions(id: number): Observable<Role[]> {
+  //   return this.http.get<{ data: Role[] }>(`${this.apiUrl}/role/${id}/permissions`).pipe( 
+  //     map(response => {
+  //       return response.data
+  //     }) 
+  //   );
+  // } 
+
+  //Les permissions d'un role : ancien
+  getRolePermissions(id: number): Observable<Permission[]> {
+    return this.http
+      .get<{ data: { role: { permissions: Permission[] } } }>(`${this.apiUrl}/role/${id}/permissions`)
+      .pipe(
+        map((response) => { 
+          return response.data.role.permissions;
+        }),
+        catchError(this.handleError<Permission[]>('getRolePermissions', []))
+      );
+  }
+  
 
     //revoqué permissions d'un role
     revokeRolePermissions(idRole: number, data: any): Observable<any>{

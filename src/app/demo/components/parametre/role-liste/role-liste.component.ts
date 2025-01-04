@@ -7,6 +7,9 @@ import { ProductService } from '../../../service/product.service';
 import { Role } from 'src/app/demo/models/Role';
 import { Router } from '@angular/router';
 import { RoleService } from 'src/app/demo/service/role/role.service';
+import { AuthService } from 'src/app/demo/service/auth/auth.service';
+import { PermissionService } from 'src/app/demo/service/permission/permission.service';
+import { ContactService } from 'src/app/demo/service/contact/contact.service';
 
 
 @Component({
@@ -19,7 +22,9 @@ import { RoleService } from 'src/app/demo/service/role/role.service';
 })
 export class RoleListeComponent implements OnInit {
   
-    isAdmin: boolean = false;
+  isAdmin: boolean = false;
+  canEdit: boolean = false;
+  loading: boolean = true;
   roles : Role[] = [];
   role: Role = new Role();
   optionPays: any[] = [];
@@ -29,11 +34,12 @@ export class RoleListeComponent implements OnInit {
   submitted: boolean = false;
   cols: any[] = [];
   statuses: any[] = [];
-  
- 
 
+  userAuthenticated : any = {};
+  userAuthenticatedRole : any = {};
+  userAuthenticatedRoleID : number = 0;
+  
   rowsPerPageOptions = [5, 10, 20];
-  // selectedRoles: Role[] = [];
  
 
   selectedRoles: Product[] = [];
@@ -41,53 +47,96 @@ export class RoleListeComponent implements OnInit {
 
   product: Product = {};
 
+  permissions: any[] = [];
+  permission: any = {};
+  rolePermissions: any = {};
+
   constructor(
     private router : Router,
+    private contactService: ContactService,
+    private authService: AuthService,
     private roleService: RoleService,
     private productService: ProductService, 
     private messageService: MessageService, 
+    private permissionService: PermissionService,
     private confirmationService: ConfirmationService) 
     { }
 
-
-  
+   
   ngOnInit() {
-        this.getAllRoles();
-        
         this.optionPays = [
           { label: 'GUINEE-CONAKRY', value: 'Guinée-Conakry' },
           { label: 'FRANCE', value: 'France' },
       ];
-
-      this.productService.getProducts().then(data => this.products = data);
-
-      this.cols = [
-          { field: 'product', header: 'Product' },
-          { field: 'price', header: 'Price' },
-          { field: 'category', header: 'Category' },
-          { field: 'rating', header: 'Reviews' },
-          { field: 'inventoryStatus', header: 'Status' }
-      ];
-
-      this.statuses = [
-          { label: 'INSTOCK', value: 'instock' },
-          { label: 'LOWSTOCK', value: 'lowstock' },
-          { label: 'OUTOFSTOCK', value: 'outofstock' }
-      ];
+      
+      this.getAllRoles(); 
+      this.getAutenticatedContact(); 
+  }
+ 
+     
+//   canEdit(): boolean {
+   
+//     return false;
+//     // return this.role.includes('modifier devises');
+//   }
+/******************************************************
+ *   USERS
+ ******************************************************/ 
+getAutenticatedContact(): void {
+    const id = Number(this.authService.getUserId());
+    this.contactService.getContactById(id).subscribe({
+      next: (response) => {
+        this.userAuthenticated = response;  
+        this.userAuthenticatedRole = this.userAuthenticated.data.roles;
+        // console.log('User Authenticated:', this.userAuthenticated.data);
+        // console.log('User Authenticated Role:', this.userAuthenticatedRole[0]);
+        this.getRolePermissionsById(this.userAuthenticatedRole[0].id);
+      },
+      error: (err) => {
+        console.error('Erreur lors de la récupération du USER:', err);
+      }
+    });
   }
 
+ 
+
+/******************************************************
+ *   PERMISSIONS
+ ******************************************************/ 
+ 
+
+getRolePermissionsById(id: number): void {
+    this.permissionService.getRolePermissions(id).subscribe({
+        next: (response) => {
+            this.rolePermissions = response; 
+            console.log("permissions du rôle:", this.rolePermissions);
+            this.canEdit = this.rolePermissions.some((permission: any) => permission.name === 'modifier Roles');
+            console.log('Can Edit:', this.canEdit);
+        },
+        error: (err) => {
+            console.error(
+                'Erreur lors de la récupération des permissions:',
+                err
+            );
+        },
+    });
+}
+
+
+
+/******************************************************
+ *   ROLE
+ ******************************************************/ 
   getAllRoles(): void {
     this.roleService.getRoles().subscribe({
       next: (response) => {
         this.roles = response;   
-        console.log("Roles :", response);
       },
       error: (err) => {
         console.error('Erreur lors de la récupération des roles:', err);
       }
     });
   }
-
 
 
   saveRole() {
@@ -141,28 +190,44 @@ export class RoleListeComponent implements OnInit {
         this.roleDialog = false; 
     }
 }
-  //Fin role
+ 
 
-
+/******************************************************
+ *   UTILS
+ ******************************************************/ 
+ 
   openNew() {
-      this.product = {};
+      this.role = new Role();
       this.submitted = false;
       this.roleDialog = true;
   }
+
+  
+  hideDialog() {
+    this.roleDialog = false;
+    this.submitted = false;
+}
 
   deleteSelectedRoles() {
       this.deleteRolesDialog = true;
   }
 
+
+
   editRole(role: Role) {
+    if(!this.canEdit){
+        this.messageService.add({
+            severity: 'error',
+            summary: 'Accès refusé',
+            detail: 'Vous n\'avez pas la permission pour modifier les rôles.',
+            life: 3000,
+          });
+          return;
+    }
+  
     this.role = { ...role };
     this.roleDialog = true;
-}
-
-// editRole(product: Product) {
-//   this.product = { ...product };
-//   this.roleDialog = true;
-// }
+ }
 
   deleteRole(role: Role) {
       this.deleteRoleDialog = true;
@@ -210,24 +275,6 @@ confirmDelete( ) {
       });
   }
 }
-
-  hideDialog() {
-      this.roleDialog = false;
-      this.submitted = false;
-  }
-
- 
-  findIndexById(id: string): number {
-      let index = -1;
-      for (let i = 0; i < this.products.length; i++) {
-          if (this.products[i].id === id) {
-              index = i;
-              break;
-          }
-      }
-
-      return index;
-  }
 
   createId(): string {
       let id = '';

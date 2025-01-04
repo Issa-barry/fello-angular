@@ -1,6 +1,9 @@
 <div class="grid">
   <div class="col-12">
-      <div class="card px-6 py-6">
+    <!-- <div *ngIf="loading">Chargement des permissions...</div> -->
+
+      <div class="card px-6 py-6"  >
+        
           <p-toast></p-toast>
           <p-toolbar styleClass="mb-4">
               <ng-template pTemplate="left">
@@ -10,7 +13,7 @@
               </ng-template>
 
               <ng-template pTemplate="right">
-                  <button [disabled]="isAdmin" pButton pRipple label="Sauvegarder" icon="pi pi-save" class="p-button-help" (click)="saveSelectedPermissions()"></button>
+                  <button   pButton pRipple label="Sauvegarder" icon="pi pi-save" class="p-button-help" (click)="saveSelectedPermissions()"></button>
               </ng-template>
           </p-toolbar>
 
@@ -48,7 +51,7 @@
                       <td style="width:50%; min-width:15rem; font-weight: 700;">{{rowData.key}} </td>
                       <td style="width:50%; min-width:15rem;" *ngFor="let permission of rowData.value">
                           <!-- {{ permission.name }}  -->
-                          <p-tableCheckbox [value]="permission" [disabled]="isAdmin"></p-tableCheckbox>
+                          <p-tableCheckbox [value]="permission"  ></p-tableCheckbox>
                           <!-- <p-tableCheckbox [value]="permission" [(ngModel)]="selectedPermissions"></p-tableCheckbox> -->
                       </td>
                   </tr>

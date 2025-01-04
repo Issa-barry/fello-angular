@@ -18,7 +18,7 @@ const httpOption = {
   providedIn: 'root'
 })
 export class RoleService {
-  private apiUrlRole = `${environment.apiDev}/roles`;
+  private apiUrlRole = `${environment.apiDev}`;
      
   constructor(private http: HttpClient) { }
 
@@ -35,48 +35,46 @@ export class RoleService {
   }  
   
   getRoles(): Observable<Role[]> {
-    return this.http.get<{ data: Role[] }>(this.apiUrlRole).pipe(
+    return this.http.get<{ data: Role[] }>(this.apiUrlRole+'/roles').pipe(
       map(response => response.data) 
     );
-  }
-  // getRoles(): Observable<Role[]> {
-  //   return this.http.get<{ roles: Role[] }>(this.apiUrlRole).pipe(
-  //     map(response => response.roles) // Changez "data" par "roles"
-  //   );
-  // }
-  
+  } 
  
   getRoleById(id: number): Observable<Role> {
-    return this.http.get<{data : Role}>(`${this.apiUrlRole}/${id}`).pipe(
+    return this.http.get<{data : Role}>(`${this.apiUrlRole}/roles/${id}`).pipe(
       map(response => response.data),
       catchError(this.handleError<Role>('getRoleById'))
     );
   }
 
-  // getRoleById(id: number): Observable<Role> {
-  //   return this.http.get<{data : Role}>(`${this.apiUrlRole}/${id}`).pipe(
-  //     map(response => response.data),
-  //     catchError(this.handleError<Role>('getRoleById'))
-  //   );
-  // }
+  findRoleByName(credentials: { name: string;}): Observable<Role> {
+    return this.http
+      .post<{ data: Role }>(`${this.apiUrlRole}/roles/find-by-name`, credentials, httpOption)
+      .pipe(
+        map((response) => response.data),
+        catchError(this.handleError<Role>('findRoleByName'))
+      );
+  }
+  
    
   createRole(role: Role): Observable<Role>{
-    return this.http.post<Role>(`${this.apiUrlRole}`, role, httpOption).pipe(
+    return this.http.post<Role>(`${this.apiUrlRole}/roles`, role, httpOption).pipe(
       catchError(this.handleError('le service createRole à detecté une erreur sur les données transmises', role))
     );
   }
   
-    
   updateRole(id: number, role: Role): Observable<Role> {
-    return this.http.put<Role>(`${this.apiUrlRole}/${id}`, role, httpOption).pipe(
+    return this.http.put<Role>(`${this.apiUrlRole}/roles/${id}`, role, httpOption).pipe(
       catchError(this.handleError<Role>('updateRole'))
     );
   }
 
   deleteRole(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrlRole}/${id}`, httpOption).pipe(
+    return this.http.delete<void>(`${this.apiUrlRole}/roles/${id}`, httpOption).pipe(
       catchError(this.handleError<void>('deleteRole'))
     );
   }
+
+  
     
 }

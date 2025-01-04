@@ -27,9 +27,9 @@ export class LoginComponent implements OnInit {
   login(): void {
     const credentials = { email: this.email, password: this.password };
     this.authService.login(credentials).subscribe(
-      (response) => {
+      (response) => { 
         console.log('Connexion réussie :', response);
-        this.router.navigate(['/dashboard']);
+        this.router.navigate(['/dashboard']); 
       },
       (error) => {
         this.errorMessage = 'Échec de la connexion, vérifiez vos identifiants.';

@@ -74,7 +74,7 @@ hideDialog() {
 }
 
 openNew() {
-  this.agence = new Agence();
+   this.agence = new Agence();
    this.submitted = false;
    this.agenceDialog = true;
 }
