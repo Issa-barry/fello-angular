@@ -1,7 +1,7 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { environment } from 'src/environements/environment.dev';
-import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
+import { catchError, map, Observable, of, switchMap, tap, throwError } from 'rxjs';
 import { Role } from '../../models/Role';
  
 const httpOption = {
@@ -38,7 +38,7 @@ export class RoleService {
     return this.http.get<{ data: Role[] }>(this.apiUrlRole+'/roles').pipe(
       map(response => response.data) 
     );
-  } 
+  }   
  
   getRoleById(id: number): Observable<Role> {
     return this.http.get<{data : Role}>(`${this.apiUrlRole}/roles/${id}`).pipe(
@@ -69,12 +69,20 @@ export class RoleService {
     );
   }
 
-  deleteRole(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrlRole}/roles/${id}`, httpOption).pipe(
-      catchError(this.handleError<void>('deleteRole'))
-    );
-  }
+  // deleteRole(id: number): Observable<void> {
+  //   return this.http.delete<void>(`${this.apiUrlRole}/roles/${id}`, httpOption).pipe(
+  //     catchError(this.handleError<void>('deleteRole'))
+  //   );
+  // }
 
-  
+  deleteRole(id: number): Observable<void> { 
+    return this.http.delete<void>(`${this.apiUrlRole}/roles/${id}`, httpOption).pipe(
+        catchError((error) => {
+            console.error('Erreur dans deleteRole:', error);
+            return throwError(() => error); // Propager l'erreur au composant
+        })
+    );
+ }
+
     
 }

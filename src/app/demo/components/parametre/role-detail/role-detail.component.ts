@@ -90,15 +90,15 @@ getRolePermissionsById(id: number): void {
 
 
     saveSelectedPermissions(): void {
-        // if(this.isAdmin){
-        //     this.messageService.add({
-        //         severity: 'error',
-        //         summary: 'Eurreur',
-        //         detail: 'Erreur : Vous ne pouvez pas modifier les permissions d\'un Admin. Ceci est géré uniquement coté back-end technique.',
-        //         life: 3000
-        //     });
-        //     return;
-        // }
+        if(this.isAdmin){
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Eurreur',
+                detail: 'Erreur : Vous ne pouvez pas modifier les permissions d\'un Admin. Ceci est géré uniquement coté back-end technique.',
+                life: 3000
+            });
+            return;
+        }
 
         this.revokeNonSelectedPermissions();
         this.assignManyPermissionToRole(this.roleId);
@@ -169,8 +169,8 @@ getRolePermissionsById(id: number): void {
             next: (response) => {
                 this.role = response; 
 
-                // Vérifiez si le rôle est "Admin"
-                this.isAdmin = this.role.name === 'Admin';
+                // Vérifiez si le rôle est "Administrateur"
+                this.isAdmin = this.role.name === 'Administrateur';
             },
             error: (err) => {
                 console.error(

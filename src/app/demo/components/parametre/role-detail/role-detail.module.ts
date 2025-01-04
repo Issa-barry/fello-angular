@@ -22,6 +22,7 @@ import { AppConfigModule } from 'src/app/layout/config/app.config.module';
 import { TreeDemoRoutingModule } from '../../uikit/tree/treedemo-routing.module';
 import { TreeTableModule } from 'primeng/treetable';
 import { TreeModule } from 'primeng/tree';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
  
 @NgModule({
   declarations: [RoleDetailComponent],
@@ -33,7 +34,6 @@ import { TreeModule } from 'primeng/tree';
 	FileUploadModule,
 	FormsModule,
 	ButtonModule,
-	RippleModule,
 	ToolbarModule,
 	RatingModule,
 	InputTextModule,
@@ -42,12 +42,12 @@ import { TreeModule } from 'primeng/tree';
 	RadioButtonModule,
 	InputNumberModule,
 	DialogModule, 
-    InputTextModule,
     RippleModule,
     AppConfigModule,  
 	TreeDemoRoutingModule, 
 	TreeModule,
 	TreeTableModule,
+	ProgressSpinnerModule
   ]
 })
 export class RoleDetailModule { }

@@ -10,6 +10,7 @@ import { RoleService } from 'src/app/demo/service/role/role.service';
 import { AuthService } from 'src/app/demo/service/auth/auth.service';
 import { PermissionService } from 'src/app/demo/service/permission/permission.service';
 import { ContactService } from 'src/app/demo/service/contact/contact.service';
+import { el } from '@fullcalendar/core/internal-common';
 
 
 @Component({
@@ -129,6 +130,7 @@ getRolePermissionsById(id: number): void {
     this.roleService.getRoles().subscribe({
       next: (response) => {
         this.roles = response;   
+        this.loading = false; 
       },
       error: (err) => {
         console.error('Erreur lors de la récupération des roles:', err);
@@ -139,8 +141,7 @@ getRolePermissionsById(id: number): void {
 
   saveRole() {
     this.submitted = true;
-
-    if (this.role.id) { // Modification
+    if (this.role.id && this.canEdit) { // Modification
       this.roleService.updateRole(this.role.id, this.role).subscribe({
         next: () => {
              this.getAllRoles(); 
@@ -163,7 +164,7 @@ getRolePermissionsById(id: number): void {
     });
     this.roleDialog = false;
 
-    } else { // Création 
+    } else if(this.canCreate) { // Création 
         this.roleService.createRole(this.role).subscribe({
             next: () => {
                 this.getAllRoles(); 
@@ -185,7 +186,7 @@ getRolePermissionsById(id: number): void {
             }
         });
         this.roleDialog = false; 
-    }
+    } 
 }
  
 
@@ -194,6 +195,15 @@ getRolePermissionsById(id: number): void {
  ******************************************************/ 
  
   openNew() {
+    if(!this.canCreate){
+        this.messageService.add({
+            severity: 'error',
+            summary: 'Accès refusé',
+            detail: 'Vous n\'avez pas la permission de créer des rôles.',
+            life: 3000,
+          });
+          return;
+    }
       this.role = new Role();
       this.submitted = false;
       this.roleDialog = true;
@@ -209,8 +219,6 @@ getRolePermissionsById(id: number): void {
       this.deleteRolesDialog = true;
   }
 
-
-
   editRole(role: Role) {
     if(!this.canEdit){
         this.messageService.add({
@@ -220,8 +228,15 @@ getRolePermissionsById(id: number): void {
             life: 3000,
           });
           return;
+    }else if(role.name === 'Administrateur'){
+        this.messageService.add({
+            severity: 'error',
+            summary: 'Accès refusé',
+            detail: 'Vous ne pouvez pas modifier le rôle Administrateur.',
+            life: 3000,
+          });
+          return;
     }
-  
     this.role = { ...role };
     this.roleDialog = true;
  }
@@ -235,9 +250,20 @@ getRolePermissionsById(id: number): void {
             life: 3000,
           });
           return;
+    }else if(role.name === 'Administrateur'){
+        this.messageService.add({
+            severity: 'error',
+            summary: 'Accès refusé',
+            detail: 'Vous ne pouvez pas supprimer le rôle Administrateur.',
+            life: 3000,
+          });
+          return;
     }
       this.deleteRoleDialog = true;
       this.role = { ...role };
+
+      console.log('Role:', this.role.name);
+      
   }
 
   confirmDeleteSelected() {
@@ -246,40 +272,43 @@ getRolePermissionsById(id: number): void {
       this.selectedRoles = [];
   }
 
- 
+  confirmDelete() {
+    this.deleteRoleDialog = false;
+    if (this.role.id !== undefined && this.canDelete) { // Vérification que l'ID est défini
+        this.roleService.deleteRole(this.role.id).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success', 
+                    summary: 'Succès',
+                    detail: 'Rôle supprimé avec succès.',
+                    life: 3000
+                });
+                this.getAllRoles(); // Rechargez la liste des rôles après suppression
+            },
+            error: (err) => {
+                console.error('Erreur lors de la suppression du rôle:', err);
 
-confirmDelete( ) { 
-  this.deleteRoleDialog = false;
-  if (this.role.id !== undefined && this.canDelete) { // Vérification que l'ID est défini
-      this.roleService.deleteRole(this.role.id).subscribe({
-          next: () => {
-              this.messageService.add({
-                  severity: 'success',
-                  summary: 'Succès',
-                  detail: 'Role supprimée avec succès',
-                  life: 3000
-              });
-              this.getAllRoles(); // Rechargez la liste des roles après suppression
-          },
-          error: (err) => {
-              console.error('Erreur lors de la suppression de l\'role:', err);
-              this.messageService.add({
-                  severity: 'error',
-                  summary: 'Erreur',
-                  detail: 'La suppression de l\'role a échoué',
-                  life: 3000
-              });
-          }
-      });
-  } else {
-      this.messageService.add({
-          severity: 'error',
-          summary: 'Erreur',
-          detail: 'Impossible de supprimer l\'role : ID non défini ou vous n\'avez pas la permission.',
-          life: 3000
-      });
-  }
+                // Utilisez le message d'erreur renvoyé par le backend (si disponible)
+                const backendMessage = err.error?.message || 'Une erreur est survenue lors de la suppression du rôle.';
+
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: backendMessage, // Afficher le message détaillé du backend
+                    life: 5000
+                });
+            }
+        });
+    } else {
+        this.messageService.add({
+            severity: 'error',
+            summary: 'Erreur',
+            detail: 'Impossible de supprimer le rôle : ID non défini ou vous n\'avez pas la permission.',
+            life: 3000
+        });
+    }
 }
+
 
   createId(): string {
       let id = '';

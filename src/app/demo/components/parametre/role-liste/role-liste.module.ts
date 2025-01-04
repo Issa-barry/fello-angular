@@ -20,6 +20,7 @@ import { ToastModule } from 'primeng/toast';
 import { AppConfigModule } from 'src/app/layout/config/app.config.module';
 import { PasswordModule } from 'primeng/password';
 import { RoleListeComponent } from './role-liste.component';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
  
 
 
@@ -45,7 +46,8 @@ import { RoleListeComponent } from './role-liste.component';
     InputTextModule,
     RippleModule,
     AppConfigModule,
-    PasswordModule
+    PasswordModule,
+	ProgressSpinnerModule,
   ]
 })
 export class RoleListeModule { }
