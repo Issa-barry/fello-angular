@@ -24,6 +24,8 @@ export class RoleListeComponent implements OnInit {
   
   isAdmin: boolean = false;
   canEdit: boolean = false;
+  canCreate: boolean = false;
+  canDelete: boolean = false;
   loading: boolean = true;
   roles : Role[] = [];
   role: Role = new Role();
@@ -73,12 +75,7 @@ export class RoleListeComponent implements OnInit {
       this.getAutenticatedContact(); 
   }
  
-     
-//   canEdit(): boolean {
-   
-//     return false;
-//     // return this.role.includes('modifier devises');
-//   }
+
 /******************************************************
  *   USERS
  ******************************************************/ 
@@ -104,13 +101,14 @@ getAutenticatedContact(): void {
  *   PERMISSIONS
  ******************************************************/ 
  
-
 getRolePermissionsById(id: number): void {
     this.permissionService.getRolePermissions(id).subscribe({
         next: (response) => {
             this.rolePermissions = response; 
-            console.log("permissions du rôle:", this.rolePermissions);
             this.canEdit = this.rolePermissions.some((permission: any) => permission.name === 'modifier Roles');
+            this.canCreate = this.rolePermissions.some((permission: any) => permission.name === 'créer Roles');
+            this.canDelete = this.rolePermissions.some((permission: any) => permission.name === 'supprimer Roles');  
+            console.log("permissions du rôle:", this.rolePermissions); 
             console.log('Can Edit:', this.canEdit);
         },
         error: (err) => {
@@ -143,7 +141,6 @@ getRolePermissionsById(id: number): void {
     this.submitted = true;
 
     if (this.role.id) { // Modification
-         
       this.roleService.updateRole(this.role.id, this.role).subscribe({
         next: () => {
              this.getAllRoles(); 
@@ -230,14 +227,22 @@ getRolePermissionsById(id: number): void {
  }
 
   deleteRole(role: Role) {
+    if(!this.canDelete){
+        this.messageService.add({
+            severity: 'error',
+            summary: 'Accès refusé',
+            detail: 'Vous n\'avez pas la permission pour supprimer les rôles.',
+            life: 3000,
+          });
+          return;
+    }
       this.deleteRoleDialog = true;
       this.role = { ...role };
   }
 
   confirmDeleteSelected() {
       this.deleteRolesDialog = false;
-      this.products = this.products.filter(val => !this.selectedRoles.includes(val));
-      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Role Deleted', life: 3000 });
+       this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Role Deleted', life: 3000 });
       this.selectedRoles = [];
   }
 
@@ -245,7 +250,7 @@ getRolePermissionsById(id: number): void {
 
 confirmDelete( ) { 
   this.deleteRoleDialog = false;
-  if (this.role.id !== undefined) { // Vérification que l'ID est défini
+  if (this.role.id !== undefined && this.canDelete) { // Vérification que l'ID est défini
       this.roleService.deleteRole(this.role.id).subscribe({
           next: () => {
               this.messageService.add({
@@ -270,7 +275,7 @@ confirmDelete( ) {
       this.messageService.add({
           severity: 'error',
           summary: 'Erreur',
-          detail: 'Impossible de supprimer l\'role : ID non défini.',
+          detail: 'Impossible de supprimer l\'role : ID non défini ou vous n\'avez pas la permission.',
           life: 3000
       });
   }
