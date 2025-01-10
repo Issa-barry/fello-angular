@@ -16,7 +16,7 @@ const httpOption = {
   providedIn: 'root',
 })
 export class AuthService {
-  private apiUrl = `${environment.apiDev}`;
+  private apiUrl = `${environment.apiUrl}`;
   private currentUserSubject: BehaviorSubject<any>;
   public currentUser: Observable<any>;
   private   userId = "";

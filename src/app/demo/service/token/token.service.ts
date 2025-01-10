@@ -8,7 +8,7 @@ import { environment } from 'src/environements/environment.dev';
   providedIn: 'root',
 })
 export class TokenService {
-  private apiUrl = `${environment.apiDev}`;
+  private apiUrl = `${environment.apiUrl}`;
   private tokenSubject: BehaviorSubject<string | null>;
   public token$: Observable<string | null>;
 

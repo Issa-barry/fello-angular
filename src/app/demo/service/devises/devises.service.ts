@@ -7,7 +7,7 @@ import { catchError, map, Observable, of } from 'rxjs';
   providedIn: 'root'
 })
 export class DevisesService {
-  private apiUrl = `${environment.apiDev}/devises`;
+  private apiUrl = `${environment.apiUrl}/devises`;
 
   constructor(private http: HttpClient) {}
 

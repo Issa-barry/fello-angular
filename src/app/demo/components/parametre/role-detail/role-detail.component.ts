@@ -51,51 +51,47 @@ export class RoleDetailComponent implements OnInit {
         this.getRolePermissionsById(this.roleId);
     }
 
-/**************************************************** *
+    /**************************************************** *
 * PERMISSIONS
 /*********************************** */
-getAllPermissions(): void {
-    this.permissionService.getPermissions().subscribe({
-        next: (response) => {
-            this.permissions = response;
-            console.log("les permis", this.permissions);
-            this.loading = false; // Désactiver l'état de chargement
-        },
-        error: (err) => {
-            console.error( 'Erreur lors de la récupération des permissions:', err );
-            this.loading = false; // Désactiver l'état de chargement
-        },
-    });
-}
+    getAllPermissions(): void {
+        this.permissionService.getPermissions().subscribe({
+            next: (response) => {
+                this.permissions = response;
+                this.loading = false; // Désactiver l'état de chargement
+            },
+            error: (err) => {
+                console.error(
+                    'Erreur lors de la récupération des permissions:',
+                    err
+                );
+                this.loading = false; // Désactiver l'état de chargement
+            },
+        });
+    }
 
-   
-getRolePermissionsById(id: number): void {
-    this.permissionService.getRolePermissions(id).subscribe({
-        next: (response) => {
-            this.rolePermissions = response; 
-            console.log("permission du role2",this.rolePermissions);
-            
-            this.selectedPermissions = [
-                ...this.rolePermissions,
-            ]; //pre selection des permissions (celà sert à les cocher en IHM)
-        },
-        error: (err) => {
-            console.error(
-                'Erreur lors de la récupération des permissions:',
-                err
-            );
-        },
-    });
-}
-
+    getRolePermissionsById(id: number): void {
+        this.permissionService.getRolePermissions(id).subscribe({
+            next: (response) => {
+                this.rolePermissions = response;
+                this.selectedPermissions = [...this.rolePermissions]; //pre selection des permissions (celà sert à les cocher en IHM)
+            },
+            error: (err) => {
+                console.error(
+                    'Erreur lors de la récupération des permissions:',
+                    err
+                );
+            },
+        });
+    }
 
     saveSelectedPermissions(): void {
-        if(this.isAdmin){
+        if (this.isAdmin) {
             this.messageService.add({
                 severity: 'error',
                 summary: 'Eurreur',
-                detail: 'Erreur : Vous ne pouvez pas modifier les permissions d\'un Admin. Ceci est géré uniquement coté back-end technique.',
-                life: 3000
+                detail: "Erreur : Vous ne pouvez pas modifier les permissions d'un Admin. Ceci est géré uniquement coté back-end technique.",
+                life: 3000,
             });
             return;
         }
@@ -104,12 +100,11 @@ getRolePermissionsById(id: number): void {
         this.assignManyPermissionToRole(this.roleId);
         this.getAllPermissions();
         this.messageService.add({
-          severity: 'success',
-          summary: 'Succès',
-          detail: 'Les assignations de permissions on été enregistré',
-          life: 3000
-      });
-      
+            severity: 'success',
+            summary: 'Succès',
+            detail: 'Les assignations de permissions on été enregistré',
+            life: 3000,
+        });
     }
 
     assignManyPermissionToRole(id: number): void {
@@ -119,9 +114,16 @@ getRolePermissionsById(id: number): void {
             ),
         };
         this.permissionService
-            .assigneRolePermissions(id, dataToAssigne).subscribe({
-                next: () => {this.getAllPermissions();},
-                error: (err) => {console.error("Erreur lors de l'assignation de la permission:",err);
+            .assigneRolePermissions(id, dataToAssigne)
+            .subscribe({
+                next: () => {
+                    this.getAllPermissions();
+                },
+                error: (err) => {
+                    console.error(
+                        "Erreur lors de l'assignation de la permission:",
+                        err
+                    );
                     this.messageService.add({
                         severity: 'error',
                         summary: 'Erreur',
@@ -131,7 +133,6 @@ getRolePermissionsById(id: number): void {
                 },
             });
     }
-
 
     revokeNonSelectedPermissions(): void {
         // Filtrer les permissions non sélectionnées
@@ -146,9 +147,7 @@ getRolePermissionsById(id: number): void {
             this.permissionService
                 .revokeRolePermissions(this.roleId, dataToRevoke)
                 .subscribe({
-                    next: () => {
-                        console.log(`Permission révoquée : ${permission.name}`);
-                    },
+                    next: () => {},
                     error: (err) => {
                         console.error(
                             `Erreur lors de la révocation de la permission ${permission.name}:`,
@@ -159,16 +158,14 @@ getRolePermissionsById(id: number): void {
         });
     }
 
-
-/**************************************************** *
+    /**************************************************** *
 * ROLE
 /*********************************** */
 
     getRoleById(id: number): void {
         this.roleService.getRoleById(id).subscribe({
             next: (response) => {
-                this.role = response; 
-
+                this.role = response;
                 // Vérifiez si le rôle est "Administrateur"
                 this.isAdmin = this.role.name === 'Administrateur';
             },
@@ -181,8 +178,6 @@ getRolePermissionsById(id: number): void {
         });
     }
 
-  
-
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal(
             (event.target as HTMLInputElement).value,
@@ -193,6 +188,4 @@ getRolePermissionsById(id: number): void {
     onGoToRoleListe() {
         this.router.navigate(['/dashboard/parametre/role-liste']);
     }
-
-    
 }

@@ -19,7 +19,7 @@ const httpOption = {
   providedIn: 'root'
 })
 export class ContactService {
-  private apiUrl = `${environment.apiDev}`;
+  private apiUrl = `${environment.apiUrl}`;
 
   constructor(private http: HttpClient) { }
 

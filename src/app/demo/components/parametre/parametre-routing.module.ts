@@ -9,9 +9,10 @@ const routes: Routes = [
   { path: 'role-detail/:id',data: {breadcrumb: 'Paramétre > Role > détail'}, loadChildren: () => import('./role-detail/role-detail.module').then(m => m.RoleDetailModule) },
   { 
     path: 'role-liste', 
-    data: { breadcrumb: 'Paramétre/Role/Liste', permission: 'afficher devises' }, 
+    // data: { breadcrumb: 'Paramétre/Role/Liste', permission: 'afficher roles' }, 
+    data: { breadcrumb: 'Paramétre/Role/Liste', }, 
     loadChildren: () => import('./role-liste/role-liste.module').then(m => m.RoleListeModule),
-    canActivate: [permissionGuard], // Ajout du guard
+    // canActivate: [permissionGuard], // Ajout du guard
   },
 ];
 

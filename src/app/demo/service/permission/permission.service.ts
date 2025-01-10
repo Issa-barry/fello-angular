@@ -18,7 +18,7 @@ const httpOption = {
   providedIn: 'root'
 })
 export class PermissionService {
-  private apiUrl = `${environment.apiDev}`;
+  private apiUrl = `${environment.apiUrl}`;
   constructor(private http: HttpClient) { }
 
   private log(log: string){
