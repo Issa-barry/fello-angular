@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ContactRoutingModule } from './contact-routing.module';
+import { RoleDetailRoutingModule } from './role-detail-routing.module';
+
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
 import { FormsModule } from '@angular/forms';
@@ -16,37 +17,38 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
-import { ContactComponent } from './contact.component';
-import { NewPasswordRoutingModule } from '../auth/newpassword/newpassword-routing.module';
 import { AppConfigModule } from 'src/app/layout/config/app.config.module';
-import { PasswordModule } from 'primeng/password';
-
-
+ import { RoleDetailComponent } from './role-detail.component';
+import { TreeDemoRoutingModule } from '../../uikit/tree/treedemo-routing.module';
+import { TreeTableModule } from 'primeng/treetable';
+import { TreeModule } from 'primeng/tree';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+ 
 @NgModule({
-  declarations: [ContactComponent],
+  declarations: [RoleDetailComponent],
   imports: [
     CommonModule,
-    ContactRoutingModule,
+    RoleDetailRoutingModule,
     ToastModule,
     TableModule,
-		FileUploadModule,
-		FormsModule,
-		ButtonModule,
-		RippleModule,
-		ToolbarModule,
-		RatingModule,
-		InputTextModule,
-		InputTextareaModule,
-		DropdownModule,
-		RadioButtonModule,
-		InputNumberModule,
-		DialogModule,
-		NewPasswordRoutingModule,
-        InputTextModule,
-        RippleModule,
-        AppConfigModule,
-        PasswordModule
+	FileUploadModule,
+	FormsModule,
+	ButtonModule,
+	ToolbarModule,
+	RatingModule,
+	InputTextModule,
+	InputTextareaModule,
+	DropdownModule,
+	RadioButtonModule,
+	InputNumberModule,
+	DialogModule, 
+    RippleModule,
+    AppConfigModule,  
+	TreeDemoRoutingModule, 
+	TreeModule,
+	TreeTableModule,
+	ProgressSpinnerModule
   ]
 })
-export class ContactModule { }
-  
+export class RoleDetailModule { }
+ 

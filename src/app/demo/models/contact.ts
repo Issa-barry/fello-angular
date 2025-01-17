@@ -1,4 +1,5 @@
 import { Adresse } from "./adresse";
+import { Role } from "./Role";
 
  
  export class Contact {
@@ -12,7 +13,8 @@ import { Adresse } from "./adresse";
     date_naissance?:string;
     password:string;
     password_confirmation:string;
-    role:string;
+    role_id?:number;
+    roles: Role;
     statut: string;
     adresse: Adresse;
 
@@ -26,9 +28,9 @@ import { Adresse } from "./adresse";
         this.password_confirmation="";
         this.phone = "";
         this.email = "";
-        this.role ="client",
         this.statut="attente";
         this.adresse = new Adresse();
+        this.roles= new Role();
 
     }
 }
