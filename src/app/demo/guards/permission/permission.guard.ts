@@ -1,50 +1,68 @@
 import { inject } from '@angular/core';
 import { CanActivateFn, Router } from '@angular/router';
 import { PermissionService } from '../../service/permission/permission.service';
-import { map, catchError, of } from 'rxjs';
-import { MessageService } from 'primeng/api';
+import { AuthService } from '../../service/auth/auth.service';
+import { ContactService } from '../../service/contact/contact.service';
+import { Observable, of } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
+import { Contact } from '../../models/contact';
 
-export const permissionGuard: CanActivateFn = (route, state) => {
+export const permissionGuard: CanActivateFn = (route, state): Observable<boolean> => {
   const permissionService = inject(PermissionService);
+  const authService = inject(AuthService);
+  const contactService = inject(ContactService);
   const router = inject(Router);
-  // const messageService = inject(MessageService);
 
-  // Récupérer la permission requise depuis les données de la route
-  const requiredPermission = route.data?.['permission'];
-  // console.log('Permission requise :', requiredPermission);
+  const userId = Number(authService.getUserId());
 
-  // ID du rôle utilisateur (temporairement statique pour le test)
-  const userRoleId = 2; // Remplacez par une méthode dynamique si nécessaire
+  if (!userId) {
+    console.error('User ID is not available. Redirecting to login.');
+    router.navigate(['/auth/login']);
+    return of(false);
+  }
 
-  return permissionService.getRolePermissions(userRoleId).pipe(
-    map((permissions) => {
-      // console.log('Réponse API brut :', permissions);
+  return contactService.getContactById(userId).pipe(
+    switchMap((contact: Contact | null) => {
+      if (!contact) {
+        console.error('Contact not found. Redirecting to login.');
+        // router.navigate(['/auth/login']);
+        return of(false);
+      }
 
-      // Extraire les noms des permissions
-      const permissionNames = permissions.map((perm) => perm.name);
-      // console.log('Guard : Noms des permissions utilisateur :', permissionNames);
+      const roleId = contact.role_id;
+      if (!roleId) {
+        console.error('Role ID is missing for the contact. Redirecting to login.');
+        // router.navigate(['/auth/login']);
+        return of(false);
+      }
 
-      const hasPermission = permissionNames.includes(requiredPermission);
-      // console.log('L\'utilisateur a-t-il la permission ? :', hasPermission);
+      const requiredPermission = route.data?.['permission'];
+      if (!requiredPermission) {
+        console.error('No required permission specified in route data.');
+        return of(false);
+      }
 
-      // Retourner true pour forcer l'accès, même si la permission est fausse (pour débogage)
-      // if (!hasPermission) {
-        
-      //   router.navigate(['/unauthorized']); // Redirection
-      // }
-
-      return hasPermission;
+      return permissionService.getRolePermissions(roleId).pipe(
+        map((permissions) => {
+          const hasPermission = permissions.some(permission => permission.name === requiredPermission);
+          if (!hasPermission) {
+            console.warn(`Permission '${requiredPermission}' is not granted for role ID ${roleId}. Redirecting to unauthorized.`);
+            // router.navigate(['/unauthorized']);
+            return false;
+          }
+          return true;
+        }),
+        catchError((error) => {
+          console.error('Error while checking permissions:', error);
+          // router.navigate(['/auth/login']);
+          return of(false);
+        })
+      );
     }),
     catchError((error) => {
-      console.error('Erreur lors de la vérification des permissions :', error);
-      router.navigate(['/unauthorized']); // Redirige en cas d'erreur
-      // messageService.add({
-      //   severity: 'error',
-      //   summary: 'Accès refusé',
-      //   detail: 'Vous n\'avez pas la permission requise pour accéder à cette page.',
-      //   life: 3000,
-      // });
-      return of(false); // Retourner true pour permettre l'accès malgré l'erreur
+      console.error('Error while retrieving user contact:', error);
+      // router.navigate(['/auth/login']);
+      return of(false);
     })
   );
 };

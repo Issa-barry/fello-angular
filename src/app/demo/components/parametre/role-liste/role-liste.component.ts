@@ -77,11 +77,16 @@ export class RoleListeComponent implements OnInit {
      ******************************************************/
     getAutenticatedContact(): void {
         const id = Number(this.authService.getUserId());
-        this.contactService.getContactById(id).subscribe({
+
+        console.log(id);
+        
+        this.contactService.getContactById(1).subscribe({
             next: (response) => {
                 this.userAuthenticated = response;
-                this.userAuthenticatedRole = this.userAuthenticated.data.roles;
+                this.userAuthenticatedRole = this.userAuthenticated.roles;
                 this.getRolePermissionsById(this.userAuthenticatedRole[0].id);
+                // console.log(this.userAuthenticated);
+                
             },
             error: (err) => {
                 console.error('Erreur lors de la récupération du USER:', err);
@@ -106,6 +111,8 @@ export class RoleListeComponent implements OnInit {
                 this.canDelete = this.rolePermissions.some(
                     (permission: any) => permission.name === 'supprimer Roles'
                 );
+                // console.log('Permissions du role:', this.rolePermissions);
+                
             },
             error: (err) => {
                 console.error(

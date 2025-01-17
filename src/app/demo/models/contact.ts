@@ -12,7 +12,7 @@ import { Adresse } from "./adresse";
     date_naissance?:string;
     password:string;
     password_confirmation:string;
-    role:string;
+    role_id?:number;
     statut: string;
     adresse: Adresse;
 
@@ -26,7 +26,6 @@ import { Adresse } from "./adresse";
         this.password_confirmation="";
         this.phone = "";
         this.email = "";
-        this.role ="client",
         this.statut="attente";
         this.adresse = new Adresse();
 
