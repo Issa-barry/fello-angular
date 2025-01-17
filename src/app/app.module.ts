@@ -6,6 +6,7 @@ import { AppLayoutModule } from './layout/app.layout.module';
 import { ToastModule } from 'primeng/toast';
 import { HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AuthInterceptor } from './interceptors/auth.interceptor';
+import { MessageService } from 'primeng/api';
 
 @NgModule({
     declarations: [
@@ -18,7 +19,8 @@ import { AuthInterceptor } from './interceptors/auth.interceptor';
     ],
     providers: [
         { provide: LocationStrategy, useClass: HashLocationStrategy },
-        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true } 
+        { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+        MessageService
     ],
     bootstrap: [AppComponent]
 })

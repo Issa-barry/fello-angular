@@ -6,12 +6,14 @@ import { ContactService } from '../../service/contact/contact.service';
 import { Observable, of } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { Contact } from '../../models/contact';
+import { MessageService } from 'primeng/api';
 
 export const permissionGuard: CanActivateFn = (route, state): Observable<boolean> => {
   const permissionService = inject(PermissionService);
   const authService = inject(AuthService);
   const contactService = inject(ContactService);
   const router = inject(Router);
+  const messageService = inject(MessageService);
 
   const userId = Number(authService.getUserId());
 
@@ -25,14 +27,14 @@ export const permissionGuard: CanActivateFn = (route, state): Observable<boolean
     switchMap((contact: Contact | null) => {
       if (!contact) {
         console.error('Contact not found. Redirecting to login.');
-        // router.navigate(['/auth/login']);
+        // router.navigate(['/']);
         return of(false);
       }
 
       const roleId = contact.role_id;
       if (!roleId) {
         console.error('Role ID is missing for the contact. Redirecting to login.');
-        // router.navigate(['/auth/login']);
+        // router.navigate(['/']);
         return of(false);
       }
 
