@@ -77,16 +77,12 @@ export class RoleListeComponent implements OnInit {
      ******************************************************/
     getAutenticatedContact(): void {
         const id = Number(this.authService.getUserId());
-
-        console.log(id);
-        
-        this.contactService.getContactById(1).subscribe({
+        this.contactService.getContactById(id).subscribe({
             next: (response) => {
                 this.userAuthenticated = response;
                 this.userAuthenticatedRole = this.userAuthenticated.roles;
                 this.getRolePermissionsById(this.userAuthenticatedRole[0].id);
                 // console.log(this.userAuthenticated);
-                
             },
             error: (err) => {
                 console.error('Erreur lors de la récupération du USER:', err);

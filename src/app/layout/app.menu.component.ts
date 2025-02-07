@@ -1,123 +1,131 @@
 import { OnInit } from '@angular/core';
 import { Component } from '@angular/core';
-import { PermissionService } from 'src/app/demo/service/permission/permission.service'; // Service pour les permissions
+import { PermissionService } from 'src/app/demo/service/permission/permission.service';
 import { AuthService } from 'src/app/demo/service/auth/auth.service';
+import { ContactService } from '../demo/service/contact/contact.service';
 
 @Component({
     selector: 'app-menu',
     templateUrl: './app.menu.component.html'
 })
 export class AppMenuComponent implements OnInit {
-
+    
     model: any[] = [];
-    canViewRole: boolean = false;
-    canViewDashboardCa: boolean = false;
-    canViewDashboardRh: boolean = false;
-    canViewTransfert: boolean = false;
-    canViewFactures: boolean = false;
-    canViewContact: boolean = false;
-    canViewAgence: boolean = false;
+    userAuthenticated: any = {};
+    userPermissions: string[] = [];
+
+    permissionsMap: { [key: string]: string } = {
+        canViewRole: 'afficher Roles',
+        canViewDashboardCa: 'afficher Dashboard-CA',
+        canViewDashboardRh: 'afficher Dashboard-RH',
+        canViewTransfert: 'afficher Transfert',
+        canViewFactures: 'afficher Factures',
+        canViewContact: 'afficher Contact',
+        canViewAgence: 'afficher Agence'
+    };
+
+    permissionStates: { [key: string]: boolean } = {};
 
     constructor(
         private permissionService: PermissionService,
-        private authService: AuthService
+        private authService: AuthService,
+        private contactService: ContactService,
     ) {}
 
     ngOnInit() {
-        // Récupérer les permissions de l'utilisateur authentifié
-        const userId = this.authService.getUserId();
-        if (userId) {
-            this.permissionService.getRolePermissions(Number(userId)).subscribe({
-                next: (permissions) => {
-                    // Vérifiez les permissions spécifiques
-                    this.canViewRole = permissions.some(
-                        (permission: any) => permission.name === 'afficher Roles'
-                    );
-                    this.canViewDashboardCa = permissions.some(
-                        (permission: any) => permission.name === 'afficher Dashboard-CA'
-                    );
-                    this.canViewDashboardRh = permissions.some(
-                        (permission: any) => permission.name === 'afficher Dashboard-RH'
-                    );
-                    this.canViewTransfert = permissions.some(
-                        (permission: any) => permission.name === 'afficher Transfert'
-                    );
-                    this.canViewFactures = permissions.some(
-                        (permission: any) => permission.name === 'afficher Factures'
-                    );
-                    this.canViewContact = permissions.some(
-                        (permission: any) => permission.name === 'afficher Contact'
-                    );
-                    this.canViewAgence = permissions.some(
-                        (permission: any) => permission.name === 'afficher Agence'
-                    );
-                    this.buildMenu(); // Construire le menu après avoir obtenu les permissions
-                },
-                error: (err) => {
-                    console.error('Erreur lors de la récupération des permissions :', err);
-                    this.buildMenu(); // Construire le menu par défaut si une erreur survient
-                }
-            });
-        } else {
-            this.buildMenu(); // Construire le menu par défaut si l'utilisateur n'est pas authentifié
-        }
+        this.getAuthenticatedContact();
     }
 
-    // Méthode pour construire dynamiquement le menu
+    /**
+     * Récupérer les informations de l'utilisateur authentifié
+     */
+    getAuthenticatedContact(): void {
+        const userId = Number(this.authService.getUserId());
+        if (!userId) {
+            this.buildMenu();
+            return;
+        }
+
+        this.contactService.getContactById(userId).subscribe({
+            next: (response) => {
+                this.userAuthenticated = response;
+                // console.log("Utilisateur authentifié :", this.userAuthenticated);
+                this.checkPermissions(this.userAuthenticated.role_id);
+            },
+            error: (err) => {
+                console.error('Erreur lors de la récupération du USER:', err);
+                this.buildMenu(); // Construire le menu même en cas d'erreur
+            },
+        });
+    }
+
+    /**
+     * Vérifier les permissions de l'utilisateur
+     */
+    checkPermissions(userId: number): void {
+        this.permissionService.getRolePermissions(userId).subscribe({
+            next: (permissions) => {
+                this.userPermissions = permissions.map((p: any) => p.name);
+
+                // Mettre à jour l'état des permissions dynamiquement
+                Object.keys(this.permissionsMap).forEach(key => {
+                    this.permissionStates[key] = this.userPermissions.includes(this.permissionsMap[key]);
+                });
+
+                this.buildMenu(); // Construire le menu après avoir obtenu les permissions
+            },
+            error: (err) => {
+                console.error('Erreur lors de la récupération des permissions :', err);
+                this.buildMenu(); // Construire le menu même si la récupération des permissions échoue
+            }
+        });
+    }
+
+    /**
+     * Construire dynamiquement le menu en fonction des permissions
+     */
     buildMenu() {
         this.model = [
             { 
                 label: 'Dashboards',
                 icon: 'pi pi-home',
                 items: [ 
-                    ...(this.canViewDashboardRh ? [
-                        {
-                            label: 'Statistique-RH',
-                            icon: 'pi pi-fw pi-chart-bar',
-                            routerLink: ['/dashboard']
-                        }
-                    ] : []),
-                    ...(this.canViewDashboardCa ? [
-                        {
-                            label: 'Chiffre-d\'affaire',
-                            icon: 'pi pi-fw pi-chart-line',
-                            routerLink: ['/dashboard/dashboard-banking']
-                        }
-                    ] : [])
+                    ...(this.permissionStates['canViewDashboardRh'] ? [{
+                        label: 'Statistique-RH',
+                        icon: 'pi pi-fw pi-chart-bar',
+                        routerLink: ['/dashboard']
+                    }] : []),
+                    ...(this.permissionStates['canViewDashboardCa'] ? [{
+                        label: 'Chiffre-d\'affaire',
+                        icon: 'pi pi-fw pi-chart-line',
+                        routerLink: ['/dashboard/dashboard-banking']
+                    }] : [])
                 ]
             },
             { 
                 label: 'MENU',
                 icon: 'pi pi-fw pi-star-fill',
                 items: [
-                    ...(this.canViewTransfert ? [
-                        {
-                            label: 'Transfert',
-                            icon: 'pi pi-fw pi-arrow-right-arrow-left',
-                            routerLink: ['/dashboard/transfert']
-                        }
-                    ] : []),
-                    ...(this.canViewFactures ? [
-                        {
-                            label: 'Facturation',
-                            icon: 'pi pi-fw pi-calculator',
-                            routerLink: ['/dashboard/facturation']
-                        }
-                    ] : []),
-                    ...(this.canViewContact ? [
-                        {
-                            label: 'Contact',
-                            icon: 'pi pi-fw pi-users',
-                            routerLink: ['/dashboard/contact']
-                        }
-                    ] : []),
-                    ...(this.canViewAgence ? [
-                        {
-                            label: 'Agence',
-                            icon: 'pi pi-fw pi-map-marker',
-                            routerLink: ['/dashboard/agence']
-                        }
-                    ] : [])
+                    ...(this.permissionStates['canViewTransfert'] ? [{
+                        label: 'Transfert',
+                        icon: 'pi pi-fw pi-arrow-right-arrow-left',
+                        routerLink: ['/dashboard/transfert']
+                    }] : []),
+                    ...(this.permissionStates['canViewFactures'] ? [{
+                        label: 'Facturation',
+                        icon: 'pi pi-fw pi-calculator',
+                        routerLink: ['/dashboard/facturation']
+                    }] : []),
+                    ...(this.permissionStates['canViewContact'] ? [{
+                        label: 'Contact',
+                        icon: 'pi pi-fw pi-users',
+                        routerLink: ['/dashboard/contact']
+                    }] : []),
+                    ...(this.permissionStates['canViewAgence'] ? [{
+                        label: 'Agence',
+                        icon: 'pi pi-fw pi-map-marker',
+                        routerLink: ['/dashboard/agence']
+                    }] : [])
                 ]
             }, 
             {
@@ -125,7 +133,7 @@ export class AppMenuComponent implements OnInit {
                 icon: 'pi pi-cog',
                 items: [
                     {
-                        label: 'Parametre',
+                        label: 'Paramètre',
                         icon: 'pi pi-fw pi-cog',
                         items: [
                             {
@@ -133,17 +141,16 @@ export class AppMenuComponent implements OnInit {
                                 icon: 'pi pi-fw pi-globe',
                                 routerLink: ['/dashboard/parametre']
                             },
-                            ...(this.canViewRole ? [
-                                {
-                                    label: 'Role & Permission',
-                                    icon: 'pi pi-fw pi-lock-open',
-                                    routerLink: ['/dashboard/parametre/role-liste']
-                                }
-                            ] : []),
+                            ...(this.permissionStates['canViewRole'] ? [{
+                                label: 'Role & Permission',
+                                icon: 'pi pi-fw pi-lock-open',
+                                routerLink: ['/dashboard/parametre/role-liste']
+                            }] : []),
                         ]
                     }, 
                 ]
             },
         ];
     }
+    
 }
