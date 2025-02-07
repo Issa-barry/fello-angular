@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../../environements/environment.dev';
 import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
-import { Agence } from '../models/agence';
-import { Adresse } from '../models/adresse';
+import { Agence } from '../../models/agence';
+import { Adresse } from '../../models/adresse';
+import { environment } from 'src/environements/environment.dev';
  
 
 const httpOption = {
@@ -20,8 +20,8 @@ const httpOption = {
   providedIn: 'root'
 })
 export class AgenceService {
-  private apiUrl = `${environment.apiDev}/agences`;
-  private apiAdresse = `${environment.apiDev}/adresse`;
+  private apiUrl = `${environment.apiUrl}/agences`;
+  private apiAdresse = `${environment.apiUrl}/adresse`;
 
   constructor(private http: HttpClient) { }
   

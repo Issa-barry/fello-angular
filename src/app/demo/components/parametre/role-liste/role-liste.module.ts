@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { ContactRoutingModule } from './contact-routing.module';
+import { RoleListeRoutingModule } from './role-liste-routing.module';
+
 import { TableModule } from 'primeng/table';
 import { FileUploadModule } from 'primeng/fileupload';
 import { FormsModule } from '@angular/forms';
@@ -16,17 +17,18 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
-import { ContactComponent } from './contact.component';
-import { NewPasswordRoutingModule } from '../auth/newpassword/newpassword-routing.module';
 import { AppConfigModule } from 'src/app/layout/config/app.config.module';
 import { PasswordModule } from 'primeng/password';
+import { RoleListeComponent } from './role-liste.component';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
+ 
 
 
 @NgModule({
-  declarations: [ContactComponent],
+  declarations: [RoleListeComponent],
   imports: [
     CommonModule,
-    ContactRoutingModule,
+    RoleListeRoutingModule,
     ToastModule,
     TableModule,
 		FileUploadModule,
@@ -40,13 +42,12 @@ import { PasswordModule } from 'primeng/password';
 		DropdownModule,
 		RadioButtonModule,
 		InputNumberModule,
-		DialogModule,
-		NewPasswordRoutingModule,
-        InputTextModule,
-        RippleModule,
-        AppConfigModule,
-        PasswordModule
+		DialogModule, 
+    InputTextModule,
+    RippleModule,
+    AppConfigModule,
+    PasswordModule,
+	ProgressSpinnerModule,
   ]
 })
-export class ContactModule { }
-  
+export class RoleListeModule { }

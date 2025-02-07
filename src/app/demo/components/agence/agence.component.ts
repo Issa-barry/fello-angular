@@ -3,8 +3,8 @@ import { Product } from 'src/app/demo/api/product';
 import { ProductService } from 'src/app/demo/service/product.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { AgenceService } from '../../service/agence.service';
 import { Agence } from '../../models/agence';
+import { AgenceService } from '../../service/agence/agence.service';
 
  
 
@@ -74,7 +74,7 @@ hideDialog() {
 }
 
 openNew() {
-  this.agence = new Agence();
+   this.agence = new Agence();
    this.submitted = false;
    this.agenceDialog = true;
 }

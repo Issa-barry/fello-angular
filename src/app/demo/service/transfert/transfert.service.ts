@@ -19,7 +19,7 @@ const httpOption = {
   providedIn: 'root'
 })
 export class TransfertService {
-  private apiUrl = `${environment.apiDev}/transferts`;
+  private apiUrl = `${environment.apiUrl}/transferts`;
 
   constructor(private http: HttpClient) { }
   private log(log: string){

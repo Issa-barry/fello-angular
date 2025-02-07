@@ -17,7 +17,7 @@ export class ContactComponent implements OnInit{
   contacts : Contact[] = [];
   contact: Contact = new Contact();
   optionPays: any[] = [];
-  contactDialog: boolean = false; 
+  contactDialog: boolean = false;  
   deleteContactDialog: boolean = false;
   deleteContactsDialog: boolean = false;
   submitted: boolean = false;
@@ -65,6 +65,7 @@ export class ContactComponent implements OnInit{
           { label: 'OUTOFSTOCK', value: 'outofstock' }
       ];
   }
+  
   getAllContacts(): void {
     this.contactService.getContacts().subscribe({
       next: (response) => {
@@ -84,7 +85,7 @@ export class ContactComponent implements OnInit{
          
       this.contactService.updateContact(this.contact.id, this.contact).subscribe({
         next: () => {
-             this.getAllContacts(); 
+            this.getAllContacts(); 
             this.messageService.add({
                 severity: 'success',
                 summary: 'Succès',
