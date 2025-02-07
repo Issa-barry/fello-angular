@@ -32,6 +32,7 @@ export const permissionGuard: CanActivateFn = (route, state): Observable<boolean
       }
 
       const roleId = contact.role_id;
+      
       if (!roleId) {
         console.error('Role ID is missing for the contact. Redirecting to login.');
         // router.navigate(['/']);
@@ -48,7 +49,7 @@ export const permissionGuard: CanActivateFn = (route, state): Observable<boolean
         map((permissions) => {
           const hasPermission = permissions.some(permission => permission.name === requiredPermission);
           if (!hasPermission) {
-            console.warn(`Permission '${requiredPermission}' is not granted for role ID ${roleId}. Redirecting to unauthorized.`);
+            console.warn(`La permission '${requiredPermission}' n'est pas accordée pour le rôle avec l'ID ${roleId}.`);
             // router.navigate(['/unauthorized']);
             return false;
           }
@@ -67,4 +68,6 @@ export const permissionGuard: CanActivateFn = (route, state): Observable<boolean
       return of(false);
     })
   );
+
+  // return of(true);
 };
