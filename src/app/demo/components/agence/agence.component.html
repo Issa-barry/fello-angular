@@ -86,8 +86,11 @@
                 </div>  
                  <div class="field">
                     <label for="phone">Phone</label>
-                    <input type="text" pInputText id="phone" [(ngModel)]="agence.phone" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.phone}"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.phone">Le numéro de téléphone est obligatoire.</small>
+                    <input type="text" pInputText id="phone" (ngModelChange)="validatePhone()" [(ngModel)]="agence.phone" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !isValidPhone}"/>
+                    <!-- <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.phone">Le numéro de téléphone est obligatoire.</small> -->
+                    <small class="error-message" *ngIf="submitted && !isValidPhone">
+                        Veuillez entrer un numéro de téléphone valide (ex: +224 622 00 00 00).
+                    </small>
                 </div>  
                 <div class="field">
                     <label for="email">Email</label>
@@ -97,7 +100,13 @@
   
                 <div class="field">
                     <label for="pays">Pays</label>
-                    <p-dropdown  [(ngModel)]="agence.adresse.pays"  inputId="pays"  optionValue="label" [options]="optionPays"  placeholder="Sélectionner un pays" (ngModelChange)="validatePays()" [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.pays}" >
+                    <p-dropdown 
+                    
+                              [(ngModel)]="agence.adresse.pays"  
+                              inputId="pays"  optionValue="label" 
+                              [options]="optionPays"  
+                              placeholder="Sélectionner un pays" 
+                              (ngModelChange)="validatePays()" [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.pays}" >
                         <ng-template let-option pTemplate="item">
                             <span [class]=" option.value">{{option.label}}</span>
                         </ng-template>
@@ -116,7 +125,7 @@
                 <div class="formgrid grid">  
                     <div class="field col">
                         <label for="quantity">Code Postal</label>
-                          <p-inputNumber id="code_postal"  [(ngModel)]="agence.adresse.code_postal"  (ngModelChange)="validateCodePostal()" [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.code_postal || !isValidCodePostal}"></p-inputNumber> 
+                          <p-inputNumber id="code_postal" [disabled]="isCodePostalDisabled" [(ngModel)]="agence.adresse.code_postal"  (ngModelChange)="validateCodePostal()" [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.code_postal || !isValidCodePostal}"></p-inputNumber> 
                         <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.adresse.code_postal">Le code postal est obligatoire.</small>
                         <small class="ng-invalid" *ngIf="!isValidCodePostal">
                             Le code postal doit contenir exactement 5 chiffres.

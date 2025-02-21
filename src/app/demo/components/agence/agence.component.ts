@@ -194,13 +194,27 @@ handleApiErrors(err: any): void {
       });
   }
 }
+isValidPhone: boolean = true;
 
-isValidPays: boolean = true;
-validatePays() {
-    this.isValidPays = !!this.agence.adresse.pays; // Vérifie si le pays est défini
+validatePhone() {
+    if (this.agence.phone) {
+        // Regex acceptant :
+        // - Numéro local : "622000000" (8 chiffres minimum)
+        // - Numéro international avec + : "+225 07 12 34 56" (indicatif suivi d'au moins 8 chiffres)
+        // - Numéro international avec 00 : "00225 07 12 34 56" (même règle que +)
+        const phoneRegex = /^(?:\+|00)?(\d{1,3})[-.\s]?\d{10,}$/;
+        this.isValidPhone = phoneRegex.test(this.agence.phone);
+    } else {
+        this.isValidPhone = false;
+    }
 }
 
+
+
+isValidPays: boolean = true;
+
 isValidCodePostal: boolean = true; 
+ 
    validateCodePostal() {
     if (this.agence.adresse && this.agence.adresse.code_postal !== undefined) {
         const codePostalStr = String(this.agence.adresse.code_postal);
@@ -210,9 +224,27 @@ isValidCodePostal: boolean = true;
     }
 }
 
+isCodePostalDisabled: boolean = false;
+
+validatePays() {
+    this.isValidPays = !!this.agence.adresse.pays; // Vérifie si le pays est sélectionné
+
+    // Si le pays sélectionné est "Guinée-Conakry", fixer le code postal à "00000" et le rendre non modifiable
+    if (this.agence.adresse.pays === "GUINEE-CONAKRY") {
+        this.agence.adresse.code_postal = "00000";
+        this.isCodePostalDisabled = true;
+    } else {
+        this.isCodePostalDisabled = false;
+    }
+}
+
+
   saveAgence() {
     this.submitted = true;
     this.validatePays();
+    this.validateCodePostal();
+    this.validatePhone();
+
         const codePostalStr = String(this.agence.adresse.code_postal);
         if (!this.isValidCodePostal) {
             return; 
