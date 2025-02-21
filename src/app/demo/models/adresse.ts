@@ -9,14 +9,14 @@ export class Adresse {
     region:string; 
     constructor()
     {
-        this.pays = "test";
-        this.adresse = "test";
+        this.pays = "";
+        this.adresse = "";
         this.complement_adresse = "";
-        this.ville ="test";
+        this.ville ="";
         this.code_postal = "";
-        this.quartier = "test";
-        this.region = "test";
+        this.quartier = "";
+        this.region = "";
     }
 
    
-}
+} 

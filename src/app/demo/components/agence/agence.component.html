@@ -75,13 +75,13 @@
                     </tr>
                 </ng-template>
             </p-table>
-        </div>
+        </div> 
 
         <p-dialog [(visible)]="agenceDialog" [style]="{width: '450px'}" header="Agence Details" [modal]="true" class="p-fluid">
           <ng-template pTemplate="content"> 
                 <div class="field">
-                    <label for="nom">Nom</label>
-                    <input type="text" pInputText id="nom" [(ngModel)]="agence.nom_agence" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.nom_agence}"/>
+                    <label for="nom_agence">Nom</label>
+                    <input type="text" pInputText id="nom_agence" [(ngModel)]="agence.nom_agence" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.nom_agence}"/>
                     <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.nom_agence">Le nom est obligatoire.</small>
                 </div>  
                  <div class="field">
@@ -92,42 +92,32 @@
                 <div class="field">
                     <label for="email">Email</label>
                     <input type="text" pInputText id="email" [(ngModel)]="agence.email" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.email}"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.email">Name is required.</small>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.email">L'email est obligatoire.</small>
                 </div>  
+  
                 <div class="field">
-                    <label for="status">Pays</label>
-                    <p-dropdown [(ngModel)]="agence.adresse.pays" inputId="inventoryStatus" optionValue="label" [options]="optionPays" placeholder="Select">
-                        <!-- <ng-template pTemplate="selectedItem">
-                            <span *ngIf="product && product.inventoryStatus" [class]="'product-badge status-' + product.inventoryStatus.toString().toLowerCase()">{{product.inventoryStatus}}</span>
-                        </ng-template> -->
+                    <label for="pays">Pays</label>
+                    <p-dropdown  [(ngModel)]="agence.adresse.pays"  inputId="pays"  optionValue="label" [options]="optionPays"  placeholder="Sélectionner un pays" (ngModelChange)="validatePays()" [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.pays}" >
                         <ng-template let-option pTemplate="item">
-                            <span [class]="'product-badge status-' + option.value">{{option.label}}</span>
+                            <span [class]=" option.value">{{option.label}}</span>
                         </ng-template>
-                    </p-dropdown>
-                </div>  
+                    </p-dropdown> 
+                    <small class="error-message" *ngIf="submitted && !isValidPays">
+                        Le choix du pays est obligatoire.
+                    </small>
+                </div>
+
+                
                 <div class="field">
                     <label for="adresse">Adresse</label>
                     <input type="text" pInputText id="adresse" [(ngModel)]="agence.adresse.adresse" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.adresse}"/>
                     <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.adresse.adresse">L'adresse est obligatoire.</small>
                 </div>  
-                <div class="formgrid grid">
-                    <!-- <div class="field col">
-                        <label for="code_postal">Code_postall</label>
-                         <p-inputNumber id="code_postal" [(ngModel)]="agence.adresse.code_postal" ></p-inputNumber> 
-
-                        <input type="text" id="code_postal" [(ngModel)]="agence.adresse.code_postal" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.code_postal}"/>
-                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.adresse.code_postal">Le code postall est obligatoire.</small>
-                    </div> -->
-
+                <div class="formgrid grid">  
                     <div class="field col">
                         <label for="quantity">Code Postal</label>
-                        <!-- <input type="text" pInputText id="ville" [(ngModel)]="agence.adresse.code_postal" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.code_postal}"/> -->
-                         <p-inputNumber 
-                         id="code_postal" 
-                         [(ngModel)]="agence.adresse.code_postal" 
-                         (ngModelChange)="validateCodePostal()"
-                         ></p-inputNumber> 
-                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.adresse.code_postal">La ville est obligatoire.</small>
+                          <p-inputNumber id="code_postal"  [(ngModel)]="agence.adresse.code_postal"  (ngModelChange)="validateCodePostal()" [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.code_postal || !isValidCodePostal}"></p-inputNumber> 
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.adresse.code_postal">Le code postal est obligatoire.</small>
                         <small class="ng-invalid" *ngIf="!isValidCodePostal">
                             Le code postal doit contenir exactement 5 chiffres.
                         </small>

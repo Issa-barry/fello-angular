@@ -41,11 +41,36 @@ export class AgenceComponent implements OnInit {
   deleteAgencesDialog: boolean = false;
   apiErrors: { [key: string]: string[] } = {};
 
+  value1: any;
+
+  value2: any;
+
+  value3: any;
+
+  value4: any;
+
+  value5: any;
+
+  value6: any;
+
+  value7: any;
+
+  value8: any;
+
+  value9: any;
+
+  value10: any;
+
+  cities: any[];
   constructor(
     private agenceService: AgenceService,
     private productService: ProductService, 
     private messageService: MessageService, 
     private confirmationService: ConfirmationService) { 
+        this.cities = [
+            { name: 'Guinée-Conacry', code: 'GN' },
+            { name: 'France', code: 'FR' },
+        ];
     }
     ngOnInit() {
       this.getAllAgences(); 
@@ -59,8 +84,6 @@ getAllAgences(): void {
   this.agenceService.getAgences().subscribe({
     next: (response) => {
       this.agences = response;  
-      console.log(this.agences);
-       
     },
     error: (err) => {
       console.error('Erreur lors de la récupération des agences:', err);
@@ -172,8 +195,12 @@ handleApiErrors(err: any): void {
   }
 }
 
+isValidPays: boolean = true;
+validatePays() {
+    this.isValidPays = !!this.agence.adresse.pays; // Vérifie si le pays est défini
+}
+
 isValidCodePostal: boolean = true; 
-   // Fonction pour valider le code postal
    validateCodePostal() {
     if (this.agence.adresse && this.agence.adresse.code_postal !== undefined) {
         const codePostalStr = String(this.agence.adresse.code_postal);
@@ -184,21 +211,16 @@ isValidCodePostal: boolean = true;
 }
 
   saveAgence() {
-
     this.submitted = true;
-    
-        // Vérification stricte du format du code postal (exactement 5 chiffres)
+    this.validatePays();
         const codePostalStr = String(this.agence.adresse.code_postal);
         if (!this.isValidCodePostal) {
-            return; // Stoppe l'exécution si la validation échoue
+            return; 
         }
 
-     // Vérifier que l'adresse existe et convertir code_postal en string
-     if (this.agence.adresse && this.agence.adresse.code_postal !== undefined) {
-        this.agence.adresse.code_postal = String(this.agence.adresse.code_postal);
-    }
-
-    
+        if (this.agence.adresse && this.agence.adresse.code_postal !== undefined) {
+            this.agence.adresse.code_postal = String(this.agence.adresse.code_postal);
+        }
 
     if (this.agence.id) { // Modification
    
@@ -224,7 +246,7 @@ isValidCodePostal: boolean = true;
         });
         this.agenceDialog = false;
         
-    } else { // Création
+    } else if(this.agence.nom_agence && this.agence.phone && this.agence.email && this.agence.adresse.ville) { // Création
       
         this.agenceService.createAgence(this.agence).subscribe({
             next: () => {
