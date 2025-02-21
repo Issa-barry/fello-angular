@@ -19,7 +19,7 @@ export class AgenceComponent implements OnInit {
   
   products: Product[] = [];
 
-  product: Product = {};
+  product: Product = {}; 
 
   selectedProducts: Product[] = [];
 
@@ -172,10 +172,36 @@ handleApiErrors(err: any): void {
   }
 }
 
+isValidCodePostal: boolean = true; 
+   // Fonction pour valider le code postal
+   validateCodePostal() {
+    if (this.agence.adresse && this.agence.adresse.code_postal !== undefined) {
+        const codePostalStr = String(this.agence.adresse.code_postal);
+        this.isValidCodePostal = /^\d{5}$/.test(codePostalStr);
+    } else {
+        this.isValidCodePostal = false;
+    }
+}
+
   saveAgence() {
+
     this.submitted = true;
+    
+        // Vérification stricte du format du code postal (exactement 5 chiffres)
+        const codePostalStr = String(this.agence.adresse.code_postal);
+        if (!this.isValidCodePostal) {
+            return; // Stoppe l'exécution si la validation échoue
+        }
+
+     // Vérifier que l'adresse existe et convertir code_postal en string
+     if (this.agence.adresse && this.agence.adresse.code_postal !== undefined) {
+        this.agence.adresse.code_postal = String(this.agence.adresse.code_postal);
+    }
+
+    
 
     if (this.agence.id) { // Modification
+   
         this.agenceService.updateAgence(this.agence.id, this.agence).subscribe({
             next: () => {
                 this.getAllAgences(); 
@@ -197,6 +223,7 @@ handleApiErrors(err: any): void {
             }
         });
         this.agenceDialog = false;
+        
     } else { // Création
       
         this.agenceService.createAgence(this.agence).subscribe({

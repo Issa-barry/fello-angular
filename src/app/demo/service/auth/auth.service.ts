@@ -6,10 +6,15 @@ import { environment } from 'src/environements/environment.dev';
 import { Router } from '@angular/router';
 import { TokenService } from '../token/token.service';
 
+//Hedaer Option
 const httpOption = {
   headers: new HttpHeaders({
-    'Content-Type': 'application/json',
-  }),
+      'Content-Type': 'application/json',
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': 'Content-Type',
+      'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT',
+
+  })
 };
 
 @Injectable({
@@ -43,7 +48,7 @@ export class AuthService {
   }
  
   login(credentials: { email: string; password: string }): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
+    return this.http.post<any>(`${this.apiUrl}/login`, credentials, httpOption).pipe(
       map((response) => {
         this.tokenService.storeToken(response.access_token);
          this.userId = response.user.id;

@@ -25,7 +25,7 @@
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
                         </span>
-                    </div>
+                    </div> 
                 </ng-template>
                 <ng-template pTemplate="header">
                     <tr>
@@ -111,22 +111,32 @@
                     <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.adresse.adresse">L'adresse est obligatoire.</small>
                 </div>  
                 <div class="formgrid grid">
-                    <div class="field col">
+                    <!-- <div class="field col">
                         <label for="code_postal">Code_postall</label>
-                        <!-- <p-inputNumber id="code_postal" [(ngModel)]="agence.adresse.code_postal" ></p-inputNumber> -->
+                         <p-inputNumber id="code_postal" [(ngModel)]="agence.adresse.code_postal" ></p-inputNumber> 
 
                         <input type="text" id="code_postal" [(ngModel)]="agence.adresse.code_postal" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.code_postal}"/>
                         <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.adresse.code_postal">Le code postall est obligatoire.</small>
+                    </div> -->
+
+                    <div class="field col">
+                        <label for="quantity">Code Postal</label>
+                        <!-- <input type="text" pInputText id="ville" [(ngModel)]="agence.adresse.code_postal" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.code_postal}"/> -->
+                         <p-inputNumber 
+                         id="code_postal" 
+                         [(ngModel)]="agence.adresse.code_postal" 
+                         (ngModelChange)="validateCodePostal()"
+                         ></p-inputNumber> 
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.adresse.code_postal">La ville est obligatoire.</small>
+                        <small class="ng-invalid" *ngIf="!isValidCodePostal">
+                            Le code postal doit contenir exactement 5 chiffres.
+                        </small>
                     </div>
+
                     <div class="field col">
                         <label for="quantity">Ville</label>
                         <input type="text" pInputText id="ville" [(ngModel)]="agence.adresse.ville" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.ville}"/>
                         <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.adresse.ville">La ville est obligatoire.</small>
-                        </div>
-                    <div class="field col">
-                    <label for="quantity">Ville</label>
-                    <input type="text" pInputText id="ville" [(ngModel)]="agence.adresse.ville" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.ville}"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.adresse.ville">La ville est obligatoire.</small>
                     </div>
                     
                 </div>
