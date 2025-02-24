@@ -1,6 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from 'src/app/demo/api/product';
-import { ProductService } from 'src/app/demo/service/product.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Agence } from '../../models/agence';
@@ -17,12 +15,6 @@ import { AgenceService } from '../../service/agence/agence.service';
 })
 export class AgenceComponent implements OnInit {
   
-  products: Product[] = [];
-
-  product: Product = {}; 
-
-  selectedProducts: Product[] = [];
-
   submitted: boolean = false;
 
   cols: any[] = [];
@@ -31,7 +23,6 @@ export class AgenceComponent implements OnInit {
 
   rowsPerPageOptions = [5, 10, 20];
 
-  
   agences: Agence[] = [];
   selectedAgences: Agence[] = [];
   agence: Agence = new Agence();
@@ -40,37 +31,12 @@ export class AgenceComponent implements OnInit {
   deleteAgenceDialog: boolean = false;
   deleteAgencesDialog: boolean = false;
   apiErrors: { [key: string]: string[] } = {};
-
-  value1: any;
-
-  value2: any;
-
-  value3: any;
-
-  value4: any;
-
-  value5: any;
-
-  value6: any;
-
-  value7: any;
-
-  value8: any;
-
-  value9: any;
-
-  value10: any;
-
-  cities: any[];
+ 
   constructor(
     private agenceService: AgenceService,
-    private productService: ProductService, 
     private messageService: MessageService, 
     private confirmationService: ConfirmationService) { 
-        this.cities = [
-            { name: 'Guinée-Conacry', code: 'GN' },
-            { name: 'France', code: 'FR' },
-        ];
+      
     }
     ngOnInit() {
       this.getAllAgences(); 
@@ -119,15 +85,13 @@ openDeleteAgence(agence: Agence) {
 
   confirmDeleteSelected() {
       this.deleteAgencesDialog = false;
-      this.products = this.products.filter(val => !this.selectedProducts.includes(val));
-      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-      this.selectedProducts = [];
-  }
+       this.messageService.add({ severity: 'success', summary: 'Successful', detail: '  Deleted', life: 3000 });
+   }
 
   confirmDelete( ) { 
     this.deleteAgenceDialog = false;
       
-    if (this.agence.id !== undefined) { // Vérification que l'ID est défini
+    if (this.agence.id !== undefined) { 
         this.agenceService.deleteAgence(this.agence.id).subscribe({
             next: () => {
                 this.messageService.add({
@@ -136,7 +100,7 @@ openDeleteAgence(agence: Agence) {
                     detail: 'Agence supprimée avec succès',
                     life: 3000
                 });
-                this.getAllAgences(); // Rechargez la liste des agences après suppression
+                this.getAllAgences(); 
             },
             error: (err) => {
                 console.error('Erreur lors de la suppression de l\'agence:', err);
@@ -227,7 +191,7 @@ isValidCodePostal: boolean = true;
 isCodePostalDisabled: boolean = false;
 
 validatePays() {
-    this.isValidPays = !!this.agence.adresse.pays; // Vérifie si le pays est sélectionné
+    this.isValidPays = !!this.agence.adresse.pays; 
 
     // Si le pays sélectionné est "Guinée-Conakry", fixer le code postal à "00000" et le rendre non modifiable
     if (this.agence.adresse.pays === "GUINEE-CONAKRY") {
