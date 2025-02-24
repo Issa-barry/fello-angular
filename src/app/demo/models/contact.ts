@@ -16,14 +16,16 @@ import { Role } from "./Role";
     role_id?:number;
     roles: Role;
     statut: string;
+    role: string;
     adresse: Adresse;
 
     constructor()
     {
+        this.role ="Client";
         this.nom = "";
         this.prenom ="";
         this.civilite="Mlle";
-        this.date_naissance="2024-01-01";
+        this.date_naissance="1999-01-01";
         this.password="";
         this.password_confirmation="";
         this.phone = "";
