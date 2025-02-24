@@ -98,12 +98,21 @@
                     <input type="text" pInputText id="prenom" [(ngModel)]="contact.prenom" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.prenom}"/>
                     <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.prenom">Name is required.</small>
                 </div>
-                <div class="field">
+                <!-- <div class="field">
                     <label for="phone">Phone</label>
                     
                     <input type="text" pInputText id="phone" [(ngModel)]="contact.phone" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.phone}"/>
                     <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.phone">Name is required.</small>
-                </div>
+                </div> -->
+
+                <div class="field">
+                    <label for="phone">Phone</label>
+                    <input type="text" pInputText id="phone" (ngModelChange)="validatePhone()" [(ngModel)]="contact.phone" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !isValidPhone}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="!contact.phone">Le numéro de téléphone est obligatoire.</small>
+                    <small class="error-message" *ngIf="submitted && !isValidPhone">
+                        Veuillez entrer un numéro de téléphone valide (ex: +224 622 00 00 00).
+                    </small>
+                </div>  
                 <div class="field">
                     <label for="email">Email</label>
                     <input type="text" pInputText id="email" [(ngModel)]="contact.email" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.email}"/>
@@ -146,9 +155,15 @@
 
                 <div class="formgrid grid">
                     <div class="field col">
-                        <label for="price">Code_Postal</label>
+                        <!-- <label for="price">Code_Postal</label>
                         <input type="text" id="code_postal" [(ngModel)]="contact.adresse.code_postal" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.code_postal}"/>
-
+                     -->
+                     <label for="quantity">Code Postal</label>
+                     <p-inputNumber id="code_postal" [disabled]="isCodePostalDisabled" [(ngModel)]="contact.adresse.code_postal"  (ngModelChange)="validateCodePostal()" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.code_postal || !isValidCodePostal}"></p-inputNumber> 
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.adresse.code_postal">Le code postal est obligatoire.</small>
+                        <small class="ng-invalid" *ngIf="!isValidCodePostal">
+                            Le code postal doit contenir exactement 5 chiffres.
+                        </small>
                     </div>
                     <div class="field col">
                         <label for="ville">Ville</label>

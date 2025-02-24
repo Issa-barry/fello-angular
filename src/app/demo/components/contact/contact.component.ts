@@ -23,7 +23,7 @@ export class ContactComponent implements OnInit{
   submitted: boolean = false;
   cols: any[] = [];
   statuses: any[] = [];
-  
+   
   rowsPerPageOptions = [5, 10, 20];
   // selectedContacts: Contact[] = [];
  
@@ -68,8 +68,51 @@ export class ContactComponent implements OnInit{
     });
   }
 
+  isValidPhone: boolean = true;
+  validatePhone() {
+    if (this.contact.phone) {
+        // Regex acceptant :
+        // - Numéro local : "622000000" (8 chiffres minimum)
+        // - Numéro international avec + : "+225 07 12 34 56" (indicatif suivi d'au moins 8 chiffres)
+        // - Numéro international avec 00 : "00225 07 12 34 56" (même règle que +)
+        const phoneRegex = /^(?:\+|00)?(\d{1,3})[-.\s]?\d{10,}$/;
+        this.isValidPhone = phoneRegex.test(this.contact.phone);
+    } else {
+        this.isValidPhone = false;
+    }
+}
+
+
+isValidCodePostal: boolean = true; 
+isCodePostalDisabled: boolean = false;
+
+   validateCodePostal() {
+    if (this.contact.adresse && this.contact.adresse.code_postal !== undefined) {
+        const codePostalStr = String(this.contact.adresse.code_postal);
+        this.isValidCodePostal = /^\d{5}$/.test(codePostalStr);
+    } else {
+        this.isValidCodePostal = false;
+    }
+}
+
+isValidPays: boolean = true;
+validatePays() {
+    this.isValidPays = !!this.contact.adresse.pays; 
+
+    // Si le pays sélectionné est "Guinée-Conakry", fixer le code postal à "00000" et le rendre non modifiable
+    if (this.contact.adresse.pays === "GUINEE-CONAKRY") {
+        this.contact.adresse.code_postal = "00000";
+        this.isCodePostalDisabled = true;
+    } else {
+        this.isCodePostalDisabled = false;
+    }
+}
+
+
   saveContact() {
     this.submitted = true;
+    this.validatePays();
+    this.validateCodePostal();
 
     if (this.contact.id) { // Modification
          

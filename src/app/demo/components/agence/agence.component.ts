@@ -31,6 +31,7 @@ export class AgenceComponent implements OnInit {
   deleteAgenceDialog: boolean = false;
   deleteAgencesDialog: boolean = false;
   apiErrors: { [key: string]: string[] } = {};
+  
  
   constructor(
     private agenceService: AgenceService,
