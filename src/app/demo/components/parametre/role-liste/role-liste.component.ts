@@ -115,7 +115,7 @@ export class RoleListeComponent implements OnInit {
                     'Erreur lors de la récupération des permissions:',
                     err
                 ); 
-            },
+            }, 
         });
     }
 
@@ -136,6 +136,7 @@ export class RoleListeComponent implements OnInit {
 
     saveRole() {
         this.submitted = true;
+
         if (this.role.id && this.canEdit) {
             // Modification
             this.roleService.updateRole(this.role.id, this.role).subscribe({
@@ -159,7 +160,7 @@ export class RoleListeComponent implements OnInit {
                 },
             });
             this.roleDialog = false;
-        } else if (this.canCreate) {
+        } else if (this.canCreate && this.role.name ) {
             // Création
             this.roleService.createRole(this.role).subscribe({
                 next: () => {
