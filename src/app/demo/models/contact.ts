@@ -16,7 +16,7 @@ import { Role } from "./Role";
     role_id?:number;
     roles: Role;
     statut: string;
-    role: string;
+    role: any;
     adresse: Adresse;
 
     constructor()
@@ -35,4 +35,4 @@ import { Role } from "./Role";
         this.roles= new Role();
 
     }
-}
+}  

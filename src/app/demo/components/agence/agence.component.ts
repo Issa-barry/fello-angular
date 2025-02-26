@@ -219,14 +219,14 @@ validatePays() {
             this.agence.adresse.code_postal = String(this.agence.adresse.code_postal);
         }
 
-    if (this.agence.id) { // Modification
+    if (this.agence.id && this.agence.nom_agence && this.agence.phone && this.agence.email && this.agence.adresse.ville) { // Modification
    
         this.agenceService.updateAgence(this.agence.id, this.agence).subscribe({
             next: () => {
                 this.getAllAgences(); 
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Succès',
+                    summary: 'Succès', 
                     detail: 'Agence modifiée avec succès',
                     life: 3000
                 });

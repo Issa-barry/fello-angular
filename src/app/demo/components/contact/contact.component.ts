@@ -6,6 +6,8 @@ import { Product } from '../../api/product';
 import { ProductService } from '../../service/product.service'; 
 import { Contact } from '../../models/contact';
 import { ContactService } from '../../service/contact/contact.service';
+import { RoleService } from '../../service/role/role.service';
+import { Role } from '../../models/Role';
 
 @Component({
   selector: 'app-contact',
@@ -16,6 +18,7 @@ import { ContactService } from '../../service/contact/contact.service';
 export class ContactComponent implements OnInit{
   contacts : Contact[] = [];
   contact: Contact = new Contact();
+  roles: Role[] = [];
   optionPays: any[] = [];
   contactDialog: boolean = false;  
   deleteContactDialog: boolean = false;
@@ -37,12 +40,14 @@ export class ContactComponent implements OnInit{
     private contactService: ContactService,
     private productService: ProductService, 
     private messageService: MessageService, 
+    private roleService: RoleService,
     private confirmationService: ConfirmationService) 
     { }
 
 
   ngOnInit() {
         this.getAllContacts();
+        this.getAllRoles()
         
         this.optionPays = [
           { label: 'GUINEE-CONAKRY', value: 'Guinée-Conakry' },
@@ -56,6 +61,16 @@ export class ContactComponent implements OnInit{
       ];
   }
   
+  getAllRoles() : void {
+ this.roleService.getRoles().subscribe({
+    next: (response) => {
+        this.roles = response
+        console.log(this.roles);
+        
+    }
+ })
+  }
+
   getAllContacts(): void {
     this.contactService.getContacts().subscribe({
       next: (response) => {
@@ -67,6 +82,7 @@ export class ContactComponent implements OnInit{
       }
     });
   }
+
 
   isValidPhone: boolean = true;
   validatePhone() {
@@ -114,7 +130,11 @@ validatePays() {
     this.validatePays();
     this.validateCodePostal();
 
-    if (this.contact.id) { // Modification
+   this.contact.role = String(this.contact.role.name);
+   this.contact.adresse.code_postal = String(this.contact.adresse.code_postal);
+    // console.log(this.contact.role.name);
+
+    if (this.contact.id && this.contact.password) { // Modification
          
       this.contactService.updateContact(this.contact.id, this.contact).subscribe({
         next: () => {
@@ -138,9 +158,9 @@ validatePays() {
     });
     this.contactDialog = false;
 
-    } else { // Création
+    } else if  (this.contact.password)  { // Création
        
-        console.log(this.contact);
+        console.log(this.contact.role);
         
         this.contactService.createContact(this.contact).subscribe({
             next: () => {
