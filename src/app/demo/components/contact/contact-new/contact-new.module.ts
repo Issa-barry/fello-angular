@@ -13,6 +13,7 @@ import { InputTextareaModule } from 'primeng/inputtextarea';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ContactNewComponent } from './contact-new.component';
+import { PasswordModule } from 'primeng/password';
 
 
 @NgModule({
@@ -21,15 +22,16 @@ import { ContactNewComponent } from './contact-new.component';
     CommonModule,
     ContactNewRoutingModule,
     FormsModule,
-        ProfileCreateRoutingModule,
-        ButtonModule,
-        RippleModule,
-        InputTextModule,
-        DropdownModule,
-        FileUploadModule,
-        InputTextareaModule,
-        InputGroupModule,
-        InputGroupAddonModule
+    ProfileCreateRoutingModule,
+    ButtonModule,
+    RippleModule,
+    InputTextModule,
+    DropdownModule,
+    FileUploadModule,
+    InputTextareaModule,
+    InputGroupModule,
+    InputGroupAddonModule, 
+    PasswordModule
   ]
 })
 export class ContactNewModule { }

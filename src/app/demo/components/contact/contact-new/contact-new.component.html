@@ -65,6 +65,25 @@
                     <label for="state" class="font-medium text-900" >Ville</label>
                     <input id="state" type="text" [(ngModel)]="contact.adresse.ville" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.ville}"  pInputText>
                 </div> 
+
+                <div class="field mb-4 col-12 md:col-6">
+                    <label for="city" class="font-medium text-900">Mot de passe</label>
+                     <p-password 
+                        id="password" required placeholder="mot de passe"
+                        [(ngModel)]="contact.password" styleClass="w-full"  [inputStyle]="{paddingLeft: '2.5rem'}" 
+                        inputStyleClass="w-full" [toggleMask]="true" 
+                        [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.password}" >
+                    </p-password>
+                </div>
+                <div class="field mb-4 col-12 md:col-6">
+                    <label for="city" class="font-medium text-900">Confirmer mot de passe</label>
+                     <p-password 
+                        id="password_confirmation" required placeholder="Confirmer mot de passe"
+                        [(ngModel)]="contact.password_confirmation" styleClass="w-full"  [inputStyle]="{paddingLeft: '2.5rem'}" 
+                        inputStyleClass="w-full" [toggleMask]="true" 
+                        [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.password_confirmation}" >
+                    </p-password>
+                </div> 
                 <div class="col-12">
                     <button pButton pRipple label="Creer utilisateur" class="w-auto mt-3" (click)="saveContact()"></button>
                 </div>
