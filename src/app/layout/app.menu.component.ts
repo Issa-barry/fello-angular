@@ -127,7 +127,7 @@ export class AppMenuComponent implements OnInit {
                         routerLink: ['/dashboard/agence']
                     }] : [])
                 ]
-            }, 
+            },  
             {
                 label: 'AUTRE', 
                 icon: 'pi pi-cog',

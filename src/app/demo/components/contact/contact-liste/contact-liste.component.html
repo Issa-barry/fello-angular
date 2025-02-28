@@ -6,7 +6,7 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
+                        <button pButton pRipple label="" icon="pi pi-plus" class="p-button-success mr-2" (click)="onGotToNewContact()"></button>
                         <button pButton pRipple label="" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedContacts()" [disabled]="!selectedContacts || !selectedContacts.length"></button>
                     </div>
                 </ng-template>
@@ -73,7 +73,7 @@
                         </td> -->
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editContact(contact)"></button>
+                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="onGotToContactDetail(contact)"></button>
                                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteContact(contact)"></button>
                             </div>
                         </td>
@@ -101,7 +101,8 @@
                 </div>
                  <div class="field">
                     <label for="nom">Nom</label>
-                    <input type="text" pInputText id="nom" [(ngModel)]="contact.nom" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.nom}"/>
+                    <input type="text" pInputText id="nom" [(ngModel)]="contact.nom" required autofocus 
+                    [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.nom}"/>
                     <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.nom">Le nom est obligatoire.</small>
                 </div>
                 <div class="field">

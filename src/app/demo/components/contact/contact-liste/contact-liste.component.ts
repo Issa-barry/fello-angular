@@ -8,6 +8,7 @@ import { Contact } from '../../../models/contact';
 import { ContactService } from '../../../service/contact/contact.service';
 import { RoleService } from '../../../service/role/role.service';
 import { Role } from '../../../models/Role';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-contact-liste',
@@ -28,7 +29,7 @@ export class ContactListeComponent implements OnInit {
     deleteContactsDialog: boolean = false;
     submitted: boolean = false;
     cols: any[] = [];
-    statuses: any[] = [];
+    statuses: any[] = []; 
      
     rowsPerPageOptions = [5, 10, 20];
     // selectedContacts: Contact[] = [];
@@ -44,6 +45,7 @@ export class ContactListeComponent implements OnInit {
       private productService: ProductService, 
       private messageService: MessageService, 
       private roleService: RoleService,
+      private router: Router,
       private confirmationService: ConfirmationService) 
       { }
   
@@ -70,8 +72,8 @@ export class ContactListeComponent implements OnInit {
           this.roles = response
           console.log(this.roles);
           
-      }
-   })
+        }
+      })
     }
   
     getAllContacts(): void {
@@ -273,5 +275,13 @@ export class ContactListeComponent implements OnInit {
   
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
+    }
+
+    onGotToNewContact() {
+        this.router.navigate(['/dashboard/contact/contact-new']);
+    }
+
+    onGotToContactDetail(contact: Contact) {
+        this.router.navigate(['/dashboard/contact/contact-detail', contact.id]);
     }
 }

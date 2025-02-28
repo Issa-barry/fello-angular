@@ -26,6 +26,6 @@ import { InputGroupModule } from 'primeng/inputgroup';
 		InputGroupModule,
         InputGroupAddonModule
 	],
-	declarations: [ProfileCreateComponent]
+	declarations: [ProfileCreateComponent] 
 })
 export class ProfileCreateModule { }
