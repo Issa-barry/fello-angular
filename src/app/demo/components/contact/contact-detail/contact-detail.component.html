@@ -9,15 +9,12 @@
         <div class="col-12 lg:col-10">
             <div class="grid formgrid p-fluid">
                 <div class="field mb-4 col-12 md:col-6">
-                    <label for="role" class="font-medium text-900">Role</label> 
-                    <p-dropdown [(ngModel)]="contact.roles"
-                                [options]="roles"
-                                optionLabel="name"
-                                optionValue="id"
-                                inputId="role"
-                                [ngClass]="{'ng-invalid ng-dirty' : (submitted && !contact.role) || errors['role']}">
-                    </p-dropdown>
-                    <small *ngIf="errors['role']">{{ errors['role'] }}</small>
+                    <label for="role" class="font-medium text-900" >Role</label> 
+                    <p-dropdown [(ngModel)]="contact.role"  [options]="roles"  optionLabel="name" 
+                    placeholder="Sélectionnez un rôle"
+                    [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.role || errors['role']}">
+                </p-dropdown>
+                <small *ngIf="errors['role']">{{ errors['role'] }}</small>
                 </div>
                 
                 <div class="field mb-4 col-12 md:col-6">

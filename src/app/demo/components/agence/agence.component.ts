@@ -255,7 +255,7 @@ validatePays() {
                     life: 3000
                 });
             },
-            error: (err) => {
+            error: (err) => { 
                 console.error('Erreur lors de la création de l\'agence:', err);
                 this.messageService.add({
                     severity: 'error',

@@ -115,16 +115,16 @@ export class ContactDetailComponent implements OnInit {
          this.contact.adresse.pays = String(this.contact.adresse.pays);
          this.contact.adresse.code_postal = String(this.contact.adresse.code_postal);
      
-         this.contactService.createContact(this.contact).subscribe({
+         this.contactService.updateContact(this.id, this.contact).subscribe({
              next: () => { 
                  this.messageService.add({
                      severity: 'success',
                      summary: 'Succès',
-                     detail: 'Contact créé avec succès',
+                     detail: 'Les données du contact on été maj avec succès',
                      life: 3000
                  });
      
-                 this.contact = new Contact();
+                 
                  this.submitted = false;
                  this.errors = {}; // Réinitialisation des erreurs après succès
              },
