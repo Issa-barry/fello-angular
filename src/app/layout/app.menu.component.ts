@@ -129,7 +129,7 @@ export class AppMenuComponent implements OnInit {
                 ]
             }, 
             {
-                label: 'AUTRE',
+                label: 'AUTRE', 
                 icon: 'pi pi-cog',
                 items: [
                     {

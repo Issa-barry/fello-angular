@@ -129,6 +129,7 @@ validatePays() {
     this.submitted = true;
     this.validatePays();
     this.validateCodePostal();
+    this.validatePhone();
 
    this.contact.role = String(this.contact.role.name);
    this.contact.adresse.code_postal = String(this.contact.adresse.code_postal);
@@ -158,7 +159,7 @@ validatePays() {
     });
     this.contactDialog = false;
 
-    } else if  (this.contact.password)  { // Création
+    } else if  (this.contact.nom)  { // Création
        
         console.log(this.contact.role);
         
