@@ -29,7 +29,7 @@ import { ToastModule } from 'primeng/toast';
     InputTextModule,
     DropdownModule,
     FileUploadModule,
-    InputTextareaModule,
+    InputTextareaModule, 
     InputGroupModule,
     InputGroupAddonModule, 
     PasswordModule, 
