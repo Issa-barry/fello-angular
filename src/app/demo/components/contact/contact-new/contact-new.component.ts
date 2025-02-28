@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Civilite } from 'src/app/demo/enums/civilite.enum';
 import { Contact } from 'src/app/demo/models/contact';
 import { Role } from 'src/app/demo/models/Role';
 import { ContactService } from 'src/app/demo/service/contact/contact.service';
@@ -48,6 +49,9 @@ export class ContactNewComponent implements OnInit {
          }
        })
      }
+
+  //Civilité :  Convertir l'énumération en tableau d'options
+  civiliteOptions = Object.values(Civilite).map(civ => ({ label: civ, value: civ }));
 
     saveContact() {
       this.submitted = true;

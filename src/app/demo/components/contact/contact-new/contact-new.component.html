@@ -8,56 +8,41 @@
         <div class="col-12 lg:col-10">
             <div class="grid formgrid p-fluid">
                 <div class="field mb-4 col-12 md:col-6">
-                    <label for="role" class="font-medium text-900" >Role</label>
-                    <!-- <p-dropdown [(ngModel)]="contact.role" inputId="country" [options]="countries" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Country">
-                        <ng-template let-country pTemplate="item">
-                            <div class="flex align-items-center">
-                                <img src="assets/demo/images/flag/flag_placeholder.png" [class]="'mr-2 flag flag-' + country.code.toLowerCase()" style="width:18px"/>
-                                <div>{{country.name}}</div>
-                            </div>
-                        </ng-template>
-                    </p-dropdown> -->
-                    <p-dropdown 
-                    [(ngModel)]="contact.role" 
-                    [options]="roles" 
-                    optionLabel="name" 
-                    placeholder="Sélectionnez un rôle">
+                    <label for="role" class="font-medium text-900" >Role</label> 
+                    <p-dropdown [(ngModel)]="contact.role"  [options]="roles"  optionLabel="name" 
+                    placeholder="Sélectionnez un rôle"
+                    [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.role}">
                 </p-dropdown>
                 </div>
                 <div class="field mb-4 col-12 md:col-6">
-                    <label for="country" class="font-medium text-900" >Civilitté</label>
-                    <p-dropdown [(ngModel)]="contact.civilite" inputId="country" [options]="countries" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Country">
-                        <ng-template let-country pTemplate="item">
-                            <div class="flex align-items-center">
-                                <img src="assets/demo/images/flag/flag_placeholder.png" [class]="'mr-2 flag flag-' + country.code.toLowerCase()" style="width:18px"/>
-                                <div>{{country.name}}</div>
-                            </div>
-                        </ng-template>
+                    <label for="country" class="font-medium text-900" >Civilitté</label> 
+                    <p-dropdown id="civilite" [options]="civiliteOptions" optionLabel="label" optionValue="value"
+                        [(ngModel)]="contact.civilite" placeholder="Sélectionnez une civilité" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.civilite}">
                     </p-dropdown>
                 </div>
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="nom" class="font-medium text-900">Nom</label>
                     <input id="nom" type="text" pInputText [(ngModel)]="contact.nom" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.nom}">
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.nom">Le nom est obligatoire.</small>
-
-                    <!-- <input id="nom" type="text" pInputText [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.nom}"> -->
-
+                    <!-- <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.nom">Le nom est obligatoire.</small>  -->
                 </div>
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="prenom" class="font-medium text-900">Prénom</label>
-                    <input id="prenom" type="text" [(ngModel)]="contact.prenom" pInputText>
+                    <input id="prenom" type="text" [(ngModel)]="contact.prenom" [ngClass]="{'ng-invalid ng-dirty': submitted && !contact.prenom}" pInputText>
                 </div> 
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="email" class="font-medium text-900">Email</label>
-                    <input id="email" type="text" [(ngModel)]="contact.email" pInputText>
+                    <input id="email" type="text" [(ngModel)]="contact.email" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.email}" pInputText>
                 </div>
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="phone" class="font-medium text-900">Phone</label>
-                    <input id="phone" type="text" [(ngModel)]="contact.phone" pInputText>
+                    <input id="phone" type="text" [(ngModel)]="contact.phone" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.phone}" pInputText>
                 </div> 
                 <div class="field mb-4 col-12 md:col-12">
                     <label for="country" class="font-medium text-900" >Pays</label>
-                    <p-dropdown [(ngModel)]="contact.adresse.pays" inputId="country" [options]="countries" optionLabel="name" [filter]="true" filterBy="name" [showClear]="true" placeholder="Select a Country">
+                    <p-dropdown [(ngModel)]="contact.adresse.pays" inputId="country" [options]="countries"
+                                optionLabel="name" [filter]="true" filterBy="name" 
+                                [showClear]="true" placeholder="Select a Country"
+                                [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.pays}">
                         <ng-template let-country pTemplate="item">
                             <div class="flex align-items-center">
                                 <img src="assets/demo/images/flag/flag_placeholder.png" [class]="'mr-2 flag flag-' + country.code.toLowerCase()" style="width:18px"/>
@@ -69,16 +54,16 @@
              
                 <div class="field mb-4 col-12 md:col-12">
                     <label for="adresse" class="font-medium text-900"  >Adresse</label>
-                    <input id="adresse" type="text" [(ngModel)]="contact.adresse.adresse" pInputText >
+                    <input id="adresse" type="text" [(ngModel)]="contact.adresse.adresse" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.adresse}" pInputText >
                 </div>
 
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="city" class="font-medium text-900">Code Postal</label>
-                    <input id="city" type="text" pInputText [(ngModel)]="contact.adresse.code_postal">
+                    <input id="city" type="text" pInputText [(ngModel)]="contact.adresse.code_postal" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.code_postal}" >
                 </div>
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="state" class="font-medium text-900" >Ville</label>
-                    <input id="state" type="text" [(ngModel)]="contact.adresse.ville" pInputText>
+                    <input id="state" type="text" [(ngModel)]="contact.adresse.ville" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.ville}"  pInputText>
                 </div> 
                 <div class="col-12">
                     <button pButton pRipple label="Creer utilisateur" class="w-auto mt-3" (click)="saveContact()"></button>

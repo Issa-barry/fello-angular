@@ -1,3 +1,4 @@
+import { Civilite } from "../enums/civilite.enum";
 import { Adresse } from "./adresse";
 import { Role } from "./Role";
 
@@ -5,7 +6,7 @@ import { Role } from "./Role";
  export class Contact {
     id?: number;
     reference?:string;
-    civilite?:string;
+    civilite?:Civilite;
     nom: string;
     prenom: string;
     phone: string;
@@ -21,10 +22,10 @@ import { Role } from "./Role";
 
     constructor()
     {
-        this.role ="Client";
+        this.role ="";
         this.nom = "";
         this.prenom ="";
-        this.civilite="Mlle";
+        this.civilite=Civilite.Autre;
         this.date_naissance="1999-01-01";
         this.password="";
         this.password_confirmation="";
@@ -33,6 +34,5 @@ import { Role } from "./Role";
         this.statut="attente";
         this.adresse = new Adresse();
         this.roles= new Role();
-
     }
 }  
