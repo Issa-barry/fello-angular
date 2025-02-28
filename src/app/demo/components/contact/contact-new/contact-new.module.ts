@@ -14,6 +14,7 @@ import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { ContactNewComponent } from './contact-new.component';
 import { PasswordModule } from 'primeng/password';
+import { ToastModule } from 'primeng/toast';
 
 
 @NgModule({
@@ -31,7 +32,8 @@ import { PasswordModule } from 'primeng/password';
     InputTextareaModule,
     InputGroupModule,
     InputGroupAddonModule, 
-    PasswordModule
+    PasswordModule, 
+    ToastModule
   ]
 })
 export class ContactNewModule { }

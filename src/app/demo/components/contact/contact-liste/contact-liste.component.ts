@@ -43,9 +43,10 @@ export class ContactListeComponent implements OnInit {
     constructor(
       private contactService: ContactService,
       private productService: ProductService, 
-      private messageService: MessageService, 
+      
       private roleService: RoleService,
       private router: Router,
+      private messageService: MessageService, 
       private confirmationService: ConfirmationService) 
       { }
   
