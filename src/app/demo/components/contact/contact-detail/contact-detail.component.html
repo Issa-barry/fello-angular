@@ -10,10 +10,19 @@
             <div class="grid formgrid p-fluid">
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="role" class="font-medium text-900" >Role</label> 
-                    <p-dropdown [(ngModel)]="contact.role"  [options]="roles"  optionLabel="name" 
-                    placeholder="Sélectionnez un rôle"
+                    <p-dropdown 
+                    [(ngModel)]="contact.role" 
+                    [options]="roles"  
+                    optionLabel="name" 
+                    optionValue="name" 
+                    inputId="role"
                     [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.role || errors['role']}">
+                    <ng-template let-option pTemplate="item">
+                        <span>{{ option.name }}</span>
+                    </ng-template>
                 </p-dropdown>
+                
+
                 <small *ngIf="errors['role']">{{ errors['role'] }}</small>
                 </div>
                 
@@ -98,9 +107,10 @@
                     </p-password>
                  </div> 
                 <div class="col-12">
-                    <button pButton pRipple label="Creer utilisateur" class="w-auto mt-3" (click)="saveContact()"></button>
+                    <button pButton pRipple label="Enregistrer" class="w-auto mt-3" (click)="saveContact()"></button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+ 

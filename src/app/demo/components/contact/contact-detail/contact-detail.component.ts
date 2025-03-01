@@ -41,21 +41,54 @@ export class ContactDetailComponent implements OnInit {
                {name: 'France', code: 'FR'},
            ]; 
            this.getAllRoles();
-           this.getRoleById(3);
            this.onGetContact();
        }
  
-       onGetContact(): void {
+    
+    
+    
+       /**************************
+        * ROLE
+        **************************/
+       getAllRoles(): void {
+        this.roleService.getRoles().subscribe({
+            next: (response) => {
+                this.roles = response;
+    
+                // ✅ Si le contact est déjà récupéré, mettre à jour son rôle dans le dropdown
+                if (this.contact && this.contact.role) {
+                    this.contact.role = this.roles.find(role => role.id === this.contact.role.id) || null;
+                }
+            }
+        });
+    }
+
+    getRoleById(id: number): void {
+        this.roleService.getRoleById(id).subscribe({
+            next: (resp) => {
+                this.role = resp;
+                this.contact.role = resp.name; // ✅ Assigne directement le rôle au contact
+            },
+            error: (err) => {
+                console.error('Erreur lors de la récupération du rôle:', err);
+            }
+        });
+    }
+    
+    onGetContact(): void {
         this.contactService.getContactById(this.id).subscribe({
             next: (resp) => {
                 this.contact = resp;
     
-                // 🔥 Assure que le rôle est bien sélectionné dans le dropdown
-                if (this.roles.length > 0) {
-                    this.contact.role = this.roles.find(role => role.id === resp.role.id) || null;
-                }
+                console.log("Contact récupéré:", this.contact);
     
-                console.log('Contact récupéré:', this.contact);
+                // ✅ Vérification avant d'appeler getRoleById()
+                if (this.contact.role_id !== undefined && this.contact.role_id !== null) {
+                    this.getRoleById(this.contact.role_id);
+                } else {
+                    console.warn("Le contact n'a pas de rôle attribué.");
+                    this.contact.role = null;
+                }
             },
             error: (err) => {
                 console.error('Erreur lors de la récupération du contact:', err);
@@ -63,25 +96,7 @@ export class ContactDetailComponent implements OnInit {
         });
     }
     
-       /**************************
-        * ROLE
-        **************************/
-        getAllRoles() : void {
-         this.roleService.getRoles().subscribe({
-            next: (response) => {
-                this.roles = response
-              }
-            })
-          }
-
-          getRoleById(id:number): void{
-            this.roleService.getRoleById(id).subscribe({
-                next:(resp) => {
-                  this.role = resp
-                  console.log("Role", this.role); 
-                 }
-              })
-          }
+    
      
        //Civilité :  Convertir l'énumération en tableau d'options
        civiliteOptions = Object.values(Civilite).map(civ => ({ label: civ, value: civ }));
@@ -93,7 +108,7 @@ export class ContactDetailComponent implements OnInit {
          if (!this.contact.role 
              || !this.contact.civilite 
              || !this.contact.nom 
-             || !this.contact.prenom 
+             || !this.contact.prenom  
              || !this.contact.email 
              || !this.contact.phone
              || !this.contact.password
