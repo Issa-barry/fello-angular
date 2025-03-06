@@ -25,6 +25,8 @@ export class ContactDetailComponent implements OnInit {
        @Input() role: Role = new Role()
        id:      number  = this.activatedRoute.snapshot.params['id'];
        isGuineeSelected: boolean = false;
+       villeAvantSelection : string = '';
+       paysAvantSelection : string = '';
      
      
           constructor(
@@ -37,10 +39,10 @@ export class ContactDetailComponent implements OnInit {
           ) { }
      
        ngOnInit() {
-           this.countries = [
-               {name: 'GUINEE-CONAKRY', code: 'GN'},
-               {name: 'France', code: 'FR'},
-           ]; 
+        this.countries = [
+            { name: 'GUINEE-CONAKRY', code: 'GN', value: 'GUINEE-CONAKRY' },
+            { name: 'France', code: 'FR', value: 'FRANCE' },
+        ];
            this.getAllRoles();
            this.onGetContact();
        }
@@ -48,17 +50,58 @@ export class ContactDetailComponent implements OnInit {
        
     onCountryChange(event: any) {
         const selectedCountry = event.value;
+        console.log('this.contact.adresse.pays: pays actuelle', this.contact.adresse.pays);
+
+        console.log(' pays selectionner', selectedCountry);
+
+        console.log('ville avant selection dans onChange:', this.villeAvantSelection);
+        console.log('pays avant selection:', this.paysAvantSelection);
+
         
+
         if (selectedCountry && selectedCountry === 'GUINEE-CONAKRY') { 
             this.isGuineeSelected = true;
             this.contact.adresse.adresse = 'GUINEE-CONAKRY';
             this.contact.adresse.code_postal = '00224'; 
-            
+            this.contact.adresse.ville = this.villeAvantSelection;
+            if(this.paysAvantSelection !== 'GUINEE-CONAKRY'){
+                this.contact.adresse.ville = '';
+            }
+
         } else { 
             this.isGuineeSelected = false; 
+            this.contact.adresse.adresse = '';
             this.contact.adresse.ville = '';
             this.contact.adresse.quartier = '';
+            this.contact.adresse.code_postal = ''; 
         }
+
+        // this.contactService.getContactById(this.id).subscribe({
+        //     next: (resp) => {
+        //         this.contact = resp;
+        //         this.isGuineeSelected = this.contact.adresse.pays === 'GUINEE-CONAKRY';
+
+        //         // console.log('this.contact.adresse.pays: pays actuelle', this.contact.adresse.pays);
+
+        //         // console.log(' pays selectionner', selectedCountry);
+                
+        //         if (selectedCountry && selectedCountry === 'GUINEE-CONAKRY' && this.contact.adresse.pays === 'GUINEE-CONAKRY') { 
+        //             // this.isGuineeSelected = true;
+        //             // this.contact.adresse.adresse = 'GUINEE-CONAKRY';
+        //             // this.contact.adresse.code_postal = '00224'; 
+        //         } else if (selectedCountry && selectedCountry === 'GUINEE-CONAKRY' && this.contact.adresse.pays === 'France') { 
+        //             // this.isGuineeSelected = true;
+        //             // this.contact.adresse.adresse = 'GUINEE-CONAKRY';
+        //             // this.contact.adresse.code_postal = '00224'; 
+        //             console.log('pays selectionner', selectedCountry);
+        //             console.log('pays contct', this.contact.adresse.pays);
+                    
+        //         }
+        //     },
+        //     error: (err) => {
+        //         console.error('Erreur lors de la récupération du contact:', err);
+        //     }
+        // });
     }
     
  
@@ -97,11 +140,13 @@ export class ContactDetailComponent implements OnInit {
         this.contactService.getContactById(this.id).subscribe({
             next: (resp) => {
                 this.contact = resp;
-    
-                console.log("Contact récupéré:", this.contact.adresse.pays);
 
                 this.isGuineeSelected = this.contact.adresse.pays === 'GUINEE-CONAKRY';
 
+                this.villeAvantSelection = this.contact.adresse.ville;
+                this.paysAvantSelection = this.contact.adresse.pays;
+                // console.log('pays avant selection:', this.paysAvantSelection);
+                
                 // ✅ Vérification avant d'appeler getRoleById()
                 if (this.contact.role_id !== undefined && this.contact.role_id !== null) {
                     this.getRoleById(this.contact.role_id);

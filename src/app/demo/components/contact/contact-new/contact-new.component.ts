@@ -84,7 +84,6 @@ export class ContactNewComponent implements OnInit {
             this.isGuineeSelected = true;
             this.contact.adresse.adresse = 'GUINEE-CONAKRY';
             this.contact.adresse.code_postal = '00224'; 
-            
         } else { 
             this.isGuineeSelected = false; 
             this.contact.adresse.ville = '';
