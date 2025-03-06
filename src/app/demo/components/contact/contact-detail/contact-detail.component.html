@@ -10,12 +10,26 @@
             <div class="grid formgrid p-fluid">
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="role" class="font-medium text-900" >Role</label> 
-                    <p-dropdown [(ngModel)]="contact.role"  [options]="roles"  optionLabel="name" 
+                    <p-dropdown 
+                    [(ngModel)]="contact.role"  
+                    [options]="roles"  
+                    optionLabel="name"
+                    optionValue="name" 
                     placeholder="Sélectionnez un rôle"
                     [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.role || errors['role']}">
                 </p-dropdown>
                 <small *ngIf="errors['role']">{{ errors['role'] }}</small>
                 </div>
+                <!-- <p-dropdown [(ngModel)]="contact.role"
+                inputId="role"
+                [options]="roles"
+                optionLabel="name"
+                optionValue="name"  
+                placeholder="Sélectionnez un rôle"
+                [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.role || errors['role']}">
+       </p-dropdown> -->
+
+
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="country" class="font-medium text-900" >Civilitté</label> 
                     <p-dropdown id="civilite" [options]="civiliteOptions" optionLabel="label" optionValue="value"
@@ -50,11 +64,11 @@
                                inputId="country"
                                 [options]="countries"
                                 optionLabel="name" 
-                                optionValue="name" 
+                                optionValue="name"
                                 [filter]="true" 
                                 filterBy="name" 
                                 [showClear]="true" 
-                                placeholder="{{ contact.adresse.pays ? contact.adresse.pays : 'Sélectionnez un pays' }}"
+                                placeholder="Sélectionnez un pays"
                                 [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.pays || errors['adresse.pays']}"
                                 (onChange)="onCountryChange($event)">
                         <ng-template let-country pTemplate="item">

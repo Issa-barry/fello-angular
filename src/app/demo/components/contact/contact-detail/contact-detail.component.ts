@@ -109,44 +109,7 @@ export class ContactDetailComponent implements OnInit {
             }
         });
     }
-    
-    // onGetContact(): void {
-    //     this.contactService.getContactById(this.id).subscribe({
-    //         next: (resp) => {
-    //             this.contact = resp;
-
-    //             this.isGuineeSelected = this.contact.adresse.pays === 'GUINEE-CONAKRY';
-    //             this.villeAvantSelection = this.contact.adresse.ville;
-    //             this.paysAvantSelection = this.contact.adresse.pays;
-    //             this.codePostalAvantSelection = this.contact.adresse.code_postal;
-    //             this.adresseAvantSelection = this.contact.adresse.adresse;
-    //             this.quartierAvantSelection = this.contact.adresse.quartier;
-                
-    //               // ✅ Vérifier si le pays du contact est dans la liste des pays disponibles
-    //         const selectedCountry = this.countries.find(c => c.name === this.contact.adresse.pays);
-    //         this.contact.adresse.pays = selectedCountry ? selectedCountry.name : '';
-
-    //         console.log('onget Pays sélectionné par défaut:', this.contact.adresse.pays);
-    //         console.log('onget Pays sélectionné par défaut:', selectedCountry);
-            
-
-    //             // ✅ Vérification avant d'appeler getRoleById()
-    //             if (this.contact.role_id !== undefined && this.contact.role_id !== null) {
-    //                 this.getRoleById(this.contact.role_id);
-    //                 if (this.contact.adresse && this.contact.adresse.pays && this.countries.length > 0) {
-    //                     const selectedCountry = this.countries.find(c => c.name === this.contact.adresse.pays);
-    //                     this.contact.adresse.pays = selectedCountry || null;
-    //                 }
-    //             } else {
-    //                 console.warn("Le contact n'a pas de rôle attribué.");
-    //                 this.contact.role = null;
-    //             }
-    //         },
-    //         error: (err) => {
-    //             console.error('Erreur lors de la récupération du contact:', err);
-    //         }
-    //     });
-    // }
+     
 
     onGetContact(): void {
         this.contactService.getContactById(this.id).subscribe({
@@ -159,15 +122,7 @@ export class ContactDetailComponent implements OnInit {
                 this.codePostalAvantSelection = this.contact.adresse.code_postal;
                 this.adresseAvantSelection = this.contact.adresse.adresse;
                 this.quartierAvantSelection = this.contact.adresse.quartier;
-    
-                // ✅ Vérification et conversion en chaîne si nécessaire
-                if (this.contact.adresse.pays && typeof this.contact.adresse.pays === 'object') {
-                    const selectedCountry = this.countries.find(c => c.name === this.contact.adresse.pays);
-                    this.contact.adresse.pays = selectedCountry ? selectedCountry.name : '';
-                }
-    
-                console.log('Pays sélectionné par défaut:', this.contact.adresse.pays);
-    
+ 
                 // Vérification et récupération du rôle
                 if (this.contact.role_id !== undefined && this.contact.role_id !== null) {
                     this.getRoleById(this.contact.role_id);
@@ -183,8 +138,6 @@ export class ContactDetailComponent implements OnInit {
     }
     
     
-    
-     
        //Civilité :  Convertir l'énumération en tableau d'options
        civiliteOptions = Object.values(Civilite).map(civ => ({ label: civ, value: civ }));
          
