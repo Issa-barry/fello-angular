@@ -23,7 +23,8 @@ export class ContactDetailComponent implements OnInit {
        errors: { [key: string]: string } = {};  
        @Input() contact: Contact = new Contact()
        @Input() role: Role = new Role()
-      id:      number  = this.activatedRoute.snapshot.params['id'];
+       id:      number  = this.activatedRoute.snapshot.params['id'];
+       isGuineeSelected: boolean = false;
      
      
           constructor(
@@ -43,6 +44,23 @@ export class ContactDetailComponent implements OnInit {
            this.getAllRoles();
            this.onGetContact();
        }
+
+       
+    onCountryChange(event: any) {
+        const selectedCountry = event.value;
+        
+        if (selectedCountry && selectedCountry === 'GUINEE-CONAKRY') { 
+            this.isGuineeSelected = true;
+            this.contact.adresse.adresse = 'GUINEE-CONAKRY';
+            this.contact.adresse.code_postal = '00224'; 
+            
+        } else { 
+            this.isGuineeSelected = false; 
+            this.contact.adresse.ville = '';
+            this.contact.adresse.quartier = '';
+        }
+    }
+    
  
     
     
@@ -80,8 +98,10 @@ export class ContactDetailComponent implements OnInit {
             next: (resp) => {
                 this.contact = resp;
     
-                console.log("Contact récupéré:", this.contact);
-    
+                console.log("Contact récupéré:", this.contact.adresse.pays);
+
+                this.isGuineeSelected = this.contact.adresse.pays === 'GUINEE-CONAKRY';
+
                 // ✅ Vérification avant d'appeler getRoleById()
                 if (this.contact.role_id !== undefined && this.contact.role_id !== null) {
                     this.getRoleById(this.contact.role_id);

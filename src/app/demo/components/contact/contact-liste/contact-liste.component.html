@@ -35,8 +35,9 @@
                         <th pSortableColumn="reference">Reference <p-sortIcon field="code"></p-sortIcon></th>
                         <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
                          <th pSortableColumn="prenom">Prenom <p-sortIcon field="prenom"></p-sortIcon></th>
-                         <th pSortableColumn="phone">Phone <p-sortIcon field="phone"></p-sortIcon></th>
-                        <th pSortableColumn="statut">Statut <p-sortIcon field="statut"></p-sortIcon></th>
+                         <th pSortableColumn="adresse">Adresse <p-sortIcon field="adresse"></p-sortIcon></th>
+                         <!-- <th pSortableColumn="phone">Phone <p-sortIcon field="phone"></p-sortIcon></th> -->
+                        <!-- <th pSortableColumn="statut">Statut <p-sortIcon field="statut"></p-sortIcon></th> -->
                          <!-- <th pSortableColumn="inventoryStatus">Status <p-sortIcon field="inventoryStatus"></p-sortIcon></th> -->
                         <th>Action</th>
                     </tr>
@@ -58,13 +59,17 @@
                             {{contact.prenom}}
                         </td>
                         <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Prenom</span>
+                            {{contact.adresse.pays}}
+                        </td>
+                        <!-- <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Phone</span>
                             {{contact.phone}}
-                        </td>
-                        <td style="width:14%; min-width:10rem;">
+                        </td> -->
+                        <!-- <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Statut</span>
                             {{contact.statut}}
-                        </td>
+                        </td> -->
                       
                         <!-- <td style="width:14%; min-width: 10rem;"><span class="p-column-title">Status</span>
                             <span [class]="'product-badge status-' + (product.inventoryStatus ? product.inventoryStatus.toLowerCase() : '')">{{product.inventoryStatus}}</span>
