@@ -28,8 +28,8 @@ export class ContactDetailComponent implements OnInit {
        villeAvantSelection : string = '';
        paysAvantSelection : string = '';
        codePostalAvantSelection : string = '';
-       adresselAvantSelection : string = '';
-     
+       adresseAvantSelection : string = '';
+       quartierAvantSelection : string = '';
      
           constructor(
              private contactService: ContactService,
@@ -49,34 +49,9 @@ export class ContactDetailComponent implements OnInit {
            this.onGetContact();
        }
 
-    //    onCountryChange(event: any) {
-    //     const selectedCountry = event.value;
-    //     if (!selectedCountry) return;
-    
-    //     console.log('Pays avant sélection:', this.paysAvantSelection);
-    //     console.log('Pays sélectionné maintenant:', selectedCountry);
-    
-    //     // Vérification si le pays a changé entre "GUINEE-CONAKRY" et "France"
-    //     const paysAvant = this.paysAvantSelection?.trim().toUpperCase();
-    //     const paysActuel = selectedCountry.trim().toUpperCase();
-    
-    //     if ((paysAvant === 'GUINEE-CONAKRY' && paysActuel === 'FRANCE') || (paysAvant === 'FRANCE' && paysActuel === 'GUINEE-CONAKRY')) {
-    //         // Réinitialisation des champs si le pays a changé entre ces deux valeurs
-    //         console.log('Réinitialisation des champs car changement important de pays.');
-    //         this.contact.adresse.adresse = '';
-    //         this.contact.adresse.ville = '';
-    //         this.contact.adresse.quartier = '';
-    //         this.contact.adresse.code_postal = '';
-    //         this.isGuineeSelected = false;
-    //     } 
-    
-       
-    // }
-
+   
     onCountryChange(event: any) {
         const selectedCountry = event.value;
-        
-        console.log('Pays avant sélection:', this.paysAvantSelection);
   
         if (selectedCountry && selectedCountry === 'GUINEE-CONAKRY') { 
             this.isGuineeSelected = true;
@@ -84,6 +59,7 @@ export class ContactDetailComponent implements OnInit {
                 this.contact.adresse.adresse = 'GUINEE-CONAKRY';
                 this.contact.adresse.code_postal = '00224'; 
                 this.contact.adresse.ville = this.villeAvantSelection;
+                this.contact.adresse.quartier = this.quartierAvantSelection;
             }else{
                 this.contact.adresse.adresse = '';
                 this.contact.adresse.code_postal = ''; 
@@ -95,7 +71,7 @@ export class ContactDetailComponent implements OnInit {
             if(this.paysAvantSelection === 'France') {
             this.contact.adresse.ville = this.villeAvantSelection;
             this.contact.adresse.code_postal = this.codePostalAvantSelection;
-            this.contact.adresse.adresse = this.adresselAvantSelection;
+            this.contact.adresse.adresse = this.adresseAvantSelection;
             }else{
                 this.contact.adresse.adresse = '';
                 this.contact.adresse.code_postal = ''; 
@@ -104,10 +80,6 @@ export class ContactDetailComponent implements OnInit {
             }
         }
     }
-    
-    
- 
-    
     
     
        /**************************
@@ -138,26 +110,67 @@ export class ContactDetailComponent implements OnInit {
         });
     }
     
+    // onGetContact(): void {
+    //     this.contactService.getContactById(this.id).subscribe({
+    //         next: (resp) => {
+    //             this.contact = resp;
+
+    //             this.isGuineeSelected = this.contact.adresse.pays === 'GUINEE-CONAKRY';
+    //             this.villeAvantSelection = this.contact.adresse.ville;
+    //             this.paysAvantSelection = this.contact.adresse.pays;
+    //             this.codePostalAvantSelection = this.contact.adresse.code_postal;
+    //             this.adresseAvantSelection = this.contact.adresse.adresse;
+    //             this.quartierAvantSelection = this.contact.adresse.quartier;
+                
+    //               // ✅ Vérifier si le pays du contact est dans la liste des pays disponibles
+    //         const selectedCountry = this.countries.find(c => c.name === this.contact.adresse.pays);
+    //         this.contact.adresse.pays = selectedCountry ? selectedCountry.name : '';
+
+    //         console.log('onget Pays sélectionné par défaut:', this.contact.adresse.pays);
+    //         console.log('onget Pays sélectionné par défaut:', selectedCountry);
+            
+
+    //             // ✅ Vérification avant d'appeler getRoleById()
+    //             if (this.contact.role_id !== undefined && this.contact.role_id !== null) {
+    //                 this.getRoleById(this.contact.role_id);
+    //                 if (this.contact.adresse && this.contact.adresse.pays && this.countries.length > 0) {
+    //                     const selectedCountry = this.countries.find(c => c.name === this.contact.adresse.pays);
+    //                     this.contact.adresse.pays = selectedCountry || null;
+    //                 }
+    //             } else {
+    //                 console.warn("Le contact n'a pas de rôle attribué.");
+    //                 this.contact.role = null;
+    //             }
+    //         },
+    //         error: (err) => {
+    //             console.error('Erreur lors de la récupération du contact:', err);
+    //         }
+    //     });
+    // }
+
     onGetContact(): void {
         this.contactService.getContactById(this.id).subscribe({
             next: (resp) => {
                 this.contact = resp;
-
+    
                 this.isGuineeSelected = this.contact.adresse.pays === 'GUINEE-CONAKRY';
-
                 this.villeAvantSelection = this.contact.adresse.ville;
                 this.paysAvantSelection = this.contact.adresse.pays;
                 this.codePostalAvantSelection = this.contact.adresse.code_postal;
-                this.adresselAvantSelection = this.contact.adresse.adresse;
-                
-                
-                // ✅ Vérification avant d'appeler getRoleById()
+                this.adresseAvantSelection = this.contact.adresse.adresse;
+                this.quartierAvantSelection = this.contact.adresse.quartier;
+    
+                // ✅ Vérification et conversion en chaîne si nécessaire
+                if (this.contact.adresse.pays && typeof this.contact.adresse.pays === 'object') {
+                    const selectedCountry = this.countries.find(c => c.name === this.contact.adresse.pays);
+                    this.contact.adresse.pays = selectedCountry ? selectedCountry.name : '';
+                }
+    
+                console.log('Pays sélectionné par défaut:', this.contact.adresse.pays);
+    
+                // Vérification et récupération du rôle
                 if (this.contact.role_id !== undefined && this.contact.role_id !== null) {
                     this.getRoleById(this.contact.role_id);
-                    if (this.contact.adresse && this.contact.adresse.pays && this.countries.length > 0) {
-                        const selectedCountry = this.countries.find(c => c.name === this.contact.adresse.pays);
-                        this.contact.adresse.pays = selectedCountry || null;
-                    }
                 } else {
                     console.warn("Le contact n'a pas de rôle attribué.");
                     this.contact.role = null;
@@ -168,6 +181,7 @@ export class ContactDetailComponent implements OnInit {
             }
         });
     }
+    
     
     
      
