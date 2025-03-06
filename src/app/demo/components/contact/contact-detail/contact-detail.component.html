@@ -56,9 +56,14 @@
                 </div> 
                 <div class="field mb-4 col-12 md:col-12">
                     <label for="country" class="font-medium text-900" >Pays</label>
-                    <p-dropdown [(ngModel)]="contact.adresse.pays" inputId="pays" [options]="countries"
-                                optionLabel="name" [filter]="true" filterBy="name" 
-                                [showClear]="true" placeholder="Select a Country"
+                    <p-dropdown 
+                                [(ngModel)]="contact.adresse.pays" 
+                                [options]="countries"
+                                inputId="pays" 
+                                optionLabel="pays" 
+                                [filter]="true" 
+                                filterBy="adresse.pays" 
+                                [showClear]="true"  
                                 [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.pays || errors['adresse.pays']}">
                         <ng-template let-country pTemplate="item">
                             <div class="flex align-items-center">

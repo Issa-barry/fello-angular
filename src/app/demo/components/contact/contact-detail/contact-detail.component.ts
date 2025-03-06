@@ -85,6 +85,10 @@ export class ContactDetailComponent implements OnInit {
                 // ✅ Vérification avant d'appeler getRoleById()
                 if (this.contact.role_id !== undefined && this.contact.role_id !== null) {
                     this.getRoleById(this.contact.role_id);
+                    if (this.contact.adresse && this.contact.adresse.pays && this.countries.length > 0) {
+                        const selectedCountry = this.countries.find(c => c.name === this.contact.adresse.pays);
+                        this.contact.adresse.pays = selectedCountry || null;
+                    }
                 } else {
                     console.warn("Le contact n'a pas de rôle attribué.");
                     this.contact.role = null;
