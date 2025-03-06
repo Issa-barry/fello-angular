@@ -21,3 +21,4 @@ describe('ContactNewComponent', () => {
     expect(component).toBeTruthy();
   });
 });
+ 

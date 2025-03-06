@@ -24,7 +24,7 @@ export class ContactListeComponent implements OnInit {
     contact: Contact = new Contact();
     roles: Role[] = [];
     optionPays: any[] = [];
-    contactDialog: boolean = false;  
+    contactDialog: boolean = false;   
     deleteContactDialog: boolean = false;
     deleteContactsDialog: boolean = false;
     submitted: boolean = false;

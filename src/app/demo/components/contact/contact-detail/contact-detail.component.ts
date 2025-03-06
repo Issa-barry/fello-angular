@@ -20,7 +20,7 @@ export class ContactDetailComponent implements OnInit {
        submitted: boolean = false;
       //  contact: Contact = new Contact();
        roles: Role[] = [];
-       errors: { [key: string]: string } = {};
+       errors: { [key: string]: string } = {};  
        @Input() contact: Contact = new Contact()
        @Input() role: Role = new Role()
       id:      number  = this.activatedRoute.snapshot.params['id'];

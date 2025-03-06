@@ -46,10 +46,16 @@
                 </div> 
                 <div class="field mb-4 col-12 md:col-12">
                     <label for="country" class="font-medium text-900" >Pays</label>
-                    <p-dropdown [(ngModel)]="contact.adresse.pays" inputId="country" [options]="countries"
-                                optionLabel="name" [filter]="true" filterBy="name" 
+                    <p-dropdown [(ngModel)]="contact.adresse.pays" 
+                               inputId="country"
+                                [options]="countries"
+                                optionLabel="name" 
+                                optionValue="value" 
+                                [filter]="true" 
+                                filterBy="name" 
                                 [showClear]="true" placeholder="Select a Country"
-                                [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.pays || errors['adresse.pays']}">
+                                [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.pays || errors['adresse.pays']}"
+                                (onChange)="onCountryChange($event)">
                         <ng-template let-country pTemplate="item">
                             <div class="flex align-items-center">
                                 <img src="assets/demo/images/flag/flag_placeholder.png" [class]="'mr-2 flag flag-' + country.code.toLowerCase()" style="width:18px"/>
@@ -60,17 +66,27 @@
                     <small *ngIf="errors['adresse.pays']">{{ errors['adresse.pays'] }}</small>
                 </div>
              
-                <div class="field mb-4 col-12 md:col-12">
-                    <label for="adresse" class="font-medium text-900"  >Adresse</label>
+                <!-- Champ adresse (visible seulement si le pays n'est pas Guinée) -->
+                <div *ngIf="!isGuineeSelected" class="field mb-4 col-12 md:col-12">
+                    <label for="adresse" class="font-medium text-900">Adresse</label>
                     <input id="adresse" type="text" [(ngModel)]="contact.adresse.adresse" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.adresse || errors['adresse.adresse']}" pInputText >
                     <small *ngIf="errors['adresse.adresse']">{{ errors['adresse.adresse'] }}</small>
                 </div>
 
-                <div class="field mb-4 col-12 md:col-6">
+                <!-- Champ code postal (visible seulement si le pays n'est pas Guinée) -->
+                <div *ngIf="!isGuineeSelected" class="field mb-4 col-12 md:col-6">
                     <label for="city" class="font-medium text-900">Code Postal</label>
                     <input id="city" type="text" pInputText [(ngModel)]="contact.adresse.code_postal" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.code_postal || errors['adresse.code_postal']}" >
                     <small *ngIf="errors['adresse.code_postal']">{{ errors['adresse.code_postal'] }}</small>
                 </div>
+
+                <!-- Champ quartier (visible seulement si le pays est Guinée) -->
+                <div *ngIf="isGuineeSelected" class="field mb-4 col-12 md:col-6">
+                    <label for="quartier" class="font-medium text-900">Quartier</label>
+                    <input id="quartier" type="text" pInputText [(ngModel)]="contact.adresse.quartier" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.quartier || errors['adresse.quartier']}" >
+                    <small *ngIf="errors['adresse.quartier']">{{ errors['adresse.quartier'] }}</small>
+                </div>
+
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="state" class="font-medium text-900" >Ville</label>
                     <input id="state" type="text" [(ngModel)]="contact.adresse.ville" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.ville || errors['adresse.ville']}"  pInputText>
