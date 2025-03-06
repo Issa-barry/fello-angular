@@ -29,7 +29,7 @@ export class ContactService {
    * ✅ Nouvelle gestion des erreurs améliorée
    */
   private handleError(error: HttpErrorResponse) {
-    console.error('❌ Erreur API:', error);
+    console.error('Erreur API:', error);
 
     let errorMessage = 'Une erreur inconnue est survenue';
 
@@ -49,7 +49,7 @@ export class ContactService {
                     errorMessage = JSON.stringify(error.error.errors);
                 }
             } else if (error.error.message) {
-                errorMessage = error.error.message; // 📌 Si l'API renvoie juste un message
+                errorMessage = error.error.message; //  Si l'API renvoie juste un message
             }
         } else if (error.status === 0) {
             errorMessage = 'Impossible de se connecter au serveur';

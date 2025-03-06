@@ -25,6 +25,7 @@ export class ContactDetailComponent implements OnInit {
        @Input() role: Role = new Role()
        id:      number  = this.activatedRoute.snapshot.params['id'];
        isGuineeSelected: boolean = false;
+       paysAChanger: boolean = false;
        villeAvantSelection : string = '';
        paysAvantSelection : string = '';
        codePostalAvantSelection : string = '';
@@ -52,17 +53,20 @@ export class ContactDetailComponent implements OnInit {
    
     onCountryChange(event: any) {
         const selectedCountry = event.value;
-  
+        this.paysAChanger = true;
+
         if (selectedCountry && selectedCountry === 'GUINEE-CONAKRY') { 
+            this.contact.adresse.pays = selectedCountry;
             this.isGuineeSelected = true;
             if(this.paysAvantSelection === 'GUINEE-CONAKRY') {
                 this.contact.adresse.adresse = 'GUINEE-CONAKRY';
                 this.contact.adresse.code_postal = '00224'; 
                 this.contact.adresse.ville = this.villeAvantSelection;
                 this.contact.adresse.quartier = this.quartierAvantSelection;
+                this.contact.adresse.pays = selectedCountry;
             }else{
-                this.contact.adresse.adresse = '';
-                this.contact.adresse.code_postal = ''; 
+                this.contact.adresse.adresse = 'GUINEE-CONAKRY';
+                this.contact.adresse.code_postal = '00224'; 
                 this.contact.adresse.ville = '';
             }
             
@@ -72,6 +76,8 @@ export class ContactDetailComponent implements OnInit {
             this.contact.adresse.ville = this.villeAvantSelection;
             this.contact.adresse.code_postal = this.codePostalAvantSelection;
             this.contact.adresse.adresse = this.adresseAvantSelection;
+            this.contact.adresse.pays = selectedCountry;
+            
             }else{
                 this.contact.adresse.adresse = '';
                 this.contact.adresse.code_postal = ''; 
@@ -145,33 +151,58 @@ export class ContactDetailComponent implements OnInit {
          this.submitted = true;
          this.errors = {}; // Réinitialisation des erreurs
      
-         if (!this.contact.role 
-             || !this.contact.civilite 
-             || !this.contact.nom 
-             || !this.contact.prenom  
-             || !this.contact.email 
-             || !this.contact.phone
-             || !this.contact.password
-             || !this.contact.password_confirmation
-             || !this.contact.adresse
-             || !this.contact.adresse.pays
-             || !this.contact.adresse.ville
-             || !this.contact.adresse.code_postal) {
-             this.messageService.add({
-                 severity: 'warn',
-                 summary: 'Attention',
-                 detail: 'Veuillez remplir tous les champs obligatoires.',
-                 life: 3000
-             });
-             return;
-         }
-     
-         this.contact.role = String(this.contact.role.name);
-         this.contact.adresse.pays = String(this.contact.adresse.pays);
-         this.contact.adresse.code_postal = String(this.contact.adresse.code_postal);
-     
+        //  if (!this.contact.role 
+        //      || !this.contact.civilite 
+        //      || !this.contact.nom 
+        //      || !this.contact.prenom  
+        //      || !this.contact.email 
+        //      || !this.contact.phone
+        //      || !this.contact.password
+        //      || !this.contact.password_confirmation
+        //      || !this.contact.adresse
+        //      || !this.contact.adresse.pays
+        //      || !this.contact.adresse.ville
+        //      || !this.contact.adresse.code_postal) {
+        //      this.messageService.add({
+        //          severity: 'warn',
+        //          summary: 'Attention',
+        //          detail: 'Veuillez remplir tous les champs obligatoires.',
+        //          life: 3000
+        //      });
+        //      return;
+        //  }
+
+        const selectedRole = this.roles.find(r => r.name === this.contact.role);
+        const selectedRoleId = this.roles.find(r => r.name === this.contact.role);
+ 
+        this.contact.adresse.pays = String(this.contact.adresse.pays);
+        this.contact.adresse.adresse = String(this.contact.adresse.adresse);
+        this.contact.adresse.code_postal = String(this.contact.adresse.code_postal);
+        // this.contact.role_id = selectedRole.id;
+        this.contact.roles = selectedRole;
+        // this.contact.role_id = 2;
+
+        console.log("roles a envoyer", this.contact.role_id);
+
+        console.log("selected role", selectedRole);
+        
+        console.log("role contact a envoyer", this.contact);
+        
+       
+        // this.roleService.getRoles().subscribe({
+        //     next: (response) => {
+        //         this.roles = response;
+        //         this.contact.role = this.roles.find(role => role.id === this.contact.role_id) || null;
+
+        //         console.log('Role:', this.roles);
+                
+        //     }
+        // });
+         
          this.contactService.updateContact(this.id, this.contact).subscribe({
-             next: () => { 
+             next: (resp) => { 
+
+                this.contact = resp;
                  this.messageService.add({
                      severity: 'success',
                      summary: 'Succès',
@@ -182,6 +213,7 @@ export class ContactDetailComponent implements OnInit {
                  
                  this.submitted = false;
                  this.errors = {}; // Réinitialisation des erreurs après succès
+                 this.onGetContact();
              },
              error: (err) => {
                  console.error(' Erreur lors de la création du contact:', err);

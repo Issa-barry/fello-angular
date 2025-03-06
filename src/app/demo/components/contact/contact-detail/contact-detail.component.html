@@ -9,7 +9,7 @@
         <div class="col-12 lg:col-10">
             <div class="grid formgrid p-fluid">
                 <div class="field mb-4 col-12 md:col-6">
-                    <label for="role" class="font-medium text-900" >Role</label> 
+                    <label for="role" class="font-medium text-900" >Role : {{ contact.role }}</label> 
                     <p-dropdown 
                     [(ngModel)]="contact.role"  
                     [options]="roles"  
@@ -20,14 +20,6 @@
                 </p-dropdown>
                 <small *ngIf="errors['role']">{{ errors['role'] }}</small>
                 </div>
-                <!-- <p-dropdown [(ngModel)]="contact.role"
-                inputId="role"
-                [options]="roles"
-                optionLabel="name"
-                optionValue="name"  
-                placeholder="Sélectionnez un rôle"
-                [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.role || errors['role']}">
-       </p-dropdown> -->
 
 
                 <div class="field mb-4 col-12 md:col-6">
@@ -128,7 +120,7 @@
                     </p-password>
                  </div> 
                 <div class="col-12">
-                    <button pButton pRipple label="Creer utilisateur" class="w-auto mt-3" (click)="saveContact()"></button>
+                    <button pButton pRipple label="Enregistrer modification" class="w-auto mt-3" (click)="saveContact()"></button>
                 </div>
             </div>
         </div>

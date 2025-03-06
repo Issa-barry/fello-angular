@@ -15,9 +15,9 @@ import { Role } from "./Role";
     password:string;
     password_confirmation:string;
     role_id?:number;
-    roles: Role;
+    roles?: Role;
     statut: string;
-    role: any;
+    role?: any;
     adresse: Adresse;
 
     constructor()
