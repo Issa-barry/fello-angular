@@ -27,6 +27,7 @@ export class ContactDetailComponent implements OnInit {
        isGuineeSelected: boolean = false;
        villeAvantSelection : string = '';
        paysAvantSelection : string = '';
+       adresseAvantSelection : string = '';
      
      
           constructor(
@@ -70,44 +71,18 @@ export class ContactDetailComponent implements OnInit {
 
         } else { 
             this.isGuineeSelected = false; 
-            this.contact.adresse.adresse = '';
-            this.contact.adresse.ville = '';
-            this.contact.adresse.quartier = '';
-            this.contact.adresse.code_postal = ''; 
+            if(this.paysAvantSelection !== 'France'){
+                this.contact.adresse.adresse = '';
+                this.contact.adresse.ville = '';
+                this.contact.adresse.quartier = '';
+                this.contact.adresse.code_postal = ''; 
+            }
+            this.contact.adresse.adresse = this.adresseAvantSelection;
+            this.contact.adresse.ville = this.villeAvantSelection; 
         }
-
-        // this.contactService.getContactById(this.id).subscribe({
-        //     next: (resp) => {
-        //         this.contact = resp;
-        //         this.isGuineeSelected = this.contact.adresse.pays === 'GUINEE-CONAKRY';
-
-        //         // console.log('this.contact.adresse.pays: pays actuelle', this.contact.adresse.pays);
-
-        //         // console.log(' pays selectionner', selectedCountry);
-                
-        //         if (selectedCountry && selectedCountry === 'GUINEE-CONAKRY' && this.contact.adresse.pays === 'GUINEE-CONAKRY') { 
-        //             // this.isGuineeSelected = true;
-        //             // this.contact.adresse.adresse = 'GUINEE-CONAKRY';
-        //             // this.contact.adresse.code_postal = '00224'; 
-        //         } else if (selectedCountry && selectedCountry === 'GUINEE-CONAKRY' && this.contact.adresse.pays === 'France') { 
-        //             // this.isGuineeSelected = true;
-        //             // this.contact.adresse.adresse = 'GUINEE-CONAKRY';
-        //             // this.contact.adresse.code_postal = '00224'; 
-        //             console.log('pays selectionner', selectedCountry);
-        //             console.log('pays contct', this.contact.adresse.pays);
-                    
-        //         }
-        //     },
-        //     error: (err) => {
-        //         console.error('Erreur lors de la récupération du contact:', err);
-        //     }
-        // });
-    }
-    
  
-    
-    
-    
+    }
+     
        /**************************
         * ROLE
         **************************/
@@ -144,8 +119,8 @@ export class ContactDetailComponent implements OnInit {
                 this.isGuineeSelected = this.contact.adresse.pays === 'GUINEE-CONAKRY';
 
                 this.villeAvantSelection = this.contact.adresse.ville;
-                this.paysAvantSelection = this.contact.adresse.pays;
-                // console.log('pays avant selection:', this.paysAvantSelection);
+                this.adresseAvantSelection = this.contact.adresse.adresse;
+                this.paysAvantSelection = this.contact.adresse.pays; 
                 
                 // ✅ Vérification avant d'appeler getRoleById()
                 if (this.contact.role_id !== undefined && this.contact.role_id !== null) {
@@ -172,7 +147,7 @@ export class ContactDetailComponent implements OnInit {
          
        saveContact() {
          this.submitted = true;
-         this.errors = {}; // Réinitialisation des erreurs
+         this.errors = {}; 
      
          if (!this.contact.role 
              || !this.contact.civilite 
