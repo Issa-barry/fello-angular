@@ -15,6 +15,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { PasswordModule } from 'primeng/password';
 import { ToastModule } from 'primeng/toast';
 import { ContactDetailComponent } from './contact-detail.component';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 @NgModule({
   declarations: [ContactDetailComponent],
@@ -32,7 +33,8 @@ import { ContactDetailComponent } from './contact-detail.component';
         InputGroupModule,
         InputGroupAddonModule, 
         PasswordModule, 
-        ToastModule
+        ToastModule, 
+        ProgressSpinnerModule,
   ]
 })
 export class ContactDetailModule { }

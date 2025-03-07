@@ -10,7 +10,7 @@ import { FormsModule } from '@angular/forms';
 import { RippleModule } from 'primeng/ripple';
 import { ToolbarModule } from 'primeng/toolbar';
 import { RatingModule } from 'primeng/rating';
-import { InputTextModule } from 'primeng/inputtext';
+import { InputTextModule } from 'primeng/inputtext'; 
 import { InputTextareaModule } from 'primeng/inputtextarea';
 import { DropdownModule } from 'primeng/dropdown';
 import { RadioButtonModule } from 'primeng/radiobutton';
@@ -20,6 +20,7 @@ import { NewPasswordRoutingModule } from '../../auth/newpassword/newpassword-rou
 import { AppConfigModule } from 'src/app/layout/config/app.config.module';
 import { PasswordModule } from 'primeng/password';
 import { ContactListeComponent } from './contact-liste.component';
+import { ProgressSpinnerModule } from 'primeng/progressspinner';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { ContactListeComponent } from './contact-liste.component';
         InputTextModule,
         RippleModule,
         AppConfigModule,
-        PasswordModule
+        PasswordModule,
+        ProgressSpinnerModule,
   ]
 })
 export class ContactListeModule { }

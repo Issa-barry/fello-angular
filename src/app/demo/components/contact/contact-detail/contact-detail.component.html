@@ -1,11 +1,14 @@
 <div class="card">
     <p-toast></p-toast>
     <span class="text-900 text-xl font-bold mb-4 block">Informations du contact</span>
-    <div class="grid">
-        <div class="col-12 lg:col-2">
-            <!-- <div class="text-900 font-medium text-xl mb-3">Profile</div> -->
-            <!-- <p class="m-0 p-0 text-600 line-height-3 mr-3">Odio euismod lacinia at quis risus sed vulputate odio.</p> -->
-        </div>
+   
+    <!-- <div class="flex justify-center items-center " *ngIf="loading">
+        <p-progressSpinner></p-progressSpinner>
+    </div> -->
+
+    <p-progressBar mode="indeterminate" *ngIf="loading" class="w-full h-2"></p-progressBar>
+
+    <div class="grid" *ngIf="!loading">
         <div class="col-12 lg:col-10">
             <div class="grid formgrid p-fluid">
                 <div class="field mb-4 col-12 md:col-6">
@@ -15,7 +18,6 @@
                     [options]="roles"  
                     optionLabel="name"
                     optionValue="name" 
-                    placeholder="Sélectionnez un rôle"
                     [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.role || errors['role']}">
                 </p-dropdown>
                 <small *ngIf="errors['role']">{{ errors['role'] }}</small>

@@ -1,6 +1,7 @@
 <div class="grid">
     <div class="col-12">
-        <div class="card px-6 py-6">
+
+        <div class="card px-6 py-6" >
             <p-toast></p-toast>
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
@@ -15,9 +16,11 @@
                     <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
                 </ng-template>
             </p-toolbar>
-
-            <p-table #dt [value]="contacts" [columns]="cols" responsiveLayout="scroll" [rows]="10" 
-            [globalFilterFields]="['nom','prenom','phone','statut', 'reference']" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Liste de {first} / {last} des {totalRecords} contacts" [(selection)]="selectedContacts" selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-progressBar mode="indeterminate" *ngIf="loading" class="w-full h-2"></p-progressBar>
+<!-- 
+           <div *ngIf="!loading"> -->
+            <p-table  #dt  [value]="contacts" [columns]="cols" responsiveLayout="scroll" [rows]="10" 
+             [globalFilterFields]="['nom','prenom','phone','statut', 'reference']" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Liste de {first} / {last} des {totalRecords} contacts" [(selection)]="selectedContacts" selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Manage Products</h5>
@@ -27,7 +30,7 @@
                         </span>
                     </div>
                 </ng-template>
-                <ng-template pTemplate="header">
+                <ng-template pTemplate="header" >
                     <tr>
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
@@ -83,7 +86,8 @@
                     </tr>
                 </ng-template>
             </p-table>
-        </div>
+           </div>
+        <!-- </div> -->
 
         <p-dialog [(visible)]="contactDialog" [style]="{width: '450px'}" header="Contact Details" [modal]="true" class="p-fluid">
             <ng-template pTemplate="content">

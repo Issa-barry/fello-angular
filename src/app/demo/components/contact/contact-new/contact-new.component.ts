@@ -21,6 +21,7 @@ export class ContactNewComponent implements OnInit {
     roles: Role[] = [];
     errors: { [key: string]: string } = {};
     isGuineeSelected: boolean = false;
+    loading = false;
 
     constructor(
         private router: Router,
@@ -42,6 +43,7 @@ export class ContactNewComponent implements OnInit {
      * ROLE
      **************************/
     getAllRoles(): void {
+
         this.roleService.getRoles().subscribe({
             next: (response) => {
                 this.roles = response;
@@ -97,6 +99,7 @@ export class ContactNewComponent implements OnInit {
     saveContact() {
         this.submitted = true;
         this.errors = {};
+        
 
         // Adapter la validation en fonction du pays sélectionné
         const isGuinee = this.isGuineeSelected; 
@@ -143,6 +146,7 @@ export class ContactNewComponent implements OnInit {
                 this.contact = new Contact();
                 this.submitted = false;
                 this.errors = {};
+                 
                 this.router.navigate(['/dashboard/contact']);
             },
             error: (err) => {

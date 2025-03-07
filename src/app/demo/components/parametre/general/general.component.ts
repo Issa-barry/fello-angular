@@ -61,7 +61,7 @@ export class GeneralComponent implements OnInit{
   hideDeviseDialog(){
     this.devisesDialog = false;
     this.submitted = false;
-  }
+  } 
 
   saveDevise(devise: any){
     console.log(devise); 

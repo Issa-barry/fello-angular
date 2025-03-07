@@ -30,6 +30,7 @@ export class ContactListeComponent implements OnInit {
     submitted: boolean = false;
     cols: any[] = [];
     statuses: any[] = []; 
+    loading = false;
      
     rowsPerPageOptions = [5, 10, 20];
     // selectedContacts: Contact[] = [];
@@ -78,9 +79,11 @@ export class ContactListeComponent implements OnInit {
     }
   
     getAllContacts(): void {
+        this.loading = true;
       this.contactService.getContacts().subscribe({
         next: (response) => {
-          this.contacts = response;   
+          this.contacts = response;  
+          this.loading = false; 
           // console.log(this.contacts);
         },
         error: (err) => {
