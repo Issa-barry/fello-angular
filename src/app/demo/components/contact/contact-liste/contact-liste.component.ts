@@ -92,8 +92,8 @@ export class ContactListeComponent implements OnInit {
       });
     }
   
-  
     isValidPhone: boolean = true;
+
     validatePhone() {
       if (this.contact.phone) {
           // Regex acceptant :
