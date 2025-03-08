@@ -149,7 +149,7 @@ export class TransfertEnvoieComponent implements OnInit {
      * Enregistre le transfert après confirmation
      */
     save() {
-        this.envoieDialog = false;
+        
         this.loading = true;
 
         this.transfertService.createTransfert(this.transfert).subscribe({
@@ -160,8 +160,8 @@ export class TransfertEnvoieComponent implements OnInit {
                     detail: 'Transfert effectué avec succès',
                     life: 3000,
                 });
-
-                // this.resetForm();
+                this.loading = false;
+                this.envoieDialog = false;
                 this.openTicketDialog();
             },
             error: (error) => {

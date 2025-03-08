@@ -113,9 +113,9 @@
                     </div>
                 </div>
                 
-                <button pButton pRipple class="col-12 my-2" label="openTicket" icon="pi pi-fw pi-check" (click)="openTicketDialog()"></button>
+                <!-- <button pButton pRipple class="col-12 my-2" label="openTicket" icon="pi pi-fw pi-check" (click)="openTicketDialog()"></button> -->
                    
-                <button pButton pRipple class="col-12" label="Valider le transfert" icon="pi pi-fw pi-check" (click)="verifierFormulaire()"></button>
+                <button pButton pRipple class="col-12"   label="Valider le transfert" icon="pi pi-fw pi-check" (click)="verifierFormulaire()"></button>
             </div>
              
         </div>
@@ -136,7 +136,7 @@
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="hideDialog()"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="save()"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="save()" [loading]="loading"></button>
             </ng-template>
         </p-dialog>
 
