@@ -4,7 +4,7 @@
     code?:string;
     statut?:string;
     devise_source_id: number;  // id = 2 = euro
-    devise_cible_id: number;   // id  = 1 = franc guinéen
+    devise_cible_id: number;   // id  = 3 = franc guinéen
     montant: number;
     quartier: string;
     receveur_nom: string;
