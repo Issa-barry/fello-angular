@@ -18,7 +18,7 @@
             </p-toolbar>
             <p-progressBar mode="indeterminate" *ngIf="loading" class="w-full h-2"></p-progressBar>
 <!-- 
-           <div *ngIf="!loading"> -->
+           <div *ngIf="!loading"> --> 
             <p-table  #dt  [value]="contacts" [columns]="cols" responsiveLayout="scroll" [rows]="10" 
              [globalFilterFields]="['nom','prenom','phone','statut', 'reference']" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Liste de {first} / {last} des {totalRecords} contacts" [(selection)]="selectedContacts" selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
