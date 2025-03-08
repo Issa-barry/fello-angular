@@ -6,8 +6,6 @@ import { TransfertService } from 'src/app/demo/service/transfert/transfert.servi
 
 @Component({
     selector: 'app-transfert-envoie',
-    standalone: false,
-    // imports: [],
     templateUrl: './transfert-envoie.component.html',
     styleUrl: './transfert-envoie.component.scss',
     providers: [MessageService, ConfirmationService],
@@ -24,16 +22,12 @@ export class TransfertEnvoieComponent implements OnInit {
     transfert: Transfert = new Transfert();
     total: number = 0;
     frais: number = 0;
-    tauxDeFrais: number = 0.05; //5%
+    tauxDeFrais: number = 0.05; // 5%
     montantConverti: number = 0;
-    tauxConversion: number = 9500; // 1 euro = 940000 franc guinéen
-    isValideMontant: boolean = true;
-
-    selectedCity: string = '';
-
+    tauxConversion: number = 9500; // 1 euro = 9500 franc guinéen
     envoieDialog: boolean = false;
     submitted: boolean = false;
-    codeRecuperer: boolean = false;
+    loading: boolean = false;
     errors: { [key: string]: string } = {};
 
     constructor(
@@ -45,96 +39,135 @@ export class TransfertEnvoieComponent implements OnInit {
 
     ngOnInit(): void {}
 
-    hideDialog() {
-        this.envoieDialog = false;
-        this.submitted = false;
-    }
-
-    onCodeRecuperer() {
-        this.codeRecuperer = true;
-    }
-
-    openEnvoieDialog() {
-        this.submitted = false;
-        this.envoieDialog = true;
-    }
-
-    verifierMontant() {
-        if (this.transfert.montant < 20) {
+  
+    /**
+     * Vérifie que le montant est valide
+     */
+    verifierMontant(): boolean {
+        if (!this.transfert.montant || this.transfert.montant < 20) {
             this.messageService.add({
                 severity: 'warn',
                 summary: 'Montant insuffisant',
                 detail: 'Le montant minimum est de 20€.',
                 life: 3000,
             });
-            this.isValideMontant = false;
-            return;
+            return false;
         }
-        this.isValideMontant = true;
+        return true;
     }
 
+    /**
+     * Vérifie que tous les champs obligatoires sont remplis
+     */
+    verifierChampsObligatoires(): boolean {
+        const champsObligatoires = [
+            'quartier',
+            'montant',
+            'receveur_phone',
+            'receveur_prenom',
+            'receveur_nom',
+            'expediteur_phone',
+            'expediteur_prenom',
+            'expediteur_nom',
+            'expediteur_email',
+        ];
+
+        for (const champ of champsObligatoires) {
+            if (!this.transfert[champ as keyof Transfert]) {
+                this.messageService.add({
+                    severity: 'warn',
+                    summary: 'Attention',
+                    detail: `Le champ ${champ.replace('_', ' ')} est obligatoire.`,
+                    life: 3000,
+                });
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Calcule les frais et le montant total
+     */
     calculFraisTotal() {
         this.frais = Math.floor(this.transfert.montant * this.tauxDeFrais);
         this.total = this.transfert.montant + this.frais;
         this.calculMontantConverti();
     }
 
+    /**
+     * Convertit le montant en devise cible
+     */
     calculMontantConverti() {
-        this.montantConverti = this.transfert.montant * this.tauxConversion;
+        this.montantConverti = Math.floor(this.transfert.montant * this.tauxConversion);
         this.transfert.montant_converti = this.montantConverti;
     }
 
-    updateQuartier(event: any) {
-        // console.log('event:', event);
-        // this.transfert.quartier = event.value.value;
+    /**
+     * Ferme la boîte de dialogue
+     */
+    hideDialog() {
+        this.envoieDialog = false;
+        this.submitted = false;
     }
 
+      /**
+     * Vérifie les champs obligatoires et ouvre le dialogue si tout est valide
+     */
+      verifierFormulaire() {
+        this.submitted = true;
+        this.errors = {};
+
+        if (!this.verifierMontant()) return;
+        if (!this.verifierChampsObligatoires()) return;
+
+        this.envoieDialog = true;
+    }
+
+
+    /**
+     * Enregistre le transfert après confirmation
+     */
     save() {
         this.envoieDialog = false;
-        this.submitted = true;
-        this.verifierMontant();
-        console.log(this.isValideMontant);
-        if (
-            !this.transfert.quartier ||
-            !this.transfert.montant ||
-            !this.transfert.receveur_phone ||
-            !this.transfert.receveur_prenom ||
-            !this.transfert.receveur_nom ||
-            !this.transfert.expediteur_phone ||
-            !this.transfert.expediteur_prenom ||
-            !this.transfert.expediteur_nom ||
-            !this.transfert.expediteur_email
-        ) {
-            this.messageService.add({
-                severity: 'warn',
-                summary: 'Attention',
-                detail: 'Veuillez remplir tous les champs obligatoires.',
-                life: 3000,
-            });
-            return;
-        }
+        this.loading = true;
 
-        if (this.isValideMontant) {
-            this.transfertService.createTransfert(this.transfert).subscribe({
-                next: (response) => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: 'Succées',
-                        detail: 'Transfert effectué avec succées',
-                        life: 3000,
-                    });
-                },
-                error: (err) => {
-                    console.error('Erreur lors du transfert:', err);
-                    this.errors = err.validationErrors;
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: 'Erreur',
-                        detail: 'Envoie du transfert a échouée. Vérifiez les champs.',
-                        life: 5000,
-                    });
-                },
-            });
-        }
+        this.transfertService.createTransfert(this.transfert).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Transfert effectué avec succès',
+                    life: 3000,
+                });
+
+                this.resetForm();
+            },
+            error: (error) => {
+                console.error('Erreur lors du transfert:', error);
+                this.errors = error.validationErrors;
+                this.loading = false;
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: 'L’envoi du transfert a échoué. Vérifiez les champs.',
+                    life: 5000,
+                });
+            },
+        });
+    }
+
+    /**
+     * Réinitialise le formulaire après un transfert réussi
+     */
+    resetForm() {
+        this.transfert = new Transfert();
+        this.submitted = false;
+        this.montantConverti = 0;
+        this.frais = 0;
+        this.total = 0;
+        this.errors = {};
+        this.loading = false;
     }
 }
