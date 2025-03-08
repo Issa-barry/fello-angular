@@ -14,7 +14,7 @@ const httpOption = {
       'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT',
    
   })
-}; 
+};   
 @Injectable({
   providedIn: 'root'
 })

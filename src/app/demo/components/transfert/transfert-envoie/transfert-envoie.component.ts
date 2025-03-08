@@ -79,7 +79,26 @@ export class TransfertEnvoieComponent implements OnInit {
       this.envoieDialog = false;
       this.submitted = true;
 
-      console.log('transfert:', this.transfert);
+      if (
+        !this.transfert.quartier ||
+        !this.transfert.montant ||
+        !this.transfert.receveur_phone ||
+        !this.transfert.receveur_prenom ||
+        !this.transfert.receveur_nom ||
+        !this.transfert.expediteur_phone ||
+        !this.transfert.expediteur_prenom ||
+        !this.transfert.expediteur_nom ||
+        !this.transfert.expediteur_email 
+    ) {
+        this.messageService.add({
+            severity: 'warn',
+            summary: 'Attention',
+            detail: 'Veuillez remplir tous les champs obligatoires.',
+            life: 3000,
+        });
+        return;
+    }
+
       
         this.transfertService.createTransfert(this.transfert).subscribe({
             next: (response) => {
