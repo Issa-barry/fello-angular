@@ -140,7 +140,7 @@
             </ng-template>
         </p-dialog>
 
-        <p-dialog [(visible)]="ticketDialog"  [closable]="false"  header="Ticket-retrait" [modal]="true" [style]="{width:'450px'}">
+        <p-dialog [(visible)]="ticketDialog"  [closable]="false"  header="Ticket de retrait" [modal]="true" [style]="{width:'450px'}">
             <div class=""> 
                 <div>
                     <div class="flex flex-column lg:flex-row flex-wrap lg:align-items-center py-0 mt-2 surface-border">
@@ -163,7 +163,7 @@
                                 <span class="text-900 font-bold">Bénéficiaire</span>
                              </div>
                             <div class="text-600 text-sm mb-2">{{ transfert.receveur_prenom }} {{ transfert.receveur_nom }}</div>
-                            <div class="text-600 text-sm mb-2">{{ transfert.receveur_phone }}</div>
+                            <div class="text-600 text-sm mb-2">Tel : {{ transfert.receveur_phone }}</div>
                             <!-- <div class="text-600 text-sm mb-2">Montant : GNF {{ montantConverti }}</div> -->
                         </div>
                     </div>
