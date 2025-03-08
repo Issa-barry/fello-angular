@@ -18,43 +18,52 @@
                            optionValue="name"
                            styleClass="w-full"
                            [showClear]="true"
-                           placeholder="Sélectionnez un quartier"
-                          (onChange)="updateQuartier($event)"
-                          [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.quartier}"
+                           placeholder="Sélectionnez un quartier" 
+                          [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.quartier || errors['quartier']}"
                           >
                         </p-dropdown>
+                    <small *ngIf="errors['quartier']">{{ errors['quartier'] }}</small>
                 </div>   
                 <div class="col-12 field mb-4">
                     <span class="text-900 text-2xl block font-medium mb-4">Montant</span>
-                    <input id="receveur_phone" [(ngModel)]="transfert.montant" (input)="calculFraisTotal()" [ngClass]="{'ng-invalid ng-dirty': submitted && !transfert.montant}"  placeholder="Montant" type="number" class="p-inputtext w-full">
+                    <input id="receveur_phone" [(ngModel)]="transfert.montant" (input)="calculFraisTotal()" [ngClass]="{'ng-invalid ng-dirty': submitted && !transfert.montant || errors['montant']}"  placeholder="Montant" type="number" class="p-inputtext w-full">
+                    <small *ngIf="errors['montant']">{{ errors['montant'] }}</small>
                 </div> 
 
                 <!-- RECEVEUR -->
                 <div class="col-12 field mb-4">
                     <span class="text-900 text-2xl block font-medium mb-4">Receveur</span>
-                    <input id="receveur_phone" [(ngModel)]="transfert.receveur_phone" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.receveur_phone}" placeholder="Téléphone" type="text" class="p-inputtext w-full">
+                    <input id="receveur_phone" [(ngModel)]="transfert.receveur_phone" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.receveur_phone || errors['receveur_phone']}" placeholder="Téléphone" type="text" class="p-inputtext w-full">
+                    <small *ngIf="errors['receveur_phone']">{{ errors['receveur_phone'] }}</small>
                 </div> 
                 <div class="col-12 lg:col-6 field mb-4">
-                    <input id="receveur_prenom" [(ngModel)]="transfert.receveur_prenom" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.receveur_prenom}"  placeholder="Prenom" type="text" class="p-inputtext w-full">
+                    <input id="receveur_prenom" [(ngModel)]="transfert.receveur_prenom" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.receveur_prenom || errors['receveur_prenom']}"  placeholder="Prenom" type="text" class="p-inputtext w-full">
+                    <small *ngIf="errors['receveur_prenom']">{{ errors['receveur_prenom'] }}</small>
                 </div>  
                 <div class="col-12 lg:col-6 field mb-4">
-                    <input id="receveur_nom" [(ngModel)]="transfert.receveur_nom" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.receveur_nom}" placeholder="Nom" type="text" class="p-inputtext w-full">
+                    <input id="receveur_nom" [(ngModel)]="transfert.receveur_nom" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.receveur_nom || errors['receveur_nom']}" placeholder="Nom" type="text" class="p-inputtext w-full">
+                    <small *ngIf="errors['receveur_nom']">{{ errors['receveur_nom'] }}</small>
                 </div>
  
                 <!-- EXPEDITEUR -->
                 <div class="col-12 field mb-4">
                     <span class="text-900 text-2xl block font-medium mb-4">Expediteur</span>
-                    <input id="expediteur_phone" [(ngModel)]="transfert.expediteur_phone" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.expediteur_phone}" placeholder="Téléphone" type="text" class="p-inputtext w-full">
+                    <input id="expediteur_phone" [(ngModel)]="transfert.expediteur_phone" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.expediteur_phone || errors['expediteur_phone']}" placeholder="Téléphone" type="text" class="p-inputtext w-full">
+                    <small *ngIf="errors['expediteur_phone']">{{ errors['expediteur_phone'] }}</small>
                 </div> 
                 <div class="col-12 lg:col-6 field mb-4">
-                    <input id="expediteur_prenom" [(ngModel)]="transfert.expediteur_prenom" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.expediteur_prenom}" placeholder="Prénom" type="text" class="p-inputtext w-full">
+                    <input id="expediteur_prenom" [(ngModel)]="transfert.expediteur_prenom" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.expediteur_prenom || errors['expediteur_prenom']}" placeholder="Prénom" type="text" class="p-inputtext w-full">
+                    <small *ngIf="errors['expediteur_prenom']">{{ errors['expediteur_prenom'] }}</small>
                 </div>
                 <div class="col-12 lg:col-6 field mb-4">
-                    <input id="expediteur_nom" [(ngModel)]="transfert.expediteur_nom" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.expediteur_nom}" placeholder="Nom" type="text" class="p-inputtext w-full">
+                    <input id="expediteur_nom" [(ngModel)]="transfert.expediteur_nom" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.expediteur_nom || errors['expediteur_nom']}" placeholder="Nom" type="text" class="p-inputtext w-full">
+                    <small *ngIf="errors['expediteur_nom']">{{ errors['expediteur_nom'] }}</small>
                 </div>
                 <div class="col-12 field mb-2">
-                    <input id="expediteur_email" [(ngModel)]="transfert.expediteur_email" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.expediteur_email}" placeholder="Email" type="text" class="p-inputtext w-full mb-4">
-                 </div>
+                    <input id="expediteur_email" [(ngModel)]="transfert.expediteur_email" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.expediteur_email || errors['expediteur_email']}" placeholder="Email" type="text" class="p-inputtext w-full mb-4">
+                    <small *ngIf="errors['expediteur_email']">{{ errors['expediteur_email'] }}</small>
+
+                </div>
                  
                 <!-- <div class="col-12 flex flex-column lg:flex-row justify-content-center align-items-center lg:justify-content-end my-6">
                     <button pButton pRipple class="p-button-secondary p-button-outlined mt-3 lg:mt-0 w-full lg:w-auto flex-order-2 lg:flex-order-1 lg:mr-4" label="Annuler" icon="pi pi-fw pi-arrow-left"></button>
