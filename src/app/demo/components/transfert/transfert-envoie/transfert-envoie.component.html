@@ -8,11 +8,7 @@
                 <li class="flex align-items-center text-primary mr-2">Information <i class="pi pi-chevron-right text-500 text-xs ml-2"></i></li>
                 <li class="flex align-items-center text-500 mr-2">Payment</li>
             </ul>
-            <div class="grid formgrid">
-                <!-- <div class="col-12 field mb-4">
-                    <span class="text-900 text-2xl block font-medium mb-4">Quartier</span>
-                     <p-dropdown [options]="cities" [(ngModel)]="selectedCity" placeholder="Country / City" optionLabel="name" [showClear]="true" styleClass="w-full"></p-dropdown>
-                </div> -->
+            <div class="grid formgrid"> 
                 <div class="col-12 field mb-4">
                     <label for="cities" class="font-medium text-900" >Quartier</label>
                     <p-dropdown 
@@ -21,22 +17,12 @@
                            optionLabel="name" 
                            optionValue="name"
                            styleClass="w-full"
+                           [showClear]="true"
+                           placeholder="Sélectionnez un quartier"
                           (onChange)="updateQuartier($event)"
                           >
                         </p-dropdown>
-                </div> 
-
-                  <!-- <div class="col-12 field mb-4">
-                    <p-dropdown 
-                    [(ngModel)]="transfert.quartier"  
-                    [options]="cities"  
-                    optionLabel="name" 
-                    placeholder="Sélectionnez un rôle"
-                    >
-                    </p-dropdown>
-                  </div>  -->
-              
-
+                </div>   
                 <div class="col-12 field mb-4">
                     <span class="text-900 text-2xl block font-medium mb-4">Montant</span>
                     <input id="receveur_phone" [(ngModel)]="transfert.montant" (input)="calculFraisTotal()"  placeholder="Montant" type="number" class="p-inputtext w-full">

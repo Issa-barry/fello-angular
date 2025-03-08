@@ -6,7 +6,7 @@ import { TransfertService } from 'src/app/demo/service/transfert/transfert.servi
 
 @Component({
     selector: 'app-transfert-envoie',
-    // standalone: true,
+    standalone: false,
     // imports: [],
     templateUrl: './transfert-envoie.component.html',
     styleUrl: './transfert-envoie.component.scss',
@@ -24,9 +24,9 @@ export class TransfertEnvoieComponent implements OnInit {
     transfert: Transfert = new Transfert();
     total:number = 0;
     frais:number = 0;
-    tauxDeFrais:number = 0.05; //5%
+    tauxDeFrais:number = 0.050; //5%
     montantConverti: number = 0;
-    tauxConversion: number = 9400; // 1 euro = 940000 franc guinéen
+    tauxConversion: number = 9500; // 1 euro = 940000 franc guinéen
 
 
     selectedCity: string = '';
@@ -60,8 +60,8 @@ export class TransfertEnvoieComponent implements OnInit {
     }
 
     calculFraisTotal() {
-      this.frais = this.transfert.montant * this.tauxDeFrais;
-      this.total = this.transfert.montant + this.frais;
+      this.frais = Math.floor(this.transfert.montant * this.tauxDeFrais);
+      this.total =  this.transfert.montant + this.frais;
       this.calculMontantConverti();
     }
 
@@ -73,7 +73,6 @@ export class TransfertEnvoieComponent implements OnInit {
   updateQuartier(event: any) {
     // console.log('event:', event);
     // this.transfert.quartier = event.value.value;
-    // console.log(this.transfert.quartier);
 }
 
     save() {
