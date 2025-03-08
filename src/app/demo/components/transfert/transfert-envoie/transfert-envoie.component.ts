@@ -26,6 +26,7 @@ export class TransfertEnvoieComponent implements OnInit {
     montantConverti: number = 0;
     tauxConversion: number = 9500; // 1 euro = 9500 franc guinéen
     envoieDialog: boolean = false;
+    ticketDialog: boolean = false;
     submitted: boolean = false;
     loading: boolean = false;
     errors: { [key: string]: string } = {};
@@ -109,8 +110,26 @@ export class TransfertEnvoieComponent implements OnInit {
      */
     hideDialog() {
         this.envoieDialog = false;
+        this.ticketDialog = false;
         this.submitted = false;
     }
+
+     /**
+     * ouvrir la boîte de dialogue
+     */
+     openTicketDialog() {
+      this.ticketDialog = true;
+    }
+    
+     /**
+     * Ferme la boîte de dialogue du ticket d'envoie
+     */
+     hideTicketDialog() {
+      this.ticketDialog = false;
+      this.resetForm();
+      this.submitted = false;
+  }
+
 
       /**
      * Vérifie les champs obligatoires et ouvre le dialogue si tout est valide
@@ -142,7 +161,8 @@ export class TransfertEnvoieComponent implements OnInit {
                     life: 3000,
                 });
 
-                this.resetForm();
+                // this.resetForm();
+                this.openTicketDialog();
             },
             error: (error) => {
                 console.error('Erreur lors du transfert:', error);
