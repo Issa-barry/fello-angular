@@ -1,24 +1,26 @@
 <div class="grid">
     <div class="col-12">
-        <div class="card px-6 py-6">
+
+        <div class="card px-6 py-6" >
             <p-toast></p-toast>
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="" icon="pi pi-plus" class="p-button-success mr-2" (click)="openNew()"></button>
-                        <button pButton pRipple label="" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedContacts()" [disabled]="!selectedContacts || !selectedContacts.length"></button>
+                        <button pButton pRipple label="Nouveau" icon="pi pi-plus" class="p-button-success mr-2" (click)="onGotToNewContact()"></button>
+                        <!-- <button pButton pRipple label="" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedContacts()" [disabled]="!selectedContacts || !selectedContacts.length"></button> -->
                     </div>
                 </ng-template>
 
                 <ng-template pTemplate="right">
-                    <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import" 
-                    chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload>
+                    <!-- <p-fileUpload mode="basic" accept="image/*" [maxFileSize]="1000000" label="Import"  chooseLabel="Import" class="mr-2 inline-block"></p-fileUpload> -->
                     <button pButton pRipple label="Export" icon="pi pi-upload" class="p-button-help" (click)="dt.exportCSV()"></button>
                 </ng-template>
             </p-toolbar>
-
-            <p-table #dt [value]="contacts" [columns]="cols" responsiveLayout="scroll" [rows]="10" 
-            [globalFilterFields]="['nom','prenom','phone','statut', 'reference']" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Liste de {first} / {last} des {totalRecords} contacts" [(selection)]="selectedContacts" selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-progressBar mode="indeterminate" *ngIf="loading" class="w-full h-2"></p-progressBar>
+<!-- 
+           <div *ngIf="!loading"> -->
+            <p-table  #dt  [value]="contacts" [columns]="cols" responsiveLayout="scroll" [rows]="10" 
+             [globalFilterFields]="['nom','prenom','phone','statut', 'reference']" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Liste de {first} / {last} des {totalRecords} contacts" [(selection)]="selectedContacts" selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Manage Products</h5>
@@ -28,7 +30,7 @@
                         </span>
                     </div>
                 </ng-template>
-                <ng-template pTemplate="header">
+                <ng-template pTemplate="header" >
                     <tr>
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
@@ -36,8 +38,9 @@
                         <th pSortableColumn="reference">Reference <p-sortIcon field="code"></p-sortIcon></th>
                         <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
                          <th pSortableColumn="prenom">Prenom <p-sortIcon field="prenom"></p-sortIcon></th>
-                         <th pSortableColumn="phone">Phone <p-sortIcon field="phone"></p-sortIcon></th>
-                        <th pSortableColumn="statut">Statut <p-sortIcon field="statut"></p-sortIcon></th>
+                         <th pSortableColumn="adresse">Adresse <p-sortIcon field="adresse"></p-sortIcon></th>
+                         <!-- <th pSortableColumn="phone">Phone <p-sortIcon field="phone"></p-sortIcon></th> -->
+                        <!-- <th pSortableColumn="statut">Statut <p-sortIcon field="statut"></p-sortIcon></th> -->
                          <!-- <th pSortableColumn="inventoryStatus">Status <p-sortIcon field="inventoryStatus"></p-sortIcon></th> -->
                         <th>Action</th>
                     </tr>
@@ -59,30 +62,45 @@
                             {{contact.prenom}}
                         </td>
                         <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Prenom</span>
+                            {{contact.adresse.pays}}
+                        </td>
+                        <!-- <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Phone</span>
                             {{contact.phone}}
-                        </td>
-                        <td style="width:14%; min-width:10rem;">
+                        </td> -->
+                        <!-- <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Statut</span>
                             {{contact.statut}}
-                        </td>
+                        </td> -->
                       
                         <!-- <td style="width:14%; min-width: 10rem;"><span class="p-column-title">Status</span>
                             <span [class]="'product-badge status-' + (product.inventoryStatus ? product.inventoryStatus.toLowerCase() : '')">{{product.inventoryStatus}}</span>
                         </td> -->
                         <td>
                             <div class="flex">
-                                <button pButton pRipple icon="pi pi-pencil" class="p-button-rounded p-button-success mr-2" (click)="editContact(contact)"></button>
+                                <button pButton pRipple icon="pi pi-eye" class="p-button-rounded p-button-success mr-2" (click)="onGotToContactDetail(contact)"></button>
                                 <button pButton pRipple icon="pi pi-trash" class="p-button-rounded p-button-warning" (click)="deleteContact(contact)"></button>
                             </div>
                         </td>
                     </tr>
                 </ng-template>
             </p-table>
-        </div>
+           </div>
+        <!-- </div> -->
 
         <p-dialog [(visible)]="contactDialog" [style]="{width: '450px'}" header="Contact Details" [modal]="true" class="p-fluid">
             <ng-template pTemplate="content">
+                <div class="field">
+                    <label for="role">Rôle</label>
+                    <p-dropdown 
+                        [(ngModel)]="contact.role" 
+                        [options]="roles" 
+                        optionLabel="name" 
+                        placeholder="Sélectionnez un rôle">
+                    </p-dropdown>
+                </div>
+                
                 <div class="field">
                     <label for="civilite">Civilite</label>
                     <input type="text" pInputText id="civilite" [(ngModel)]="contact.civilite"  autofocus  />
@@ -90,24 +108,27 @@
                 </div>
                  <div class="field">
                     <label for="nom">Nom</label>
-                    <input type="text" pInputText id="nom" [(ngModel)]="contact.nom" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.nom}"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.nom">Name is required.</small>
+                    <input type="text" pInputText id="nom" [(ngModel)]="contact.nom" required autofocus 
+                    [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.nom}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.nom">Le nom est obligatoire.</small>
                 </div>
                 <div class="field">
                     <label for="prenom">Prenom</label>
                     <input type="text" pInputText id="prenom" [(ngModel)]="contact.prenom" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.prenom}"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.prenom">Name is required.</small>
-                </div>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.prenom">Le prenom est obligatoire.</small>
+                </div> 
+
                 <div class="field">
                     <label for="phone">Phone</label>
-                    
-                    <input type="text" pInputText id="phone" [(ngModel)]="contact.phone" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.phone}"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.phone">Name is required.</small>
-                </div>
+                    <input type="text" pInputText id="phone" (ngModelChange)="validatePhone()" [(ngModel)]="contact.phone" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !isValidPhone}"/>
+                     <small class="error-message" *ngIf="submitted && !isValidPhone">
+                        Veuillez entrer un numéro de téléphone valide (ex: +224 622 00 00 00).
+                    </small>
+                </div>  
                 <div class="field">
                     <label for="email">Email</label>
                     <input type="text" pInputText id="email" [(ngModel)]="contact.email" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.email}"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.email">Name is required.</small>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.email">L'email est obligatoire.</small>
                 </div>
                 <div class="field">
                     <label for="date_naissance">Date_naissance</label>
@@ -115,24 +136,9 @@
                     <!-- <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.date_naissance">Name is required.</small> -->
                 </div>
 
-
-                <!-- <div class="field">
-                    <label for="status">Inventory Status</label>
-                    <p-dropdown [(ngModel)]="product.inventoryStatus" inputId="inventoryStatus" optionValue="label" [options]="statuses" placeholder="Select">
-                        <ng-template pTemplate="selectedItem">
-                            <span *ngIf="product && product.inventoryStatus" [class]="'product-badge status-' + product.inventoryStatus.toString().toLowerCase()">{{product.inventoryStatus}}</span>
-                        </ng-template>
-                        <ng-template let-option pTemplate="item">
-                            <span [class]="'product-badge status-' + option.value">{{option.label}}</span>
-                        </ng-template>
-                    </p-dropdown>
-                </div> -->
                 <div class="field">
                     <label for="status">Pays</label>
-                    <p-dropdown [(ngModel)]="contact.adresse.pays" inputId="inventoryStatus" optionValue="label" [options]="optionPays" placeholder="Select">
-                        <!-- <ng-template pTemplate="selectedItem">
-                            <span *ngIf="product && product.inventoryStatus" [class]="'product-badge status-' + product.inventoryStatus.toString().toLowerCase()">{{product.inventoryStatus}}</span>
-                        </ng-template> -->
+                    <p-dropdown [(ngModel)]="contact.adresse.pays" inputId="inventoryStatus" optionValue="label" [options]="optionPays" placeholder="Select"> 
                         <ng-template let-option pTemplate="item">
                             <span [class]="'product-badge status-' + option.value">{{option.label}}</span>
                         </ng-template>
@@ -145,20 +151,27 @@
                 </div>
 
                 <div class="formgrid grid">
+                    <div class="field col"> 
+                     <label for="quantity">Code Postal</label>
+                     <p-inputNumber id="code_postal" [disabled]="isCodePostalDisabled" [(ngModel)]="contact.adresse.code_postal"  (ngModelChange)="validateCodePostal()" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.code_postal || !isValidCodePostal}"></p-inputNumber> 
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.adresse.code_postal">Le code postal est obligatoire.</small>
+                        <small class="ng-invalid" *ngIf="!isValidCodePostal">
+                            Le code postal doit contenir exactement 5 chiffres.
+                        </small>
+                    </div> 
                     <div class="field col">
-                        <label for="price">Code_Postal</label>
-                        <input type="text" id="code_postal" [(ngModel)]="contact.adresse.code_postal" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.code_postal}"/>
-
+                        <label for="adresse.ville">Ville</label>
+                        <input type="text" pInputText id="adresse.ville" [(ngModel)]="contact.adresse.ville" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.ville}"/>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.adresse.ville">La ville est obligatoire.</small>
                     </div>
-                    <div class="field col">
-                        <label for="ville">Ville</label>
-                        <input type="text" pInputText id="ville" [(ngModel)]="contact.adresse.ville" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.ville}"/>
-                    </div>
+                    
                 </div>
                 <div class="flex flex-column">
                     <span class="p-input-icon-left w-full mb-4">
                         <i class="pi pi-lock z-2"></i>
-                        <p-password id="password" placeholder="Password" [(ngModel)]="contact.password" styleClass="w-full"  [inputStyle]="{paddingLeft: '2.5rem'}" inputStyleClass="w-full md:w-25rem " [toggleMask]="true" ></p-password>
+                        <p-password id="password" required [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.password}" placeholder="Password" [(ngModel)]="contact.password" styleClass="w-full"  [inputStyle]="{paddingLeft: '2.5rem'}" inputStyleClass="w-full md:w-25rem " [toggleMask]="true" ></p-password>
+                        <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.password">Le mot de passe est obligatoire.</small>
+
                     </span>
                     <span class="p-input-icon-left w-full mb-4">
                         <i class="pi pi-lock z-2"></i>
@@ -176,7 +189,7 @@
         <p-dialog [(visible)]="deleteContactDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="product">Are you sure you want to delete <b>{{contact.prenom}} {{contact.nom}}</b>?</span>
+                <span *ngIf="product">Êtes-vous sûr de vouloir supprimer le contact : <br/><b>{{contact.prenom}}   {{contact.nom}}</b>?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteContactDialog = false"></button>
@@ -187,7 +200,7 @@
         <p-dialog [(visible)]="deleteContactsDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span>Are you sure you want to delete selected products?</span>
+                <span>Êtes-vous sûr de vouloir supprimer les contacts sélectionnées?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteContactsDialog = false"></button>

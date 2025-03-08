@@ -102,7 +102,8 @@
                     <p-dropdown 
                     
                               [(ngModel)]="agence.adresse.pays"  
-                              inputId="pays"  optionValue="label" 
+                              inputId="pays"  
+                              optionValue="label" 
                               [options]="optionPays"  
                               placeholder="Sélectionner un pays" 
                               (ngModelChange)="validatePays()" [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.pays}" >
@@ -144,7 +145,7 @@
                 <button pButton pRipple label="Cancel" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
                 <button pButton pRipple label="Save" icon="pi pi-check" class="p-button-text" (click)="saveAgence()"></button>
             </ng-template>
-        </p-dialog>
+        </p-dialog> 
 
         <p-dialog [(visible)]="deleteAgenceDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">
@@ -155,7 +156,7 @@
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="deleteAgenceDialog = false"></button>
                 <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmDelete()"></button>
             </ng-template>
-        </p-dialog>
+        </p-dialog> 
 
         <p-dialog [(visible)]="deleteAgencesDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
             <div class="flex align-items-center justify-content-center">

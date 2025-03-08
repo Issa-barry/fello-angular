@@ -111,11 +111,11 @@ export class AppMenuComponent implements OnInit {
                         icon: 'pi pi-fw pi-arrow-right-arrow-left',
                         routerLink: ['/dashboard/transfert']
                     }] : []),
-                    ...(this.permissionStates['canViewFactures'] ? [{
-                        label: 'Facturation',
-                        icon: 'pi pi-fw pi-calculator',
-                        routerLink: ['/dashboard/facturation']
-                    }] : []),
+                    // ...(this.permissionStates['canViewFactures'] ? [{
+                    //     label: 'Facturation',
+                    //     icon: 'pi pi-fw pi-calculator',
+                    //     routerLink: ['/dashboard/facturation']
+                    // }] : []),
                     ...(this.permissionStates['canViewContact'] ? [{
                         label: 'Contact',
                         icon: 'pi pi-fw pi-users',
@@ -127,9 +127,9 @@ export class AppMenuComponent implements OnInit {
                         routerLink: ['/dashboard/agence']
                     }] : [])
                 ]
-            }, 
+            },  
             {
-                label: 'AUTRE',
+                label: 'AUTRE', 
                 icon: 'pi pi-cog',
                 items: [
                     {

@@ -31,6 +31,7 @@ export class AgenceComponent implements OnInit {
   deleteAgenceDialog: boolean = false;
   deleteAgencesDialog: boolean = false;
   apiErrors: { [key: string]: string[] } = {};
+  
  
   constructor(
     private agenceService: AgenceService,
@@ -218,14 +219,14 @@ validatePays() {
             this.agence.adresse.code_postal = String(this.agence.adresse.code_postal);
         }
 
-    if (this.agence.id) { // Modification
+    if (this.agence.id && this.agence.nom_agence && this.agence.phone && this.agence.email && this.agence.adresse.ville) { // Modification
    
         this.agenceService.updateAgence(this.agence.id, this.agence).subscribe({
             next: () => {
                 this.getAllAgences(); 
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Succès',
+                    summary: 'Succès', 
                     detail: 'Agence modifiée avec succès',
                     life: 3000
                 });
@@ -254,7 +255,7 @@ validatePays() {
                     life: 3000
                 });
             },
-            error: (err) => {
+            error: (err) => { 
                 console.error('Erreur lors de la création de l\'agence:', err);
                 this.messageService.add({
                     severity: 'error',
