@@ -14,7 +14,7 @@
                     [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.role || errors['role']}">
                 </p-dropdown>
                 <small *ngIf="errors['role']">{{ errors['role'] }}</small>
-                </div>
+                </div> 
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="country" class="font-medium text-900" >Civilitté</label> 
                     <p-dropdown id="civilite" [options]="civiliteOptions" optionLabel="label" optionValue="value"
@@ -46,7 +46,7 @@
                 <div class="field mb-4 col-12 md:col-12">
                     <label for="country" class="font-medium text-900" >Pays</label>
                     <p-dropdown [(ngModel)]="contact.adresse.pays" 
-                               inputId="country"
+                                inputId="country"
                                 [options]="countries"
                                 optionLabel="name" 
                                 optionValue="value" 

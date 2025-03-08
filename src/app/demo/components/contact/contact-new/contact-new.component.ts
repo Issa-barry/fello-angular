@@ -21,7 +21,7 @@ export class ContactNewComponent implements OnInit {
     roles: Role[] = [];
     errors: { [key: string]: string } = {};
     isGuineeSelected: boolean = false;
-    loading = false;
+    loading = false; 
   
     constructor(
         private router: Router,

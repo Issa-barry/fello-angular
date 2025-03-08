@@ -22,6 +22,12 @@ export class TransfertEnvoieComponent implements OnInit {
     ];
 
     transfert: Transfert = new Transfert();
+    total:number = 0;
+    frais:number = 0;
+    tauxDeFrais:number = 0.05; //5%
+    montantConverti: number = 0;
+    tauxConversion: number = 9400; // 1 euro = 940000 franc guinéen
+
 
     selectedCity: string = '';
 
@@ -53,17 +59,29 @@ export class TransfertEnvoieComponent implements OnInit {
         this.envoieDialog = true;
     }
 
-    confirmRetrait() {
-        this.envoieDialog = false;
-        this.messageService.add({
-            severity: 'success',
-            summary: 'Succées',
-            detail: 'Envoie confirmé',
-            life: 3000,
-        });
+    calculFraisTotal() {
+      this.frais = this.transfert.montant * this.tauxDeFrais;
+      this.total = this.transfert.montant + this.frais;
+      this.calculMontantConverti();
     }
 
+    calculMontantConverti() {
+      this.montantConverti = this.transfert.montant * this.tauxConversion;
+      this.transfert.montant_converti = this.montantConverti;
+  }
+
+  updateQuartier(event: any) {
+    // console.log('event:', event);
+    // this.transfert.quartier = event.value.value;
+    // console.log(this.transfert.quartier);
+}
+
     save() {
+      this.envoieDialog = false;
+      this.submitted = true;
+
+      console.log('transfert:', this.transfert);
+      
         this.transfertService.createTransfert(this.transfert).subscribe({
             next: (response) => {
                 this.messageService.add({
@@ -74,7 +92,7 @@ export class TransfertEnvoieComponent implements OnInit {
                 });
             },
             error: (err) => {
-              console.error('Erreur lors de la création du contact:', err);
+              console.error('Erreur lors du transfert:', err);
 
               if (err.error && err.error.errors) {
                   this.errors = err.error.errors;
@@ -83,7 +101,7 @@ export class TransfertEnvoieComponent implements OnInit {
               this.messageService.add({
                   severity: 'error',
                   summary: 'Erreur',
-                  detail: 'Création du contact échouée. Vérifiez les champs.',
+                  detail: 'Envoie du transfert échouée. Vérifiez les champs.',
                   life: 5000,
               });
           },
