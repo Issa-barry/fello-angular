@@ -35,45 +35,72 @@ export class TransfertService {
     let validationErrors: { [key: string]: string[] } = {};
 
     if (error.error instanceof ErrorEvent) {
+        // Erreur côté client
         errorMessage = `Erreur client : ${error.error.message}`;
     } else {
-        if (error.status === 422) {
-            if (error.error && error.error.data) {
-                validationErrors = error.error.data;
+        // Erreur côté serveur
+        switch (error.status) {
+            case 404:
+                errorMessage = 'Transfert non trouvé. Vérifiez le code.';
+                break;
+            case 422:
                 errorMessage = 'Validation échouée. Vérifiez les champs.';
-            } else if (error.error.message) {
-                errorMessage = error.error.message;
-            }
-        } else if (error.status === 0) {
-            errorMessage = 'Impossible de se connecter au serveur';
-        } else {
-            errorMessage = `Erreur serveur ${error.status}: ${error.message}`;
+                if (error.error && error.error.data) {
+                    validationErrors = error.error.data;
+                }
+                break;
+            case 0:
+                errorMessage = 'Impossible de se connecter au serveur. Vérifiez votre connexion internet.';
+                break;
+            default:
+                errorMessage = `Erreur serveur ${error.status}: ${error.message}`;
         }
     }
 
     return throwError(() => ({ message: errorMessage, validationErrors }));
-  }
+}
+
 
   getTransferts(): Observable<Transfert[]> {
-    return this.http.get<{ data: Transfert[] }>(this.apiUrl).pipe(
+    return this.http.get<{ data: Transfert[] }>(this.apiUrl+'/all').pipe(
       map(response => response.data),
       catchError(this.handleError)
     );
   }
 
   getTransfertById(id: number): Observable<Transfert> {
-    return this.http.get<{ success: boolean, data: Transfert }>(`${this.apiUrl}/${id}`).pipe(
+    return this.http.get<{ success: boolean, data: Transfert }>(`${this.apiUrl}/showById/${id}`).pipe(
+      map(response => response.data),
+      catchError(this.handleError)
+    );
+  }
+
+  getTransfertByCode(code: String): Observable<Transfert> {
+    return this.http.get<{ success: boolean, data: Transfert }>(`${this.apiUrl}/showByCode/${code}`).pipe(
       map(response => response.data),
       catchError(this.handleError)
     );
   }
 
   createTransfert(transfert: Transfert): Observable<Transfert> {
-    return this.http.post<Transfert>(`${this.apiUrl}`, transfert, httpOption).pipe(
+    return this.http.post<Transfert>(`${this.apiUrl}/envoie`, transfert, httpOption).pipe(
       catchError(this.handleError)
     );
   }
 
+  validerRetrait(code: string): Observable<{ success: boolean, message: string, data: Transfert }> {
+    return this.http.post<{ success: boolean, message: string, data: Transfert }>(
+      `${this.apiUrl}/retrait`, 
+      { code },
+      httpOption
+    ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+
+
+  
   updateTransfert(id: number, transfert: Transfert): Observable<Transfert> {
     return this.http.put<Transfert>(`${this.apiUrl}/${id}`, transfert, httpOption).pipe(
       catchError(this.handleError)
@@ -85,4 +112,5 @@ export class TransfertService {
       catchError(this.handleError)
     ); 
   }
+    
 }
