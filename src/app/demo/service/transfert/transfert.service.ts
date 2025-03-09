@@ -55,21 +55,28 @@ export class TransfertService {
   }
 
   getTransferts(): Observable<Transfert[]> {
-    return this.http.get<{ data: Transfert[] }>(this.apiUrl).pipe(
+    return this.http.get<{ data: Transfert[] }>(this.apiUrl+'/all').pipe(
       map(response => response.data),
       catchError(this.handleError)
     );
   }
 
   getTransfertById(id: number): Observable<Transfert> {
-    return this.http.get<{ success: boolean, data: Transfert }>(`${this.apiUrl}/${id}`).pipe(
+    return this.http.get<{ success: boolean, data: Transfert }>(`${this.apiUrl}/showById/${id}`).pipe(
+      map(response => response.data),
+      catchError(this.handleError)
+    );
+  }
+
+  getTransfertByCode(code: String): Observable<Transfert> {
+    return this.http.get<{ success: boolean, data: Transfert }>(`${this.apiUrl}/showByCode/${code}`).pipe(
       map(response => response.data),
       catchError(this.handleError)
     );
   }
 
   createTransfert(transfert: Transfert): Observable<Transfert> {
-    return this.http.post<Transfert>(`${this.apiUrl}`, transfert, httpOption).pipe(
+    return this.http.post<Transfert>(`${this.apiUrl}/envoie`, transfert, httpOption).pipe(
       catchError(this.handleError)
     );
   }
