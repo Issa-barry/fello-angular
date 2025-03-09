@@ -1,29 +1,25 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 
-import { TransfertDetailRoutingModule } from './transfert-detail-routing.module';
-import { TransfertDetailComponent } from './transfert-detail.component';
-import { RippleModule } from 'primeng/ripple';
-import { ButtonModule } from 'primeng/button';
-import { DialogModule } from 'primeng/dialog';
-import { ToastModule } from 'primeng/toast';
+import { TransfertEditRoutingModule } from './transfert-edit-routing.module';
 import { FormsModule } from '@angular/forms';
 import { CheckboxModule } from 'primeng/checkbox';
 import { DropdownModule } from 'primeng/dropdown';
 import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
+import { ButtonModule } from 'primeng/button';
+import { RippleModule } from 'primeng/ripple';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
- 
+import { DialogModule } from 'primeng/dialog';
+import { ToastModule } from 'primeng/toast';
+import { TransfertEditComponent } from './transfert-edit.component';
+
 @NgModule({
-    declarations: [TransfertDetailComponent],
+    declarations: [TransfertEditComponent],
     imports: [
         CommonModule,
-        TransfertDetailRoutingModule,
-        ButtonModule,
-        RippleModule,
-        DialogModule,
-        ToastModule,
+        TransfertEditRoutingModule,
         FormsModule,
         CheckboxModule,
         DropdownModule,
@@ -37,4 +33,4 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
         ToastModule,
     ],
 })
-export class TransfertDetailModule {}
+export class TransfertEditModule {}

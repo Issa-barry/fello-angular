@@ -69,6 +69,10 @@ export class TransfertListeComponent implements OnInit {
   goToTransfertRetrait() {
     this.router.navigate(['/dashboard/transfert/retrait']);
   }
+
+  goToTransfertDetail(transfert: Transfert) {    
+    this.router.navigate(['/dashboard/transfert/detail', transfert.id]);  
+  }
   
   getAllTransferts(): void {
     this.transfertService.getTransferts().subscribe({

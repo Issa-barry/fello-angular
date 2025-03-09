@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { catchError, map, Observable, throwError } from 'rxjs';
 import { environment } from 'src/environements/environment.dev';
 import { Transfert } from '../../models/transfert';
- 
-
 
 const httpOption = {
   headers: new HttpHeaders({
@@ -12,9 +10,9 @@ const httpOption = {
       'Access-Control-Allow-Origin': '*',
       'Access-Control-Allow-Headers': 'Content-Type',
       'Access-Control-Allow-Methods': 'GET,POST,OPTIONS,DELETE,PUT',
-   
   })
-}; 
+};   
+
 @Injectable({
   providedIn: 'root'
 })
@@ -22,44 +20,69 @@ export class TransfertService {
   private apiUrl = `${environment.apiUrl}/transferts`;
 
   constructor(private http: HttpClient) { }
-  private log(log: string){
-    console.info(log)
+
+  private log(log: string) {
+    console.info(log);
   }
- 
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.error(error);
-      this.log(`${operation} failed: ${error.message}`);
-      return of(result as T);
-    };
-  } 
+
+  /**
+   * ✅ Nouvelle gestion des erreurs améliorée
+   */
+  private handleError(error: HttpErrorResponse) {
+    console.error('Erreur API:', error);
+
+    let errorMessage = 'Une erreur inconnue est survenue';
+    let validationErrors: { [key: string]: string[] } = {};
+
+    if (error.error instanceof ErrorEvent) {
+        errorMessage = `Erreur client : ${error.error.message}`;
+    } else {
+        if (error.status === 422) {
+            if (error.error && error.error.data) {
+                validationErrors = error.error.data;
+                errorMessage = 'Validation échouée. Vérifiez les champs.';
+            } else if (error.error.message) {
+                errorMessage = error.error.message;
+            }
+        } else if (error.status === 0) {
+            errorMessage = 'Impossible de se connecter au serveur';
+        } else {
+            errorMessage = `Erreur serveur ${error.status}: ${error.message}`;
+        }
+    }
+
+    return throwError(() => ({ message: errorMessage, validationErrors }));
+  }
 
   getTransferts(): Observable<Transfert[]> {
     return this.http.get<{ data: Transfert[] }>(this.apiUrl).pipe(
-      map(response => response.data) 
+      map(response => response.data),
+      catchError(this.handleError)
     );
   }
 
   getTransfertById(id: number): Observable<Transfert> {
-    return this.http.get<Transfert>(`${this.apiUrl}/${id}`);
-  }
-
-  createTransfert(transfert: Transfert): Observable<Transfert>{
-    return this.http.post<Transfert>(`${this.apiUrl}`, transfert, httpOption).pipe(
-      catchError(this.handleError('le service createTransfert à detecté une erreur sur les données transmises', transfert))
+    return this.http.get<{ success: boolean, data: Transfert }>(`${this.apiUrl}/${id}`).pipe(
+      map(response => response.data),
+      catchError(this.handleError)
     );
   }
-  
-   
+
+  createTransfert(transfert: Transfert): Observable<Transfert> {
+    return this.http.post<Transfert>(`${this.apiUrl}`, transfert, httpOption).pipe(
+      catchError(this.handleError)
+    );
+  }
+
   updateTransfert(id: number, transfert: Transfert): Observable<Transfert> {
     return this.http.put<Transfert>(`${this.apiUrl}/${id}`, transfert, httpOption).pipe(
-      catchError(this.handleError<Transfert>('updateTransfert'))
+      catchError(this.handleError)
     );
   }
   
   annulerTransfert(id: number): Observable<void> {
     return this.http.post<void>(`${this.apiUrl}/annuler/${id}`, httpOption).pipe(
-      catchError(this.handleError<void>('annulerTransfert'))
+      catchError(this.handleError)
     ); 
   }
 }

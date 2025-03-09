@@ -24,7 +24,7 @@ import { TransfertEnvoieComponent } from './transfert-envoie.component';
     FormsModule,
     CheckboxModule,
     DropdownModule,
-    InputTextModule,
+    InputTextModule, 
     InputNumberModule,
     ButtonModule,
     RippleModule,
