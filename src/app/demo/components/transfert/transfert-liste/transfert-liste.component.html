@@ -19,7 +19,8 @@
             <p-table #dt [value]="transferts" 
                         [columns]="cols" responsiveLayout="scroll" 
                         [rows]="10" 
-                        [globalFilterFields]="['receveur_nom','receveur_prenom','receveur_phone','expediteur_nom','expediteur_prenom','expediteur_phone','montant_converti','statut']"
+                        [globalFilterFields]="['code','receveur_nom','receveur_prenom','receveur_phone','expediteur_nom',
+                                               'expediteur_prenom','expediteur_phone','montant_converti','statut']"
                         [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" 
                         [showCurrentPageReport]="true" 
                         currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" 
@@ -39,9 +40,9 @@
                         <th style="width: 3rem">
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
-                        <th pSortableColumn="id">Code <p-sortIcon field="id"></p-sortIcon></th>
+                        <th pSortableColumn="id">Code ou id<p-sortIcon field="id"></p-sortIcon></th>
                         <th pSortableColumn="receveur_nom">Récéveur <p-sortIcon field="receveur_nom"></p-sortIcon></th>
-                        <th pSortableColumn="receveur_phone">Phone <p-sortIcon field="receveur_phone"></p-sortIcon></th>
+                        <th pSortableColumn="receveur_phone">Phone-receveur <p-sortIcon field="receveur_phone"></p-sortIcon></th>
                         <th pSortableColumn="montant">Montant <p-sortIcon field="montant"></p-sortIcon></th>
                         <th pSortableColumn="expediteur_nom">Expediteur <p-sortIcon field="expediteur_nom"></p-sortIcon></th>
                         <th pSortableColumn="inventoryStatus">Statut <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
@@ -53,8 +54,8 @@
                         <td>
                             <p-tableCheckbox [value]="transfert"></p-tableCheckbox>
                         </td>
-                        <td style="width:14%; min-width:10rem;"><span class="p-column-title">Code</span>
-                            {{transfert.id || transfert.code }}
+                        <td style="width:12%; min-width:8rem;"><span class="p-column-title">Code</span>
+                              {{ transfert.code || '/' }}
                         </td>
                         <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Name</span>

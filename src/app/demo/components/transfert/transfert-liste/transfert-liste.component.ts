@@ -70,9 +70,7 @@ export class TransfertListeComponent implements OnInit {
     this.router.navigate(['/dashboard/transfert/retrait']);
   }
 
-  goToTransfertDetail(transfert: Transfert) {
-    console.log(transfert);
-    
+  goToTransfertDetail(transfert: Transfert) {    
     this.router.navigate(['/dashboard/transfert/detail', transfert.id]);  
   }
   
