@@ -14,6 +14,7 @@ import { TransfertRetraitRoutingModule } from './transfert-retrait-routing.modul
 import { TransfertRetraitComponent } from './transfert-retrait.component';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 
 @NgModule({
@@ -32,6 +33,7 @@ import { ToastModule } from 'primeng/toast';
     InputGroupAddonModule,
     DialogModule,
     ToastModule,
+    ProgressBarModule,
   ]
 })
 export class TransfertRetraitModule { }

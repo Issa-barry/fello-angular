@@ -11,9 +11,14 @@
             <div class="grid formgrid"> 
                  <div class="col-12 field mb-6">
                     <p-inputGroup class="mb-3">
-                        <input type="text" [(ngModel)]="code" pInputText placeholder="Code" class="w-full"/>
+                        <input type="text" [(ngModel)]="code" pInputText placeholder="Code" class="w-full"
+                         [ngClass]="{'ng-invalid ng-dirty': !code || errorMessage}"/>
                         <button type="button" icon="pi pi-fw pi-check" pButton pRipple label="" [disabled]="!code" (click)="onCodeRecuperer()"></button>
                     </p-inputGroup>
+                    <small *ngIf="errorMessage" class="alert alert-danger p-3 mt-3">
+                        {{ errorMessage }}
+                    </small>
+                    
                 </div>
             </div>
         </div>
@@ -22,6 +27,7 @@
             <div class="pb-3 surface-border">
                 <span class="text-900 font-medium text-xl">Ticket</span>
             </div>
+            <p-progressBar mode="indeterminate" *ngIf="loading" class="w-full h-2"></p-progressBar>
             <div *ngIf="codeRecuperer">
                 <div class="flex flex-column lg:flex-row flex-wrap lg:align-items-center py-2 mt-3 surface-border">
                     <div class="flex-auto lg:ml-3">
@@ -68,7 +74,7 @@
             <div *ngIf="!codeRecuperer">
                 <div class="my-4 justify-content-center">
                     <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                    <span>Veuillez-saisir un code, pour afficher 1 ticket.</span>
+                    <span>Veuillez-saisir un code valide, pour afficher 1 ticket.</span>
                 </div>
             </div>
         </div>

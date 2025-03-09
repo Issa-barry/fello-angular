@@ -35,24 +35,31 @@ export class TransfertService {
     let validationErrors: { [key: string]: string[] } = {};
 
     if (error.error instanceof ErrorEvent) {
+        // Erreur côté client
         errorMessage = `Erreur client : ${error.error.message}`;
     } else {
-        if (error.status === 422) {
-            if (error.error && error.error.data) {
-                validationErrors = error.error.data;
+        // Erreur côté serveur
+        switch (error.status) {
+            case 404:
+                errorMessage = 'Transfert non trouvé. Vérifiez le code.';
+                break;
+            case 422:
                 errorMessage = 'Validation échouée. Vérifiez les champs.';
-            } else if (error.error.message) {
-                errorMessage = error.error.message;
-            }
-        } else if (error.status === 0) {
-            errorMessage = 'Impossible de se connecter au serveur';
-        } else {
-            errorMessage = `Erreur serveur ${error.status}: ${error.message}`;
+                if (error.error && error.error.data) {
+                    validationErrors = error.error.data;
+                }
+                break;
+            case 0:
+                errorMessage = 'Impossible de se connecter au serveur. Vérifiez votre connexion internet.';
+                break;
+            default:
+                errorMessage = `Erreur serveur ${error.status}: ${error.message}`;
         }
     }
 
     return throwError(() => ({ message: errorMessage, validationErrors }));
-  }
+}
+
 
   getTransferts(): Observable<Transfert[]> {
     return this.http.get<{ data: Transfert[] }>(this.apiUrl+'/all').pipe(
