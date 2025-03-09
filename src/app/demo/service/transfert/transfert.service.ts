@@ -88,6 +88,19 @@ export class TransfertService {
     );
   }
 
+  validerRetrait(code: string): Observable<{ success: boolean, message: string, data: Transfert }> {
+    return this.http.post<{ success: boolean, message: string, data: Transfert }>(
+      `${this.apiUrl}/retrait`, 
+      { code },
+      httpOption
+    ).pipe(
+      catchError(this.handleError)
+    );
+  }
+
+
+
+  
   updateTransfert(id: number, transfert: Transfert): Observable<Transfert> {
     return this.http.put<Transfert>(`${this.apiUrl}/${id}`, transfert, httpOption).pipe(
       catchError(this.handleError)
@@ -99,4 +112,5 @@ export class TransfertService {
       catchError(this.handleError)
     ); 
   }
+    
 }

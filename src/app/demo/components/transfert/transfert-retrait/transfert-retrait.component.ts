@@ -18,7 +18,9 @@ export class TransfertRetraitComponent implements OnInit {
     codeRecuperer: boolean = false;
     errorMessage: string | null = null;
     loading: boolean = false;
+    isValideCode: boolean = false;
     code: string = '';
+
 
     constructor(
         private router: Router,
@@ -39,12 +41,16 @@ export class TransfertRetraitComponent implements OnInit {
 
         this.loading = true;
         this.errorMessage = null;
+        this.isValideCode = false;
 
         this.transfertService.getTransfertByCode(this.code).subscribe({
             next: (response) => {
                 this.transfert = response;
                 this.codeRecuperer = true;
                 this.loading = false;
+                this.isValideCode = response.statut !== 'retiré' && response.statut !== 'annulé';
+                console.log('Code valide:', this.isValideCode);
+                
             },
             error: (err) => {
                 console.error(
@@ -67,12 +73,24 @@ export class TransfertRetraitComponent implements OnInit {
     }
 
     confirmRetrait() {
-        this.retraitDialog = false;
-        this.messageService.add({
-            severity: 'success',
-            summary: 'Succées',
-            detail: 'Retrait confirmé',
-            life: 3000,
-        });
-    }
+      if (!this.transfert) {
+          this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Aucun transfert sélectionné.' });
+          return;
+      }
+
+       this.loading = true;
+      this.transfertService.validerRetrait(this.code as string).subscribe({
+          next: (response) => {
+              this.transfert!.statut = 'retiré'; // Met à jour le statut localement
+              this.retraitDialog = false;
+              this.onCodeRecuperer();
+              this.loading = false;
+              this.messageService.add({ severity: 'success', summary: 'Succès', detail: response.message });
+          },
+          error: (err) => {
+              console.error('Erreur lors du retrait:', err);
+              this.messageService.add({ severity: 'error', summary: 'Erreur', detail: err.message });
+          }
+      });
+  }
 }

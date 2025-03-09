@@ -89,7 +89,7 @@
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="hideDialog()"></button>
-                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmRetrait()"></button>
+                <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Oui" (click)="confirmRetrait()" [loading]="loading"></button>
             </ng-template>
         </p-dialog>
         <p-toast></p-toast>
