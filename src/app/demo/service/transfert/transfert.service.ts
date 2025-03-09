@@ -40,6 +40,9 @@ export class TransfertService {
     } else {
         // Erreur côté serveur
         switch (error.status) {
+          case 400:
+                errorMessage = error.error.message || 'Requête invalide.';
+                break;
             case 404:
                 errorMessage = 'Transfert non trouvé. Vérifiez le code.';
                 break;

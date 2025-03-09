@@ -14,6 +14,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { InputGroupModule } from 'primeng/inputgroup';
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
  
 @NgModule({
     declarations: [TransfertDetailComponent],
@@ -35,6 +36,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
         InputGroupAddonModule,
         DialogModule,
         ToastModule,
+        ConfirmDialogModule,
     ],
 })
 export class TransfertDetailModule {}
