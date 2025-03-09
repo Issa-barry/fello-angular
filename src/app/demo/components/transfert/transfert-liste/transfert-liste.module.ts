@@ -18,6 +18,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { TransfertListeComponent } from './transfert-liste.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
   declarations: [TransfertListeComponent],
@@ -37,7 +38,7 @@ import { TransfertListeComponent } from './transfert-liste.component';
 		DropdownModule,
 		RadioButtonModule,
 		InputNumberModule,
-		DialogModule
+		DialogModule,ConfirmDialogModule,
   ]
 })
 export class TransfertListeModule { }

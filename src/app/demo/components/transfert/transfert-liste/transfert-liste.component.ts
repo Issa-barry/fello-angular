@@ -100,10 +100,7 @@ export class TransfertListeComponent implements OnInit {
       this.transfertDialog = true;
   }
 
-  deleteTransfert(transfert: Transfert) {
-      this.deleteTransfertDialog = true;
-      this.transfert = { ...transfert };
-  }
+
 
   confirmDeleteSelected() { 
       this.deleteTransfertsDialog = false;
@@ -149,5 +146,79 @@ confirmDelete( ) {
   onGlobalFilter(table: Table, event: Event) {
       table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
   }
+
+
+//   deleteTransfert(transfert: Transfert) {
+//     // this.deleteTransfertDialog = true;
+//     this.transfert = { ...transfert };
+  
+// }
+
+  confirmDeleteTransfert(transfert: Transfert): void {
+    this.confirmationService.confirm({
+        message: "Êtes-vous sûr de vouloir supprimer ce transfert ? Cette action est irréversible.",
+        header: "Confirmation-by dialog",
+        icon: "pi pi-exclamation-triangle",
+        acceptButtonStyleClass: "p-button-danger",
+      rejectButtonStyleClass: "p-button-secondary",
+        acceptLabel: "Oui",
+        rejectLabel: "Non",
+        accept: () => this.deleteTransfert(transfert),
+        reject: () => {
+            this.messageService.add({
+                severity: 'info',
+                summary: 'Annulation',
+                detail: 'La suppression a été annulée.',
+            });
+        }
+    });
+  }
+
+
+   /** 🔹 Supprimer un transfert par ID ou par Code */
+   deleteTransfert(transfert: Transfert): void {
+    if (transfert.code) {
+        this.transfertService.deleteTransfertByCode(transfert.code).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Transfert supprimé avec succès.',
+                    life: 4500,
+                });
+                this.getAllTransferts(); // ✅ Mise à jour de la liste
+            },
+            error: (err) => {
+                console.error("Erreur lors de la suppression :", err);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: err.message || "Échec de la suppression.",
+                });
+            }
+        });
+    } else {
+        this.transfertService.deleteTransfertById(transfert.id as number).subscribe({
+            next: () => {
+                this.messageService.add({
+                    severity: 'success',
+                    summary: 'Succès',
+                    detail: 'Transfert supprimé avec succès.',
+                    life: 4500,
+                });
+                this.getAllTransferts(); // ✅ Mise à jour de la liste
+            },
+            error: (err) => {
+                console.error("Erreur lors de la suppression :", err);
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: err.message || "Échec de la suppression.",
+                });
+            }
+        });
+    }
+}
+
 }
  
