@@ -25,7 +25,7 @@
         <!-- RECAPITULATIF -->
         <div class="col-12 lg:col-6 px-4 py-4 md:px-6">
             <div class="pb-3 surface-border">
-                <span class="text-900 font-medium text-xl">Ticket</span>
+                <span class="text-900 font-medium text-xl">Ticket : {{ transfert.code }}</span>
             </div>
             <p-progressBar mode="indeterminate" *ngIf="loading" class="w-full h-2"></p-progressBar>
             <div *ngIf="codeRecuperer">
