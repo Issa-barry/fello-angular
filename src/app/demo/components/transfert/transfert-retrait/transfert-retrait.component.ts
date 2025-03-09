@@ -49,8 +49,7 @@ export class TransfertRetraitComponent implements OnInit {
                 this.codeRecuperer = true;
                 this.loading = false;
                 this.isValideCode = response.statut !== 'retiré' && response.statut !== 'annulé';
-                console.log('Code valide:', this.isValideCode);
-                
+                 
             },
             error: (err) => {
                 console.error(
