@@ -65,16 +65,35 @@ export class TransfertRetraitComponent implements OnInit {
 
     
     openRetraitDialog() {
+      if (!this.isValideCode) {
+          let message = "Ce transfert ne peut pas être retiré.";
+  
+          if (this.transfert?.statut === 'retiré') {
+              message = "Ce transfert a déjà été retiré.";
+          } else if (this.transfert?.statut === 'annulé') {
+              message = "Ce transfert a été annulé et ne peut pas être retiré.";
+          }
+  
+          this.messageService.add({
+              severity: 'error',
+              summary: 'Erreur',
+              detail: message,
+              life: 3000
+          });
+          return;
+      }
+  
       this.retraitDialog = true;
   }
 
+ 
     hideDialog() {
         this.retraitDialog = false;
     }
 
     confirmRetrait() {
       if (!this.transfert) {
-          this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Aucun transfert sélectionné.' });
+          this.messageService.add({ severity: 'error', summary: 'Erreur', detail: 'Aucun transfert sélectionné.', life: 3000 });
           return;
       }
 

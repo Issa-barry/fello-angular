@@ -79,13 +79,13 @@
             </div>
         </div>
 
-        <p-dialog [(visible)]="retraitDialog" header="Confirmer" [modal]="true" [style]="{width:'450px'}">
+        <p-dialog [(visible)]="retraitDialog" header="Confirmer" [modal]="true" [style]="{width:'550px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span>Voulez-vous confirmer le retrait de <b>Asma BALDE</b> ?</span>
+                <span>Voulez-vous confirmer le retrait de <b>{{ transfert.expediteur_prenom }} {{ transfert.expediteur_nom }}</b> ?</span>
             </div>
             <div class="flex align-items-center justify-content-center">
-                <span>Pour un montant de  <b>1 450 000 GNF</b> ?</span>
+                <span>Pour un montant de  <b>{{ transfert.montant_converti }} GNF</b> ?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="hideDialog()"></button>
