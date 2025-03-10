@@ -61,7 +61,7 @@ export class PermissionService {
   //Les permissions d'un role : ancien
   getRolePermissions(id: number): Observable<Permission[]> {
     return this.http
-      .get<{ data: { role: { permissions: Permission[] } } }>(`${this.apiUrl}/role/${id}/permissions`)
+      .get<{ data: { role: { permissions: Permission[] } } }>(`${this.apiUrl}/role/${id}/oneRolePermissions`)
       .pipe(
         map((response) => { 
           return response.data.role.permissions;
