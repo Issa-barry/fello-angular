@@ -20,16 +20,16 @@ export class TransfertEnvoieComponent implements OnInit {
     ];
 
     transfert: Transfert = new Transfert();
-    total: number = 0;
-    frais: number = 0;
-    tauxDeFrais: number = 0.05; // 5%
-    montantConverti: number = 0;
-    tauxConversion: number = 9500; // 1 euro = 9500 franc guinéen
-    envoieDialog: boolean = false;
-    ticketDialog: boolean = false;
-    submitted: boolean = false;
-    loading: boolean = false;
-    errors: { [key: string]: string } = {};
+    total = 0;
+    frais = 0;
+    readonly tauxDeFrais = 0.05; // 5%
+    montantConverti = 0;
+    readonly tauxConversion = 9500; // 1 euro = 9500 GNF
+    envoieDialog = false;
+    ticketDialog = false;
+    submitted = false;
+    loading = false;
+    errors: Record<string, string> = {};
 
     constructor(
         private router: Router,
@@ -40,126 +40,74 @@ export class TransfertEnvoieComponent implements OnInit {
 
     ngOnInit(): void {}
 
-  
-    /**
-     * Vérifie que le montant est valide
-     */
-    verifierMontant(): boolean {
-        if (!this.transfert.montant || this.transfert.montant < 20) {
-            this.messageService.add({
-                severity: 'warn',
-                summary: 'Montant insuffisant',
-                detail: 'Le montant minimum est de 20€.',
-                life: 3000,
-            });
+    /** Vérifie et affiche un message si le montant est insuffisant */
+    private verifierMontant(): boolean {
+        if (!this.transfert.montant_expediteur || this.transfert.montant_expediteur < 20) {
+            this.afficherMessage('warn', 'Montant insuffisant', 'Le montant minimum est de 20€.');
             return false;
         }
         return true;
     }
 
-    /**
-     * Vérifie que tous les champs obligatoires sont remplis
-     */
-    verifierChampsObligatoires(): boolean {
+    /** Vérifie si tous les champs obligatoires sont remplis */
+    private verifierChampsObligatoires(): boolean {
         const champsObligatoires = [
-            'quartier',
-            'montant',
-            'receveur_phone',
-            'receveur_prenom',
-            'receveur_nom',
-            'expediteur_phone',
-            'expediteur_prenom',
-            'expediteur_nom',
-            'expediteur_email',
+            'quartier', 'montant_expediteur', 'receveur_phone', 'receveur_prenom', 'receveur_nom',
+            'expediteur_phone', 'expediteur_prenom', 'expediteur_nom', 'expediteur_email'
         ];
-
+        
+        if (this.transfert.expediteur_email && !this.validateEmail(this.transfert.expediteur_email)) {
+            this.errors['expediteur_email'] = 'Veuillez saisir une adresse email valide.';
+            return false;
+        }
+        
         for (const champ of champsObligatoires) {
             if (!this.transfert[champ as keyof Transfert]) {
-                this.messageService.add({
-                    severity: 'warn',
-                    summary: 'Attention',
-                    detail: `Le champ ${champ.replace('_', ' ')} est obligatoire.`,
-                    life: 3000,
-                });
+                this.afficherMessage('warn', 'Attention', `Le champ ${champ.replace('_', ' ')} est obligatoire.`);
                 return false;
             }
         }
-
         return true;
     }
 
-    /**
-     * Calcule les frais et le montant total
-     */
-    calculFraisTotal() {
-        this.frais = Math.floor(this.transfert.montant * this.tauxDeFrais);
-        this.total = this.transfert.montant + this.frais;
+    /** Vérifie le format d'un email */
+    private validateEmail(email: string): boolean {
+        return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    }
+
+    /** Calcule les frais et le total */
+    calculFraisTotal(): void {
+        this.frais = Math.floor(this.transfert.montant_expediteur * this.tauxDeFrais);
+        this.total = this.transfert.montant_expediteur + this.frais;
         this.calculMontantConverti();
     }
 
-    /**
-     * Convertit le montant en devise cible
-     */
-    calculMontantConverti() {
-        this.montantConverti = Math.floor(this.transfert.montant * this.tauxConversion);
-        this.transfert.montant_converti = this.montantConverti;
+    /** Convertit le montant en devise cible */
+    private calculMontantConverti(): void {
+        this.montantConverti = Math.floor(this.transfert.montant_expediteur * this.tauxConversion);
+        this.transfert.montant_receveur = this.montantConverti;
     }
 
-    /**
-     * Ferme la boîte de dialogue
-     */
-    hideDialog() {
-        this.envoieDialog = false;
-        this.ticketDialog = false;
-        this.submitted = false;
+    /** Affiche un message via MessageService */
+    private afficherMessage(severity: string, summary: string, detail: string): void {
+        this.messageService.add({ severity, summary, detail, life: 3000 });
     }
 
-     /**
-     * ouvrir la boîte de dialogue
-     */
-     openTicketDialog() {
-      this.ticketDialog = true;
-    }
-    
-     /**
-     * Ferme la boîte de dialogue du ticket d'envoie
-     */
-     hideTicketDialog() {
-      this.ticketDialog = false;
-      this.resetForm();
-      this.submitted = false;
-  }
-
-
-      /**
-     * Vérifie les champs obligatoires et ouvre le dialogue si tout est valide
-     */
-      verifierFormulaire() {
+    /** Vérifie le formulaire et ouvre le dialogue d'envoi */
+    verifierFormulaire(): void {
         this.submitted = true;
         this.errors = {};
 
-        if (!this.verifierMontant()) return;
-        if (!this.verifierChampsObligatoires()) return;
-
+        if (!this.verifierMontant() || !this.verifierChampsObligatoires()) return;
         this.envoieDialog = true;
     }
 
-
-    /**
-     * Enregistre le transfert après confirmation
-     */
-    save() {
-        
+    /** Enregistre le transfert */
+    save(): void {
         this.loading = true;
-
         this.transfertService.createTransfert(this.transfert).subscribe({
             next: () => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès',
-                    detail: 'Transfert effectué avec succès',
-                    life: 3000,
-                });
+                this.afficherMessage('success', 'Succès', 'Transfert effectué avec succès');
                 this.loading = false;
                 this.envoieDialog = false;
                 this.openTicketDialog();
@@ -168,20 +116,31 @@ export class TransfertEnvoieComponent implements OnInit {
                 console.error('Erreur lors du transfert:', error);
                 this.errors = error.validationErrors;
                 this.loading = false;
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Erreur',
-                    detail: 'L’envoi du transfert a échoué. Vérifiez les champs.',
-                    life: 5000,
-                });
+                this.afficherMessage('error', 'Erreur', 'L’envoi du transfert a échoué. Vérifiez les champs.');
             },
         });
     }
 
-    /**
-     * Réinitialise le formulaire après un transfert réussi
-     */
-    resetForm() {
+    /** Ouvre le dialogue du ticket */
+    openTicketDialog(): void {
+        this.ticketDialog = true;
+    }
+
+    /** Ferme tous les dialogues et réinitialise le formulaire */
+    hideDialog(): void {
+        this.envoieDialog = false;
+        this.ticketDialog = false;
+        this.submitted = false;
+    }
+
+    /** Ferme le ticket et réinitialise le formulaire */
+    hideTicketDialog(): void {
+        this.ticketDialog = false;
+        this.resetForm();
+    }
+
+    /** Réinitialise le formulaire */
+    private resetForm(): void {
         this.transfert = new Transfert();
         this.submitted = false;
         this.montantConverti = 0;

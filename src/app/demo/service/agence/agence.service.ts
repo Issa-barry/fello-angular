@@ -39,7 +39,7 @@ export class AgenceService {
  }
 
   getAgences(): Observable<Agence[]> {
-    return this.http.get<{ data: Agence[] }>(this.apiUrl).pipe(
+    return this.http.get<{ data: Agence[] }>(`${this.apiUrl}/all`).pipe(
       map(response => response.data) // Extraire le tableau de 'data'
     );
   }
@@ -49,19 +49,19 @@ export class AgenceService {
   }
 
     createAgence(agence: Agence): Observable<Agence>{
-      return this.http.post<Agence>(`${this.apiUrl}`, agence, httpOption).pipe(
+      return this.http.post<Agence>(`${this.apiUrl}/create`, agence, httpOption).pipe(
         catchError(this.handleError('le service createAgence à detecté une erreur sur les données transmises', agence))
       );
     }
     
     updateAgence(id: number, agence: Agence): Observable<Agence> {
-      return this.http.put<Agence>(`${this.apiUrl}/${id}`, agence, httpOption).pipe(
+      return this.http.put<Agence>(`${this.apiUrl}/updateById/${id}`, agence, httpOption).pipe(
         catchError(this.handleError<Agence>('updateAgence'))
       );
     }
     
     deleteAgence(id: number): Observable<void> {
-      return this.http.delete<void>(`${this.apiUrl}/${id}`, httpOption).pipe(
+      return this.http.delete<void>(`${this.apiUrl}/deleteById/${id}`, httpOption).pipe(
         catchError(this.handleError<void>('deleteAgence'))
       );
     }

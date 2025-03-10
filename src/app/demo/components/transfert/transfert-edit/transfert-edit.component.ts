@@ -46,7 +46,7 @@ ngOnInit(): void {}
  * Vérifie que le montant est valide
  */
 verifierMontant(): boolean {
-    if (!this.transfert.montant || this.transfert.montant < 20) {
+    if (!this.transfert.montant_expediteur || this.transfert.montant_expediteur < 20) {
         this.messageService.add({
             severity: 'warn',
             summary: 'Montant insuffisant',
@@ -93,8 +93,8 @@ verifierChampsObligatoires(): boolean {
  * Calcule les frais et le montant total
  */
 calculFraisTotal() {
-    this.frais = Math.floor(this.transfert.montant * this.tauxDeFrais);
-    this.total = this.transfert.montant + this.frais;
+    this.frais = Math.floor(this.transfert.montant_expediteur * this.tauxDeFrais);
+    this.total = this.transfert.montant_expediteur + this.frais;
     this.calculMontantConverti();
 }
 
@@ -102,8 +102,8 @@ calculFraisTotal() {
  * Convertit le montant en devise cible
  */
 calculMontantConverti() {
-    this.montantConverti = Math.floor(this.transfert.montant * this.tauxConversion);
-    this.transfert.montant_converti = this.montantConverti;
+    this.montantConverti = Math.floor(this.transfert.montant_expediteur * this.tauxConversion);
+    this.transfert.montant_receveur = this.montantConverti;
 }
 
 /**

@@ -25,7 +25,7 @@ const httpOption = {
     providedIn: 'root',
 })
 export class RoleService {
-    private apiUrlRole = `${environment.apiUrl}`;
+    private apiUrlRole = `${environment.apiUrl}/roles`;
 
     constructor(private http: HttpClient) {}
 
@@ -43,13 +43,13 @@ export class RoleService {
 
     getRoles(): Observable<Role[]> {
         return this.http
-            .get<{ data: Role[] }>(this.apiUrlRole + '/roles')
+            .get<{ data: Role[] }>(this.apiUrlRole + '/all')
             .pipe(map((response) => response.data));
     }
 
     getRoleById(id: number): Observable<Role> {
         return this.http
-            .get<{ data: Role }>(`${this.apiUrlRole}/roles/${id}`)
+            .get<{ data: Role }>(`${this.apiUrlRole}/getById/${id}`)
             .pipe(
                 map((response) => response.data),
                 catchError(this.handleError<Role>('getRoleById'))
@@ -59,7 +59,7 @@ export class RoleService {
     findRoleByName(credentials: { name: string }): Observable<Role> {
         return this.http
             .post<{ data: Role }>(
-                `${this.apiUrlRole}/roles/find-by-name`,
+                `${this.apiUrlRole}/find-by-name`,
                 credentials,
                 httpOption
             )
@@ -71,7 +71,7 @@ export class RoleService {
 
     createRole(role: Role): Observable<Role> {
         return this.http
-            .post<Role>(`${this.apiUrlRole}/roles`, role, httpOption)
+            .post<Role>(`${this.apiUrlRole}`, role, httpOption)
             .pipe(
                 catchError(
                     this.handleError(
@@ -84,13 +84,13 @@ export class RoleService {
 
     updateRole(id: number, role: Role): Observable<Role> {
         return this.http
-            .put<Role>(`${this.apiUrlRole}/roles/${id}`, role, httpOption)
+            .put<Role>(`${this.apiUrlRole}/updateById/${id}`, role, httpOption)
             .pipe(catchError(this.handleError<Role>('updateRole')));
     }
 
     deleteRole(id: number): Observable<void> {
         return this.http
-            .delete<void>(`${this.apiUrlRole}/roles/${id}`, httpOption)
+            .delete<void>(`${this.apiUrlRole}/deleteById/${id}`, httpOption)
             .pipe(
                 catchError((error) => {
                     console.error('Erreur dans deleteRole:', error);

@@ -40,6 +40,9 @@ export class TransfertService {
     } else {
         // Erreur côté serveur
         switch (error.status) {
+          case 400:
+                errorMessage = error.error.message || 'Requête invalide.';
+                break;
             case 404:
                 errorMessage = 'Transfert non trouvé. Vérifiez le code.';
                 break;
@@ -49,7 +52,7 @@ export class TransfertService {
                     validationErrors = error.error.data;
                 }
                 break;
-            case 0:
+            case 0: 
                 errorMessage = 'Impossible de se connecter au serveur. Vérifiez votre connexion internet.';
                 break;
             default:
@@ -99,8 +102,6 @@ export class TransfertService {
   }
 
 
-
-  
   updateTransfert(id: number, transfert: Transfert): Observable<Transfert> {
     return this.http.put<Transfert>(`${this.apiUrl}/${id}`, transfert, httpOption).pipe(
       catchError(this.handleError)
@@ -113,4 +114,16 @@ export class TransfertService {
     ); 
   }
     
+  deleteTransfertById(id: number): Observable<{ success: boolean; message: string }> {
+    return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/deleteById/${id}`, httpOption).pipe(
+      catchError(this.handleError)
+    );
+  }
+  
+  deleteTransfertByCode(code: string): Observable<{ success: boolean; message: string }> {
+    return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/deleteByCode/${code}`, httpOption).pipe(
+      catchError(this.handleError)
+    );
+  }
+  
 }
