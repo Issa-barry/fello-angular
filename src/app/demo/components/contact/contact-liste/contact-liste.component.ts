@@ -168,7 +168,7 @@ export class ContactListeComponent implements OnInit {
       });
       this.contactDialog = false;
   
-      } else if  (this.contact.nom)  { // Création
+      } else if  (this.contact.nom_complet)  { // Création
          
           console.log(this.contact.role);
           

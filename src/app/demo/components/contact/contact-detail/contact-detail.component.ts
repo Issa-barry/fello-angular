@@ -104,7 +104,7 @@ export class ContactDetailComponent implements OnInit {
 
   private isContactValid(): boolean {
     return !!(
-      this.contact.role && this.contact.civilite && this.contact.nom && this.contact.prenom &&
+      this.contact.role && this.contact.civilite && this.contact.nom_complet &&
       this.contact.email && this.contact.phone && this.contact.adresse && this.contact.adresse.pays &&
       this.contact.adresse.ville && this.contact.adresse.code_postal
     );
@@ -116,8 +116,7 @@ export class ContactDetailComponent implements OnInit {
 
 
   trimFields() {
-    this.contact.nom = this.contact.nom?.trim();
-    this.contact.prenom = this.contact.prenom?.trim();
+    this.contact.nom_complet = this.contact.nom_complet?.trim();
     this.contact.email = this.contact.email?.trim();
     this.contact.phone = this.contact.phone?.trim();
     this.contact.adresse.pays = this.contact.adresse.pays?.trim();
@@ -128,36 +127,38 @@ export class ContactDetailComponent implements OnInit {
   }
 
   saveContact() {
-    this.submitted = true;
-    this.trimFields();
-    this.errors = {};
-    this.loading = true;
-
-    if (!this.isContactValid()) {
-      this.showMessage('warn', 'Attention', 'Veuillez remplir tous les champs obligatoires.');
-      this.loading = false;
-      return;
-    }
-
-    const selectedRole = this.roles.find(r => r.name === this.contact.role);
-    this.contact.roles = selectedRole;
-
-    this.contactService.updateContact(this.id, this.contact).subscribe({
-      next: (resp) => {
-        this.contact = resp;
-        this.showMessage('success', 'Succès', 'Les données du contact ont été mises à jour avec succès.');
-        this.submitted = false;
+        this.submitted = true;
+        this.trimFields();
         this.errors = {};
-        this.loading = false;
-        this.onGetContact();
-      },
-      error: (err) => {
-        console.error('Erreur lors de la mise à jour du contact:', err);
-        this.errors = err.error?.errors || {};
-        this.showMessage('error', 'Erreur', 'Mise à jour du contact échouée. Vérifiez les champs.');
-        this.loading = false;
-      }
-    });
+        // this.loading = true;
+
+        console.log(this.contact);
+        
+        if (!this.isContactValid()) {
+          this.showMessage('warn', 'Attention', 'Veuillez remplir tous les champs obligatoires.');
+          this.loading = false;
+          return;
+        }
+
+        const selectedRole = this.roles.find(r => r.name === this.contact.role);
+        this.contact.roles = selectedRole;
+
+        this.contactService.updateContact(this.id, this.contact).subscribe({
+          next: (resp) => {
+            this.contact = resp;
+            this.showMessage('success', 'Succès', 'Les données du contact ont été mises à jour avec succès.');
+            this.submitted = false;
+            this.errors = {};
+            this.loading = false;
+            this.onGetContact();
+          },
+          error: (err) => {
+            console.error('Erreur lors de la mise à jour du contact:', err);
+            this.errors = err.error?.errors || {};
+            this.showMessage('error', 'Erreur', 'Mise à jour du contact échouée. Vérifiez les champs.');
+            this.loading = false;
+          }
+        });
   }
 
 

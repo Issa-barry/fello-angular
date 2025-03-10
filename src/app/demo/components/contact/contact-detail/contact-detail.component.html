@@ -32,14 +32,9 @@
                     <small *ngIf="errors['civilite']">{{ errors['civilite'] }}</small>
                 </div>
                 <div class="field mb-4 col-12 md:col-6">
-                    <label for="nom" class="font-medium text-900">Nom</label>
-                    <input id="nom" type="text" pInputText [(ngModel)]="contact.nom" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.nom || errors['nom']}">
-                     <small *ngIf="errors['nom']">{{ errors['nom'] }}</small>
-                </div>
-                <div class="field mb-4 col-12 md:col-6">
-                    <label for="prenom" class="font-medium text-900">Prénom</label>
-                    <input id="prenom" type="text" [(ngModel)]="contact.prenom" [ngClass]="{'ng-invalid ng-dirty': submitted && !contact.prenom || errors['prenom']}" pInputText>
-                    <small *ngIf="errors['prenom']">{{ errors['prenom'] }}</small>
+                    <label for="nom_complet" class="font-medium text-900">Nom</label>
+                    <input id="nom_complet" type="text" pInputText [(ngModel)]="contact.nom_complet" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.nom_complet || errors['nom_complet']}">
+                     <small *ngIf="errors['nom_complet']">{{ errors['nom_complet'] }}</small>
                 </div> 
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="email" class="font-medium text-900">Email</label>
