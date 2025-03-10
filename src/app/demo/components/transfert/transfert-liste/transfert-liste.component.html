@@ -22,8 +22,8 @@
                      responsiveLayout="scroll" 
                      [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]" 
                      [(selection)]="selectedTransferts" selectionMode="multiple" [rowHover]="true" 
-                     [globalFilterFields]="['code','receveur_nom', 'receveur_prenom', 'receveur_phone',
-                     'expediteur_nom','expediteur_prenom','expediteur_phone','expediteur_email',
+                     [globalFilterFields]="['code','receveur_nom_complet', 'receveur_phone',
+                     'expediteur_nom_complet','expediteur_phone','expediteur_email',
                      'montant_converti','montant','statut']" 
                      dataKey="id">
 
