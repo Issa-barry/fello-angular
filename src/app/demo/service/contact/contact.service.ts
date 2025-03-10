@@ -76,7 +76,7 @@ export class ContactService {
   }
 
   createContact(contact: Contact): Observable<Contact> {
-    return this.http.post<Contact>(`${this.apiUrl}/users`, contact, httpOption)
+    return this.http.post<Contact>(`${this.apiUrl}/create`, contact, httpOption)
   }
   // createContact(contact: Contact): Observable<Contact> {
   //   return this.http.post<Contact>(`${this.apiUrl}/users`, contact, httpOption).pipe(

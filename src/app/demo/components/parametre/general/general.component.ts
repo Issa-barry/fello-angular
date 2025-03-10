@@ -42,8 +42,7 @@ export class GeneralComponent implements OnInit{
     this.devisesService.getDevises().subscribe({
       next: (response) => {
         this.devises = response;   
-        console.log(this.devises);
-      },
+       },
       error: (err) => {
         console.error('Erreur lors de la récupération des contacts:', err);
       }
@@ -53,9 +52,7 @@ export class GeneralComponent implements OnInit{
   openDeviseDialog(){
     this.devisesDialog = true;
     this.devise = {};
-    this.submitted = false;
-    console.log(this.devise);
-    
+    this.submitted = false;    
   }
 
   hideDeviseDialog(){
@@ -64,7 +61,7 @@ export class GeneralComponent implements OnInit{
   } 
 
   saveDevise(devise: any){
-    console.log(devise); 
+    // console.log(devise); 
   }
 
 

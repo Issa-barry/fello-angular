@@ -27,7 +27,7 @@
             <li  class="p-3 surface-border flex align-items-start sm:align-items-center"  style="border-bottom: 1px solid #e0e0e0;">
                 <div class="flex flex-column">
                    <span class="text-900 font-semibold text-xl mb-2">Bénéficiaire</span>
-                   <span class="text-800 mb-2">{{ transfert.receveur_prenom }} | {{ transfert.receveur_nom }}</span>
+                   <span class="text-800 mb-2">{{ transfert.receveur_nom_complet }}</span>
                    <span class="text-800">Tel : {{ transfert.receveur_phone }}</span>
                 </div>
                <span class="text-900 font-medium text-lg ml-auto">Guinée</span>
@@ -35,7 +35,7 @@
            <li  class="p-3 surface-border flex align-items-start sm:align-items-center"  style="border-bottom: 1px solid #e0e0e0;">
             <div class="flex flex-column">
                <span class="text-900 font-semibold text-xl mb-2">Expéditeur</span>
-               <span class="text-800 mb-2">{{ transfert.expediteur_prenom }} | {{ transfert.expediteur_nom }}</span>
+               <span class="text-800 mb-2">{{ transfert.expediteur_nom_complet }}</span>
                <span class="text-800 mb-2">Tel : {{ transfert.expediteur_phone }}</span>
                <span class="text-800">Email : {{ transfert.expediteur_email }}</span>
            </div>

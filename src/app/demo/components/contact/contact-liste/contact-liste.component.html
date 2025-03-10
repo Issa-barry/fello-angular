@@ -20,7 +20,7 @@
 <!-- 
            <div *ngIf="!loading"> --> 
             <p-table  #dt  [value]="contacts" [columns]="cols" responsiveLayout="scroll" [rows]="10" 
-             [globalFilterFields]="['nom','prenom','phone','statut', 'reference']" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Liste de {first} / {last} des {totalRecords} contacts" [(selection)]="selectedContacts" selectionMode="multiple" [rowHover]="true" dataKey="id">
+             [globalFilterFields]="['nom_complet','prenom','phone','statut', 'reference']" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Liste de {first} / {last} des {totalRecords} contacts" [(selection)]="selectedContacts" selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Manage Products</h5>
@@ -36,7 +36,7 @@
                             <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
                         </th>
                         <th pSortableColumn="reference">Reference <p-sortIcon field="code"></p-sortIcon></th>
-                        <th pSortableColumn="nom">Nom <p-sortIcon field="nom"></p-sortIcon></th>
+                        <th pSortableColumn="nom_complet">Nom <p-sortIcon field="nom_complet"></p-sortIcon></th>
                          <th pSortableColumn="prenom">Prenom <p-sortIcon field="prenom"></p-sortIcon></th>
                          <th pSortableColumn="adresse">Adresse <p-sortIcon field="adresse"></p-sortIcon></th>
                          <!-- <th pSortableColumn="phone">Phone <p-sortIcon field="phone"></p-sortIcon></th> -->
@@ -55,7 +55,7 @@
                         </td>
                         <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Nom</span>
-                            {{contact.nom}}
+                            {{contact.nom_complet}}
                         </td>
                         <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Prenom</span>
@@ -107,15 +107,10 @@
                     <!-- <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.civilite">Civilité is required.</small> -->
                 </div>
                  <div class="field">
-                    <label for="nom">Nom</label>
-                    <input type="text" pInputText id="nom" [(ngModel)]="contact.nom" required autofocus 
-                    [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.nom}"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.nom">Le nom est obligatoire.</small>
-                </div>
-                <div class="field">
-                    <label for="prenom">Prenom</label>
-                    <input type="text" pInputText id="prenom" [(ngModel)]="contact.prenom" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.prenom}"/>
-                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.prenom">Le prenom est obligatoire.</small>
+                    <label for="nom_complet">Nom complet</label>
+                    <input type="text" pInputText id="nom_complet" [(ngModel)]="contact.nom_complet" required autofocus 
+                    [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.nom_complet}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !contact.nom_complet">Le nom_complet est obligatoire.</small>
                 </div> 
 
                 <div class="field">
@@ -187,10 +182,6 @@
         </p-dialog>
  
         <p-dialog [(visible)]="deleteContactDialog" header="Confirm" [modal]="true" [style]="{width:'450px'}">
-            <div class="flex align-items-center justify-content-center">
-                <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span *ngIf="product">Êtes-vous sûr de vouloir supprimer le contact : <br/><b>{{contact.prenom}}   {{contact.nom}}</b>?</span>
-            </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="No" (click)="deleteContactDialog = false"></button>
                 <button pButton pRipple icon="pi pi-check" class="p-button-text" label="Yes" (click)="confirmDelete()"></button>

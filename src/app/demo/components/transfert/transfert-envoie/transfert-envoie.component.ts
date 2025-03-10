@@ -52,8 +52,8 @@ export class TransfertEnvoieComponent implements OnInit {
     /** Vérifie si tous les champs obligatoires sont remplis */
     private verifierChampsObligatoires(): boolean {
         const champsObligatoires = [
-            'quartier', 'montant_expediteur', 'receveur_phone', 'receveur_prenom', 'receveur_nom',
-            'expediteur_phone', 'expediteur_prenom', 'expediteur_nom', 'expediteur_email'
+            'quartier', 'montant_expediteur', 'receveur_phone', 'receveur_nom_complet',
+            'expediteur_phone', 'expediteur_nom_complet', 'expediteur_email'
         ];
         
         if (this.transfert.expediteur_email && !this.validateEmail(this.transfert.expediteur_email)) {
