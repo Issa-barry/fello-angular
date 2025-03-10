@@ -84,13 +84,13 @@ export class RoleService {
 
     updateRole(id: number, role: Role): Observable<Role> {
         return this.http
-            .put<Role>(`${this.apiUrlRole}/roles/${id}`, role, httpOption)
+            .put<Role>(`${this.apiUrlRole}/updateById/${id}`, role, httpOption)
             .pipe(catchError(this.handleError<Role>('updateRole')));
     }
 
     deleteRole(id: number): Observable<void> {
         return this.http
-            .delete<void>(`${this.apiUrlRole}/roles/${id}`, httpOption)
+            .delete<void>(`${this.apiUrlRole}/deleteById/${id}`, httpOption)
             .pipe(
                 catchError((error) => {
                     console.error('Erreur dans deleteRole:', error);
