@@ -17,7 +17,7 @@ const httpOption = {
   providedIn: 'root'
 })
 export class ContactService {
-  private apiUrl = `${environment.apiUrl}`;
+  private apiUrl = `${environment.apiUrl}/users`;
 
   constructor(private http: HttpClient) { }
 
@@ -26,7 +26,7 @@ export class ContactService {
   }
 
   /**
-   * ✅ Nouvelle gestion des erreurs améliorée
+   * Nouvelle gestion des erreurs améliorée
    */
   private handleError(error: HttpErrorResponse) {
     console.error('Erreur API:', error);
@@ -62,14 +62,14 @@ export class ContactService {
   }
 
   getContacts(): Observable<Contact[]> {
-    return this.http.get<{ success: boolean, data: Contact[] }>(`${this.apiUrl}/users`).pipe(
+    return this.http.get<{ success: boolean, data: Contact[] }>(`${this.apiUrl}/all`).pipe(
       map(response => response.data),
       catchError(this.handleError)
     );
   }
 
   getContactById(id: number): Observable<Contact> {
-    return this.http.get<{ success: boolean, data: Contact }>(`${this.apiUrl}/users/${id}`).pipe(
+    return this.http.get<{ success: boolean, data: Contact }>(`${this.apiUrl}/getById/${id}`).pipe(
       map(response => response.data),
       catchError(this.handleError)
     );
@@ -85,13 +85,13 @@ export class ContactService {
   // }
 
   updateContact(id: number, contact: Contact): Observable<Contact> {
-    return this.http.put<Contact>(`${this.apiUrl}/users/${id}`, contact, httpOption).pipe(
+    return this.http.put<Contact>(`${this.apiUrl}/updateById/${id}`, contact, httpOption).pipe(
       catchError(this.handleError)
     );
   }
 
   deleteContact(id: number): Observable<void> {
-    return this.http.delete<void>(`${this.apiUrl}/users/${id}`, httpOption).pipe(
+    return this.http.delete<void>(`${this.apiUrl}/delateById/${id}`, httpOption).pipe(
       catchError(this.handleError)
     );
   }
