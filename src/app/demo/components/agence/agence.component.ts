@@ -1,10 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Product } from 'src/app/demo/api/product';
-import { ProductService } from 'src/app/demo/service/product.service';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { AgenceService } from '../../service/agence.service';
 import { Agence } from '../../models/agence';
+import { AgenceService } from '../../service/agence/agence.service';
 
  
 
@@ -17,12 +15,6 @@ import { Agence } from '../../models/agence';
 })
 export class AgenceComponent implements OnInit {
   
-  products: Product[] = [];
-
-  product: Product = {};
-
-  selectedProducts: Product[] = [];
-
   submitted: boolean = false;
 
   cols: any[] = [];
@@ -31,7 +23,6 @@ export class AgenceComponent implements OnInit {
 
   rowsPerPageOptions = [5, 10, 20];
 
-  
   agences: Agence[] = [];
   selectedAgences: Agence[] = [];
   agence: Agence = new Agence();
@@ -40,12 +31,13 @@ export class AgenceComponent implements OnInit {
   deleteAgenceDialog: boolean = false;
   deleteAgencesDialog: boolean = false;
   apiErrors: { [key: string]: string[] } = {};
-
+  
+ 
   constructor(
     private agenceService: AgenceService,
-    private productService: ProductService, 
     private messageService: MessageService, 
     private confirmationService: ConfirmationService) { 
+      
     }
     ngOnInit() {
       this.getAllAgences(); 
@@ -59,8 +51,6 @@ getAllAgences(): void {
   this.agenceService.getAgences().subscribe({
     next: (response) => {
       this.agences = response;  
-      console.log(this.agences);
-       
     },
     error: (err) => {
       console.error('Erreur lors de la récupération des agences:', err);
@@ -74,7 +64,7 @@ hideDialog() {
 }
 
 openNew() {
-  this.agence = new Agence();
+   this.agence = new Agence();
    this.submitted = false;
    this.agenceDialog = true;
 }
@@ -96,15 +86,13 @@ openDeleteAgence(agence: Agence) {
 
   confirmDeleteSelected() {
       this.deleteAgencesDialog = false;
-      this.products = this.products.filter(val => !this.selectedProducts.includes(val));
-      this.messageService.add({ severity: 'success', summary: 'Successful', detail: 'Products Deleted', life: 3000 });
-      this.selectedProducts = [];
-  }
+       this.messageService.add({ severity: 'success', summary: 'Successful', detail: '  Deleted', life: 3000 });
+   }
 
   confirmDelete( ) { 
     this.deleteAgenceDialog = false;
       
-    if (this.agence.id !== undefined) { // Vérification que l'ID est défini
+    if (this.agence.id !== undefined) { 
         this.agenceService.deleteAgence(this.agence.id).subscribe({
             next: () => {
                 this.messageService.add({
@@ -113,7 +101,7 @@ openDeleteAgence(agence: Agence) {
                     detail: 'Agence supprimée avec succès',
                     life: 3000
                 });
-                this.getAllAgences(); // Rechargez la liste des agences après suppression
+                this.getAllAgences(); 
             },
             error: (err) => {
                 console.error('Erreur lors de la suppression de l\'agence:', err);
@@ -171,17 +159,74 @@ handleApiErrors(err: any): void {
       });
   }
 }
+isValidPhone: boolean = true;
+
+validatePhone() {
+    if (this.agence.phone) {
+        // Regex acceptant :
+        // - Numéro local : "622000000" (8 chiffres minimum)
+        // - Numéro international avec + : "+225 07 12 34 56" (indicatif suivi d'au moins 8 chiffres)
+        // - Numéro international avec 00 : "00225 07 12 34 56" (même règle que +)
+        const phoneRegex = /^(?:\+|00)?(\d{1,3})[-.\s]?\d{10,}$/;
+        this.isValidPhone = phoneRegex.test(this.agence.phone);
+    } else {
+        this.isValidPhone = false;
+    }
+}
+
+
+
+isValidPays: boolean = true;
+
+isValidCodePostal: boolean = true; 
+ 
+   validateCodePostal() {
+    if (this.agence.adresse && this.agence.adresse.code_postal !== undefined) {
+        const codePostalStr = String(this.agence.adresse.code_postal);
+        this.isValidCodePostal = /^\d{5}$/.test(codePostalStr);
+    } else {
+        this.isValidCodePostal = false;
+    }
+}
+
+isCodePostalDisabled: boolean = false;
+
+validatePays() {
+    this.isValidPays = !!this.agence.adresse.pays; 
+
+    // Si le pays sélectionné est "Guinée-Conakry", fixer le code postal à "00000" et le rendre non modifiable
+    if (this.agence.adresse.pays === "GUINEE-CONAKRY") {
+        this.agence.adresse.code_postal = "00000";
+        this.isCodePostalDisabled = true;
+    } else {
+        this.isCodePostalDisabled = false;
+    }
+}
+
 
   saveAgence() {
     this.submitted = true;
+    this.validatePays();
+    this.validateCodePostal();
+    this.validatePhone();
 
-    if (this.agence.id) { // Modification
+        const codePostalStr = String(this.agence.adresse.code_postal);
+        if (!this.isValidCodePostal) {
+            return; 
+        }
+
+        if (this.agence.adresse && this.agence.adresse.code_postal !== undefined) {
+            this.agence.adresse.code_postal = String(this.agence.adresse.code_postal);
+        }
+
+    if (this.agence.id && this.agence.nom_agence && this.agence.phone && this.agence.email && this.agence.adresse.ville) { // Modification
+   
         this.agenceService.updateAgence(this.agence.id, this.agence).subscribe({
             next: () => {
                 this.getAllAgences(); 
                 this.messageService.add({
                     severity: 'success',
-                    summary: 'Succès',
+                    summary: 'Succès', 
                     detail: 'Agence modifiée avec succès',
                     life: 3000
                 });
@@ -197,7 +242,8 @@ handleApiErrors(err: any): void {
             }
         });
         this.agenceDialog = false;
-    } else { // Création
+        
+    } else if(this.agence.nom_agence && this.agence.phone && this.agence.email && this.agence.adresse.ville) { // Création
       
         this.agenceService.createAgence(this.agence).subscribe({
             next: () => {
@@ -209,7 +255,7 @@ handleApiErrors(err: any): void {
                     life: 3000
                 });
             },
-            error: (err) => {
+            error: (err) => { 
                 console.error('Erreur lors de la création de l\'agence:', err);
                 this.messageService.add({
                     severity: 'error',

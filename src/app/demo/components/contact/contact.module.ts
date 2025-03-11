@@ -16,37 +16,17 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
-import { ContactComponent } from './contact.component';
 import { NewPasswordRoutingModule } from '../auth/newpassword/newpassword-routing.module';
 import { AppConfigModule } from 'src/app/layout/config/app.config.module';
 import { PasswordModule } from 'primeng/password';
 
 
 @NgModule({
-  declarations: [ContactComponent],
+  declarations: [],
   imports: [
     CommonModule,
     ContactRoutingModule,
-    ToastModule,
-    TableModule,
-		FileUploadModule,
-		FormsModule,
-		ButtonModule,
-		RippleModule,
-		ToolbarModule,
-		RatingModule,
-		InputTextModule,
-		InputTextareaModule,
-		DropdownModule,
-		RadioButtonModule,
-		InputNumberModule,
-		DialogModule,
-		NewPasswordRoutingModule,
-        InputTextModule,
-        RippleModule,
-        AppConfigModule,
-        PasswordModule
   ]
 })
 export class ContactModule { }
- 
+  

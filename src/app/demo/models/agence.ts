@@ -19,4 +19,4 @@ import { Adresse } from "./adresse";
         this.statut="attente";
         this.adresse = new Adresse();
     }
-}
+}  

@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { environment } from '../../../environements/environment.dev';
 import { catchError, map, Observable, of, switchMap, tap } from 'rxjs';
-import { Agence } from '../models/agence';
-import { Adresse } from '../models/adresse';
+import { Agence } from '../../models/agence';
+import { Adresse } from '../../models/adresse';
+import { environment } from 'src/environements/environment.dev';
  
 
 const httpOption = {
@@ -20,8 +20,8 @@ const httpOption = {
   providedIn: 'root'
 })
 export class AgenceService {
-  private apiUrl = `${environment.apiDev}/agences`;
-  private apiAdresse = `${environment.apiDev}/adresse`;
+  private apiUrl = `${environment.apiUrl}/agences`;
+  private apiAdresse = `${environment.apiUrl}/adresse`;
 
   constructor(private http: HttpClient) { }
   
@@ -39,7 +39,7 @@ export class AgenceService {
  }
 
   getAgences(): Observable<Agence[]> {
-    return this.http.get<{ data: Agence[] }>(this.apiUrl).pipe(
+    return this.http.get<{ data: Agence[] }>(`${this.apiUrl}/all`).pipe(
       map(response => response.data) // Extraire le tableau de 'data'
     );
   }
@@ -49,19 +49,19 @@ export class AgenceService {
   }
 
     createAgence(agence: Agence): Observable<Agence>{
-      return this.http.post<Agence>(`${this.apiUrl}`, agence, httpOption).pipe(
+      return this.http.post<Agence>(`${this.apiUrl}/create`, agence, httpOption).pipe(
         catchError(this.handleError('le service createAgence à detecté une erreur sur les données transmises', agence))
       );
     }
     
     updateAgence(id: number, agence: Agence): Observable<Agence> {
-      return this.http.put<Agence>(`${this.apiUrl}/${id}`, agence, httpOption).pipe(
+      return this.http.put<Agence>(`${this.apiUrl}/updateById/${id}`, agence, httpOption).pipe(
         catchError(this.handleError<Agence>('updateAgence'))
       );
     }
     
     deleteAgence(id: number): Observable<void> {
-      return this.http.delete<void>(`${this.apiUrl}/${id}`, httpOption).pipe(
+      return this.http.delete<void>(`${this.apiUrl}/deleteById/${id}`, httpOption).pipe(
         catchError(this.handleError<void>('deleteAgence'))
       );
     }

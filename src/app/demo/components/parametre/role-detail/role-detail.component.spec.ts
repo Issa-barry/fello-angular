@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { ContactComponent } from './contact.component';
+import { RoleDetailComponent } from './role-detail.component';
 
-describe('ContactComponent', () => {
-  let component: ContactComponent;
-  let fixture: ComponentFixture<ContactComponent>;
+describe('RoleDetailComponent', () => {
+  let component: RoleDetailComponent;
+  let fixture: ComponentFixture<RoleDetailComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [ContactComponent]
+      imports: [RoleDetailComponent]
     })
     .compileComponents();
     
-    fixture = TestBed.createComponent(ContactComponent);
+    fixture = TestBed.createComponent(RoleDetailComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
@@ -20,4 +20,4 @@ describe('ContactComponent', () => {
   it('should create', () => {
     expect(component).toBeTruthy();
   });
-});
+}); 
