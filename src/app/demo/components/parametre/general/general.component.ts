@@ -2,8 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
+import { Taux } from 'src/app/demo/models/Taux';
 import { AuthService } from 'src/app/demo/service/auth/auth.service';
 import { DevisesService } from 'src/app/demo/service/devises/devises.service';
+import { TauxService } from 'src/app/demo/service/taux/taux.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
@@ -18,6 +20,9 @@ export class GeneralComponent implements OnInit{
 
   devises: any[] = [];
   devise: any = {};
+  manyTaux: Taux[] = [];
+  oneTaux: Taux = new Taux();
+  taux: Taux = new Taux();
   devisesDialog: boolean = false;
   submitted: boolean=false;
   cols: any[] = [];
@@ -30,13 +35,14 @@ export class GeneralComponent implements OnInit{
     public router: Router,
     private devisesService: DevisesService,
     private layoutService: LayoutService,
+    private tauxService: TauxService,
   ) {};
 
 
-  ngOnInit(): void {
-    this.getAllDevises()
-  }
-
+ 
+  /***********************
+   * DEVISE
+   ************************/
 
   getAllDevises(): void {
     this.devisesService.getDevises().subscribe({
@@ -53,7 +59,7 @@ export class GeneralComponent implements OnInit{
     this.devisesDialog = true;
     this.devise = {};
     this.submitted = false;    
-  }
+  } 
 
   hideDeviseDialog(){
     this.devisesDialog = false;
@@ -67,5 +73,46 @@ export class GeneralComponent implements OnInit{
 
   onGlobalFilter(table: Table, event: Event) {
     table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
-}
+   }
+
+
+  /***********************
+   * Taux
+   ************************/
+
+  getTauxById(){
+    this.tauxService.getTauxById(1).subscribe({
+      next: (response) => {
+        this.taux = response
+        console.log(response);
+        
+      }, 
+      error: (err) => {
+        console.error('Erreur lors de la récupération des contacts:', err);
+      }
+    })
+  }
+
+  
+  getAllTaux(){
+    this.tauxService.getAllTaux().subscribe({
+      next: (response) => {
+        this.manyTaux = response
+        console.log("menyTauxresponse", this.manyTaux);
+        
+      }, 
+      error: (err) => {
+        console.error('Erreur lors de la récupération des contacts:', err);
+      }
+    })
+  }
+
+
+
+  ngOnInit(): void {
+    this.getAllDevises()
+    // this.getTauxById()
+    this.getAllTaux()
+  }
+
 }
