@@ -44,9 +44,17 @@ export class AgenceService {
     );
   }
 
-  getAgenceById(id: number): Observable<Agence> {
-    return this.http.get<Agence>(`${this.apiUrl}/${id}`);
-  }
+  getAgenceById1(id: number): Observable<Agence> {
+      return this.http.get<Agence>(`${this.apiUrl}/getById/${id}`);
+    }
+
+    getAgenceById(id: number): Observable<Agence> {
+      return this.http.get<{ success: boolean, data: Agence }>(`${this.apiUrl}/getById/${id}`).pipe(
+        map(response => response.data),
+        // catchError(this.handleError)
+      );
+    }
+ 
 
     createAgence(agence: Agence): Observable<Agence>{
       return this.http.post<Agence>(`${this.apiUrl}/create`, agence, httpOption).pipe(

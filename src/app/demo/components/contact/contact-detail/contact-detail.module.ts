@@ -16,8 +16,10 @@ import { PasswordModule } from 'primeng/password';
 import { ToastModule } from 'primeng/toast';
 import { ContactDetailComponent } from './contact-detail.component';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { DialogModule } from 'primeng/dialog';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
-@NgModule({
+@NgModule({ 
   declarations: [ContactDetailComponent],
   imports: [
     CommonModule,
@@ -35,6 +37,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
         PasswordModule, 
         ToastModule, 
         ProgressSpinnerModule,
+        DialogModule,ConfirmDialogModule,
   ]
 })
 export class ContactDetailModule { }
