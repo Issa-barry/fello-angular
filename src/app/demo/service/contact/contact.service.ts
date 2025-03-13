@@ -114,7 +114,7 @@ export class ContactService {
             .pipe(catchError(this.handleError));
     }
 
-    affecterAgence(userId: number, agenceId: number): Observable<Contact> {
+    affecterAgenceById(userId: number, agenceId: number): Observable<Contact> {
         return this.http
             .post<{ success: boolean; data: Contact }>(
                 `${this.apiUrl}/affecter-agence/${userId}`,
@@ -132,6 +132,13 @@ export class ContactService {
             );
     }
 
+    affecterAgenceByReference(userId: number, reference: string): Observable<Contact> {
+      return this.http.post<Contact>(`${this.apiUrl}/affecterByReference/${userId}`, { reference }, httpOption)
+          .pipe(
+              catchError(this.handleError)
+          );
+  }
+  
     desaffecterAgence(contactId: number): Observable<Contact> {
         return this.http
             .delete<{ success: boolean; data: Contact }>(

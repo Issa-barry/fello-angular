@@ -339,7 +339,7 @@ export class ContactDetailComponent implements OnInit {
         this.errorMessage = null;
 
         this.contactService
-            .affecterAgence(this.contact.id, this.reference)
+            .affecterAgenceById(this.contact.id, this.reference)
             .subscribe({
                 next: (updatedContact) => { 
                     // Vérifier et initialiser `adresse` si elle est absente
