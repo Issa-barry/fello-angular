@@ -19,8 +19,22 @@
             <p-progressBar mode="indeterminate" *ngIf="loading" class="w-full h-2"></p-progressBar>
 <!-- 
            <div *ngIf="!loading"> --> 
-            <p-table  #dt  [value]="contacts" [columns]="cols" responsiveLayout="scroll" [rows]="10" 
-             [globalFilterFields]="['nom_complet','prenom','phone','statut', 'reference']" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Liste de {first} / {last} des {totalRecords} contacts" [(selection)]="selectedContacts" selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table  #dt 
+               [value]="contacts" 
+               [columns]="cols" 
+               responsiveLayout="scroll" 
+               [rows]="10" 
+               [globalFilterFields]="['nom_complet','adresse.ville','adresse.pays','adresse.quartier','adresse.code_postal',
+                                 'phone','statut', 'reference']" 
+                [rows]="10" 
+                [paginator]="true" 
+                [rowsPerPageOptions]="[10,20,30]" 
+                [showCurrentPageReport]="true" 
+                currentPageReportTemplate="Liste de {first} / {last} des {totalRecords} contacts" 
+                [(selection)]="selectedContacts" 
+                selectionMode="multiple" 
+                [rowHover]="true" 
+                dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
                         <h5 class="m-0">Manage Products</h5>
@@ -37,10 +51,11 @@
                         </th>
                         <th pSortableColumn="reference">Reference <p-sortIcon field="code"></p-sortIcon></th>
                         <th pSortableColumn="nom_complet">Nom <p-sortIcon field="nom_complet"></p-sortIcon></th>
-                         <th pSortableColumn="prenom">Prenom <p-sortIcon field="prenom"></p-sortIcon></th>
-                         <th pSortableColumn="adresse">Adresse <p-sortIcon field="adresse"></p-sortIcon></th>
-                         <!-- <th pSortableColumn="phone">Phone <p-sortIcon field="phone"></p-sortIcon></th> -->
-                        <!-- <th pSortableColumn="statut">Statut <p-sortIcon field="statut"></p-sortIcon></th> -->
+                        <th pSortableColumn="phone">Phone <p-sortIcon field="phone"></p-sortIcon></th>
+                         <!-- <th pSortableColumn="prenom">Prenom <p-sortIcon field="prenom"></p-sortIcon></th> -->
+                         <th pSortableColumn="adresse.ville">Ville <p-sortIcon field="ville"></p-sortIcon></th> 
+                         <th pSortableColumn="adresse">Pays <p-sortIcon field="adresse"></p-sortIcon></th> 
+                        <th pSortableColumn="statut">Statut <p-sortIcon field="statut"></p-sortIcon></th>
                          <!-- <th pSortableColumn="inventoryStatus">Status <p-sortIcon field="inventoryStatus"></p-sortIcon></th> -->
                         <th>Action</th>
                     </tr>
@@ -58,21 +73,21 @@
                             {{contact.nom_complet}}
                         </td>
                         <td style="width:14%; min-width:10rem;">
+                            <span class="p-column-title">Phone</span>
+                            {{contact.phone}}
+                        </td>
+                        <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Prenom</span>
-                            {{contact.prenom}}
+                            {{contact.adresse.ville}}
                         </td>
                         <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Prenom</span>
                             {{contact.adresse.pays}}
-                        </td>
-                        <!-- <td style="width:14%; min-width:10rem;">
-                            <span class="p-column-title">Phone</span>
-                            {{contact.phone}}
-                        </td> -->
-                        <!-- <td style="width:14%; min-width:10rem;">
+                        </td> 
+                        <td style="width:14%; min-width:10rem;">
                             <span class="p-column-title">Statut</span>
                             {{contact.statut}}
-                        </td> -->
+                        </td>
                       
                         <!-- <td style="width:14%; min-width: 10rem;"><span class="p-column-title">Status</span>
                             <span [class]="'product-badge status-' + (product.inventoryStatus ? product.inventoryStatus.toLowerCase() : '')">{{product.inventoryStatus}}</span>
