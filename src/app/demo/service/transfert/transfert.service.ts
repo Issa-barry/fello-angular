@@ -58,7 +58,7 @@ export class TransfertService {
             default:
                 errorMessage = `Erreur serveur ${error.status}: ${error.message}`;
         }
-    }
+    } 
 
     return throwError(() => ({ message: errorMessage, validationErrors }));
 }

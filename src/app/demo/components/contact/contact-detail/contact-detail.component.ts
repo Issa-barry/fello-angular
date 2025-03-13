@@ -2,8 +2,10 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Civilite } from 'src/app/demo/enums/civilite.enum';
+import { Agence } from 'src/app/demo/models/agence';
 import { Contact } from 'src/app/demo/models/contact';
 import { Role } from 'src/app/demo/models/Role';
+import { AgenceService } from 'src/app/demo/service/agence/agence.service';
 import { ContactService } from 'src/app/demo/service/contact/contact.service';
 import { RoleService } from 'src/app/demo/service/role/role.service';
 
@@ -26,6 +28,14 @@ export class ContactDetailComponent implements OnInit {
   paysAChanger = false;
   adresseCache = { ville: '', pays: '', code_postal: '', adresse: '', quartier: '' };
   civiliteOptions = Object.values(Civilite).map(civ => ({ label: civ, value: civ }));
+  agenceDialog = false;
+  errorMessage: string | null = null;
+  codeRecuperer: boolean = false;
+  code: string = '';
+  reference: number = 0;
+  agence: Agence = new Agence();
+  loadingAgence: boolean = false;
+
 
   countries = [
     { name: 'GUINEE-CONAKRY', code: 'GN'},
@@ -34,6 +44,7 @@ export class ContactDetailComponent implements OnInit {
 
   constructor(
     private contactService: ContactService,
+    private agenceService: AgenceService,
     private roleService: RoleService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService,
@@ -41,13 +52,9 @@ export class ContactDetailComponent implements OnInit {
     private router: Router
   ) {}
 
-  ngOnInit() {
-    this.getAllRoles();
-    this.onGetContact();
-  }
  
-
-
+ 
+ 
   onCountryChange(event: any) {
     const selectedCountry = event.value;
     this.paysAChanger = true;
@@ -161,5 +168,80 @@ export class ContactDetailComponent implements OnInit {
         });
   }
 
+
+
+  hideDialog(){
+    this.agenceDialog = false;
+  }
+
+  openAffecterAgenceDialog(){
+    this.agenceDialog = true;
+  }
+
+
+  confirmationAffecterAgence(){
+    this.confirmationService.confirm({
+      message: "Voulez-vous vraiment affecter le contact à cette agence ?",
+      header: "Confirmation",
+      icon: "pi pi-exclamation-triangle",
+      acceptLabel: "Oui",
+      rejectLabel: "Non",
+      acceptButtonStyleClass: "p-button-danger",
+      rejectButtonStyleClass: "p-button-secondary",
+      accept: () => this.saveAffecterAgence(),
+      reject: () => {
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Annulation',
+          detail: 'L\'affectation a été abandonnée.',
+        });
+      }
+    });
+  }
+
+  
+  saveAffecterAgence(){
+     
+     this.agenceService.getAgenceById(1).subscribe({
+      next: (resp) => {
+        this.agence = resp
+        console.log(this.agence);
+      },
+      error: (err) => console.error('Erreur lors de la récupération du rôle:', err)
+    });
+     
+  }
+
+  getAgenceById(id: number): void {
+       this.loadingAgence  = true;
+       this.errorMessage = null;
+       this.codeRecuperer = false;
+
+      this.agenceService.getAgenceById(this.reference).subscribe({
+        next: (resp) => {
+          this.agence = resp;
+          this.codeRecuperer = true;   
+          this.loadingAgence = false;  
+        },
+        error: (err) => {
+          console.error('Erreur lors de la récupération de l\'agence:', err);
+          this.errorMessage = 'Agence introuvable avec cette référence.';
+          this.codeRecuperer = false;
+          this.loadingAgence = false;
+        }
+      });
+  
+  }
+
+  onRecupererAgence() {
+   this.getAgenceById(this.reference);
+  }
+
+
+  ngOnInit() {
+    this.getAllRoles();
+    this.onGetContact();
+    // this.getAgenceById(1);
+  }
 
 }
