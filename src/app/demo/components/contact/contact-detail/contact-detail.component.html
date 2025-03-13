@@ -3,10 +3,17 @@
     <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between py-5">
         <span class="text-900 text-xl font-bold mb-4 block">Informations du contact</span>
         <div>
-            <button pButton pRipple label="Modifier" icon="pi pi-pencil" class="p-button-outlined p-button-primary mr-3"  ></button>
-            <button pButton pRipple label="Afecter à une agence" icon="pi pi-tags" class="p-button-outlined p-button-primary" (click)="openAffecterAgenceDialog()"></button>
+            <button (click)="toggleEditMode()"  [disabled]="isEditing" pButton pRipple label="Modifier" icon="pi pi-pencil" class="p-button-outlined p-button-primary mr-3"  ></button>
+            <button *ngIf="!contact.agence_id"  [disabled]="isEditing" pButton pRipple label="Afecter à une agence" icon="pi pi-tags" class="p-button-outlined p-button-primary" (click)="openAffecterAgenceDialog()"></button>
             <!-- <button pButton pRipple label="Annuler le transfert" icon="pi pi-times-circle" class="p-button-outlined p-button-danger" ></button> --> 
-        </div>
+        <!-- Bouton Désaffecter (visible uniquement si une agence est affectée) -->
+                 <button *ngIf="contact.agence_id"  [disabled]="isEditing" pButton pRipple label="Désaffecter de cette agence" icon="pi pi-times" 
+                        class="p-button-outlined p-button-danger"
+                        [disabled]="loadingAgence"
+                        (click)="desaffecterAgence()">
+                </button>
+         </div>
+        
     </div>
     <!-- <div class="flex justify-center items-center " *ngIf="loading">
         <p-progressSpinner></p-progressSpinner>
@@ -103,13 +110,23 @@
                     <small *ngIf="errors['adresse.ville']">{{ errors['adresse.ville'] }}</small>
                 </div> 
 
-                <div class="field mb-4 col-12 md:col-6">
-                     <span class="font-medium text-xl text-900 mr-2">Agence du contact :</span>
-                    <span class="font-medium text-xl text-blue-500"><label for="name">{{ agence.nom_agence }} </label></span>
-                 </div> 
+                <div class="field mb-4 col-12 md:col-12">
+                    <label for="agence" class="font-medium text-900">Agence du contact :</label>
+                
+                    <!-- Vérifie si une agence est affectée -->
+                    <span *ngIf="contact.agence_id && agence?.nom_agence; else noAgence" class="font-medium text-xl text-blue-500">
+                        {{ agence.nom_agence }}
+                    </span>
+                
+                    <!-- Sinon, affiche le message d'absence d'agence -->
+                    <ng-template #noAgence>
+                        <span class="text-red-500 text-md"> Le contact n'est affecté à aucune agence.</span>
+                    </ng-template>
+                </div>
+                
               
                 
-                <div class="col-12">
+                <div class="col-12" *ngIf="isEditing">
                     <button pButton pRipple label="Enregistrer modification" class="w-auto mt-3" (click)="saveContact()"></button>
                 </div>
             </div>
@@ -123,15 +140,15 @@
 </p-dialog> -->
 <p-dialog [(visible)]="agenceDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true" class="p-fluid">
     <ng-template pTemplate="content">
-       <div class="grid formgrid"> 
-        <div class="col-12 field mb-6">
-            <label for="name">Saisir la reference de l'agence : </label>
-           <p-inputGroup class="mb-2">
-               <input type="text" [(ngModel)]="reference" pInputText placeholder="Exemple: ST8574" class="w-full"[ngClass]="{'ng-invalid ng-dirty': !reference || errorMessage}"/>
-               <button type="button" icon="pi pi-fw pi-check" pButton pRipple label="" [disabled]="!reference" [loading]="loadingAgence" (click)="onRecupererAgence()"></button>
-           </p-inputGroup>
-           <small *ngIf="errorMessage" class="alert alert-danger p-3 mt-3"> {{ errorMessage }}</small>
-       </div>
+        <div class="grid formgrid"> 
+            <div class="col-12 field mb-6">
+                <label for="name">Saisir la reference de l'agence : </label>
+                <p-inputGroup class="mb-2">
+                    <input type="text" [(ngModel)]="reference" pInputText placeholder="Exemple: ST8574" class="w-full"[ngClass]="{'ng-invalid ng-dirty': !reference || errorMessage}"/>
+                    <button type="button" icon="pi pi-fw pi-check" pButton pRipple label="" [disabled]="!reference" [loading]="loadingAgence" (click)="onRecupererAgence()"></button>
+                </p-inputGroup>
+                <small *ngIf="errorMessage" class="alert alert-danger p-3 mt-3"> {{ errorMessage }}</small>
+        </div> 
    </div>
 
    <hr *ngIf="codeRecuperer"/>
