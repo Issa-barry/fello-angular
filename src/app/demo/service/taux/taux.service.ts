@@ -50,6 +50,12 @@ export class TauxService {
            // catchError(this.handleError)
          );
        }
+
+         deleteTauxById(id: number): Observable<{ success: boolean; message: string }> {
+           return this.http.delete<{ success: boolean; message: string }>(`${this.apiUrl}/deleteById/${id}`, httpOption).pipe(
+            //  catchError(this.handleError)
+           );
+         }
     
 
 }

@@ -36,6 +36,8 @@ export class GeneralComponent implements OnInit{
     private devisesService: DevisesService,
     private layoutService: LayoutService,
     private tauxService: TauxService,
+    private messageService: MessageService,
+    private confirmationService: ConfirmationService,
   ) {};
 
 
@@ -107,7 +109,52 @@ export class GeneralComponent implements OnInit{
     })
   }
 
+  deleteTauxById(){
+    this.tauxService.deleteTauxById(2).subscribe({
+      next: () => {
+          this.messageService.add({
+              severity: 'success',
+              summary: 'Succès',
+              detail: 'Agence supprimée avec succès',
+              life: 3000
+          });
+          this.getAllTaux(); 
+      },
+      error: (err) => {
+          console.error('Erreur lors de la suppression du taux:', err);
+          this.messageService.add({
+              severity: 'error',
+              summary: 'Erreur',
+              detail: err.error.message,
+              life: 3000
+          });
+      }
+  });
+  }
 
+  confirmDelateTaux(){
+      this.confirmationService.confirm({
+        message:
+            'Voulez-vous vraiment affecter le contact à cette agence ?',
+        header: 'Confirmation',
+        icon: 'pi pi-exclamation-triangle',
+        acceptLabel: 'Oui',
+        rejectLabel: 'Non',
+        acceptButtonStyleClass: 'p-button-danger',
+        rejectButtonStyleClass: 'p-button-secondary',
+        accept: () => this.deleteTauxById(),
+        reject: () => {
+            this.messageService.add({
+                severity: 'info',
+                summary: 'Annulation',
+                detail: "L'affectation a été abandonnée.",
+            });
+        },
+    });
+  }
+
+
+ 
 
   ngOnInit(): void {
     this.getAllDevises()
