@@ -1,9 +1,9 @@
 <div class="card">
     <h5>Général</h5>
     <p-tabView orientation="left">
-        <!-- <p-tabPanel header="Devises" class="line-height-3 m-0">
+         <p-tabPanel header="Devises" class="line-height-3 m-0">
             <div class="grid">
-                <div class="col-8">
+                <div class="col-10">
                     <div class="card px-6 py-6">
                         <p-toast></p-toast> 
                         <p-table #dt [value]="devises" [columns]="cols" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['nom',]" [rows]="10" [paginator]="false" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Liste de {first} / {last} des {totalRecords} devises" >
@@ -30,10 +30,10 @@
                                     <td>
                                         <p-tableCheckbox [value]="devise"></p-tableCheckbox>
                                     </td>
-                                    <td style="width:14%; min-width:10rem;"><span class="p-column-title">Code</span>
+                                    <td style="width:16%; min-width:18rem;"><span class="p-column-title">Code</span>
                                         {{devise.nom}}
                                     </td> 
-                                    <td style="width:14%; min-width:10rem;"><span class="p-column-title">Code</span>
+                                    <td style="width:16%; min-width:18rem;"><span class="p-column-title">Code</span>
                                         {{devise.tag}}
                                     </td> 
                                     
@@ -52,7 +52,7 @@
                 </div>
             </div>
               
-        </p-tabPanel> -->
+        </p-tabPanel>  
 
 
 
