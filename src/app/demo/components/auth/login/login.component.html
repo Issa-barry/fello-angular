@@ -8,11 +8,8 @@
 <div class="px-5 min-h-screen flex justify-content-center align-items-center">
     <div class="border-1 surface-border surface-card border-round py-7 px-4 md:px-7 z-1">
         <div class="mb-4 flex flex-column items-center">
-            <!-- Texte FELLO centré et cliquable -->
-            <div 
-                class="text-900 text-xl text-center text-primary font-bold mb-2 cursor-pointer tracking-widest" 
-                [routerLink]="['/landing']">
-                FELLO
+            <div class="text-900 text-xl text-center text-primary font-bold mb-3 cursor-pointer tracking-widest" [routerLink]="['/landing']">
+                <p>FELLO</p>
             </div>
         </div> 
         <div class="flex flex-column">
@@ -38,9 +35,9 @@
             
             <div class="mb-4 flex flex-wrap gap-3 mt-4">
                 <div>
-                    <a class="text-600 cursor-pointer hover:text-primary ml-auto mt-3 transition-duration-300" (click)="goToResetPassword()">
+                    <!-- <a class="text-600 cursor-pointer hover:text-primary ml-auto mt-3 transition-duration-300" (click)="goToResetPassword()">
                         Créer un compte
-                    </a>
+                    </a> -->
                 </div>
                 <a class="text-600 cursor-pointer hover:text-primary ml-auto transition-colors transition-duration-300" (click)="goToResetPassword()">Mot de passe oublié ?</a>
             </div>
