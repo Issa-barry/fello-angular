@@ -6,6 +6,8 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { AppConfigModule } from 'src/app/layout/config/app.config.module';
 import { FormsModule } from '@angular/forms';
+import { ToastModule } from 'primeng/toast';
+import { ProgressBarModule } from 'primeng/progressbar';
 
 @NgModule({
     imports: [
@@ -15,6 +17,8 @@ import { FormsModule } from '@angular/forms';
         ForgotPasswordRoutingModule,
         AppConfigModule,
         FormsModule,
+        ToastModule,
+        ProgressBarModule,
     ],
     declarations: [ForgotPasswordComponent]
 })
