@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable, of } from 'rxjs';
+import { HttpClient, HttpErrorResponse, HttpHeaders } from '@angular/common/http';
+import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { catchError, map } from 'rxjs/operators';
 import { environment } from 'src/environements/environment.dev';
 import { Router } from '@angular/router';
@@ -39,37 +39,87 @@ export class AuthService {
     return this.currentUser;
   }
 
-  private handleError<T>(operation = 'operation', result?: T) {
-    return (error: any): Observable<T> => {
-      console.error(error);
-      console.log(`${operation} failed: ${error.message}`);
-      return of(result as T);
-    };
+  private handleError(error: HttpErrorResponse) {
+    console.error('Erreur API:', error);
+    let errorMessage = 'Une erreur inconnue est survenue';
+
+    if (error.error instanceof ErrorEvent) {
+      errorMessage = `Erreur client : ${error.error.message}`;
+    } else {
+      switch (error.status) {
+        case 400:
+          errorMessage = 'Requête invalide. Vérifiez vos informations.';
+          break;
+        case 401:
+          errorMessage = 'Identifiants incorrects. Vérifiez votre email et mot de passe.';
+          break;
+        case 403:
+          errorMessage = 'Accès refusé. Contactez l’administrateur.';
+          break;
+        case 500:
+          errorMessage = 'Erreur interne du serveur. Réessayez plus tard.';
+          break;
+        case 0:
+          errorMessage = 'Impossible de se connecter au serveur. Vérifiez votre connexion internet.';
+          break;
+        default:
+          errorMessage = `Erreur ${error.status}: ${error.message}`;
+      }
+    }
+
+    return throwError(() => new Error(errorMessage));
   }
  
+  // login(credentials: { email: string; password: string }): Observable<any> {
+  //   return this.http.post<any>(`${this.apiUrl}/login`, credentials, httpOption).pipe(
+  //     map((response) => {
+  //       this.tokenService.storeToken(response.access_token);
+  //        this.userId = response.user.id;
+  //        this.setUserId(this.userId);
+  //       localStorage.setItem('user_id', this.userId);
+  //       this.currentUserSubject.next({ access_token: response.access_token });
+  //       return response;
+  //     }),
+  //     catchError(this.handleError)
+  //   );
+  // }
+
   login(credentials: { email: string; password: string }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, credentials, httpOption).pipe(
       map((response) => {
         this.tokenService.storeToken(response.access_token);
-         this.userId = response.user.id;
-         this.setUserId(this.userId);
-        localStorage.setItem('user_id', this.userId);
+        localStorage.setItem('user_id', response.user.id);
         this.currentUserSubject.next({ access_token: response.access_token });
         return response;
       }),
-      catchError(this.handleError('login', null))
+      // catchError(this.handleError)
     );
   }
   
+  // logout(): Observable<any> {
+  //   return this.http.post<any>(`${this.apiUrl}/logout`, {}).pipe(
+  //     map(() => {
+  //       this.tokenService.clearToken();
+  //       this.currentUserSubject.next(null);
+  //       localStorage.removeItem('user_id');
+  //       this.router.navigate(['/auth/login']);
+  //     }),
+  //     catchError(this.handleError('logout')) 
+  //   );
+  // }
+
   logout(): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/logout`, {}).pipe(
+    return this.http.post<any>(`${this.apiUrl}/logout`, {}, httpOption).pipe(
       map(() => {
         this.tokenService.clearToken();
         this.currentUserSubject.next(null);
         localStorage.removeItem('user_id');
         this.router.navigate(['/auth/login']);
       }),
-      catchError(this.handleError('logout')) 
+      catchError((error) => {
+        console.error('Erreur lors de la déconnexion:', error);
+        return throwError(() => new Error('Échec de la déconnexion. Vérifiez votre connexion.'));
+      })
     );
   }
 
@@ -80,9 +130,9 @@ export class AuthService {
         console.log('Inscription réussie :', response);
         return response;
       }),
-      catchError(this.handleError('register', null))
+      catchError(this.handleError)
     );
-  }
+  } 
 
   isAuthenticated(): boolean {
     return this.tokenService.hasToken();

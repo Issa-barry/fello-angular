@@ -31,6 +31,8 @@
                 </div>
                 <a class="text-600 cursor-pointer hover:text-primary ml-auto transition-colors transition-duration-300" (click)="goToResetPassword()">Reset password</a>
             </div> -->
+             
+            
             <button pButton pRipple label="Me connecter" class="w-full" (click)="login()"></button>
             <div *ngIf="errorMessage" class="text-red-500 mt-3">{{ errorMessage }}</div>
             

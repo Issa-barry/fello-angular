@@ -52,7 +52,6 @@ export class AppProfileSidebarComponent implements OnInit {
     this.contactService.getContactById(1).subscribe({
       next:(res) => {
         this.contact = res
-        console.log(this.contact);
       },
       error:(err) => {console.error("Erreur lor de la recuperation du contact", err)}
     })
