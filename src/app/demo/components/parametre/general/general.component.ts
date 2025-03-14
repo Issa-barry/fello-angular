@@ -2,9 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
+import { Frais } from 'src/app/demo/models/Frais';
 import { Taux } from 'src/app/demo/models/Taux';
 import { AuthService } from 'src/app/demo/service/auth/auth.service';
 import { DevisesService } from 'src/app/demo/service/devises/devises.service';
+import { FraisService } from 'src/app/demo/service/frais/frais.service';
 import { TauxService } from 'src/app/demo/service/taux/taux.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
@@ -23,6 +25,10 @@ export class GeneralComponent implements OnInit{
   manyTaux: Taux[] = [];
   oneTaux: Taux = new Taux();
   taux: Taux = new Taux();
+
+  manyFrais: Frais[] = [];
+  oneFrais: Frais = new Frais();
+
   devisesDialog: boolean = false;
   submitted: boolean=false;
   cols: any[] = [];
@@ -30,9 +36,9 @@ export class GeneralComponent implements OnInit{
   
   rowsPerPageOptions = [5, 10, 20];
 
-  constructor(
+  constructor(  public router: Router,
     private authService:AuthService,
-    public router: Router,
+   private fraisService: FraisService,
     private devisesService: DevisesService,
     private layoutService: LayoutService,
     private tauxService: TauxService,
@@ -81,6 +87,21 @@ export class GeneralComponent implements OnInit{
   /***********************
    * Taux
    ************************/
+   tauxDialog : boolean =  false;
+
+  openTauxDialog(){
+    this.tauxDialog = true;
+    this.submitted = false;    
+  } 
+
+  hideTauxDialog(){
+    this.devisesDialog = false;
+    this.submitted = false;
+  }
+  
+  confirmCreationTaux(){
+    console.log(this.oneTaux);
+  }
 
   getTauxById(){
     this.tauxService.getTauxById(1).subscribe({
@@ -154,12 +175,47 @@ export class GeneralComponent implements OnInit{
   }
 
 
+
+  
+  /***********************
+   * FRAIS
+   ************************/
+  fraisDialog : boolean =  false;
+
+  openFraisDialog(){
+    this.fraisDialog = true;
+    this.submitted = false;    
+  } 
+
+  hideFraisDialog(){
+    this.fraisDialog = false;
+    this.submitted = false;
+  }
+  
+  confirmCreationFrais(){
+    console.log("frais");
+  }
  
+  
+  getAllFrais(){
+    this.fraisService.getAllFrais().subscribe({
+      next: (response) => {
+        this.manyFrais = response
+        console.log("menyFraisresponse", this.manyFrais);
+        
+      }, 
+      error: (err) => {
+        console.error('Erreur lors de la récupération des contacts:', err);
+      }
+    })
+  }
+
 
   ngOnInit(): void {
     this.getAllDevises()
     // this.getTauxById()
     this.getAllTaux()
+    this.getAllFrais()
   }
 
 }
