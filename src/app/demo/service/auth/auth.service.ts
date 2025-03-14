@@ -60,7 +60,7 @@ export class AuthService {
       catchError(this.handleError('login', null))
     );
   }
- 
+  
   logout(): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/logout`, {}).pipe(
       map(() => {
@@ -99,7 +99,7 @@ export class AuthService {
   getUserId() {
    return localStorage.getItem('user_id');
   }
-
+ 
 
   verifyToken(): Observable<boolean> {
     return this.tokenService.verifyToken().pipe(

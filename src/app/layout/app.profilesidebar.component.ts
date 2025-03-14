@@ -1,18 +1,28 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { LayoutService } from './service/app.layout.service';
 import { Router } from '@angular/router';
 import { AuthService } from '../demo/service/auth/auth.service';
+import { ContactService } from '../demo/service/contact/contact.service';
+import { Contact } from '../demo/models/contact';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
     selector: 'app-profilemenu',
-    templateUrl: './app.profilesidebar.component.html'
+    templateUrl: './app.profilesidebar.component.html',
+    providers: [MessageService],
 })
-export class AppProfileSidebarComponent {
+export class AppProfileSidebarComponent implements OnInit {
+
+  contacts: Contact[] = [];
+  contact: Contact = new Contact();
+   errorMessage: string | null = null;
 
     constructor(
         public router: Router,
         private authService: AuthService,
-        public layoutService: LayoutService
+        public layoutService: LayoutService,
+        private contactService: ContactService,
+        private messageService: MessageService,
     ) { }
 
     get visible(): boolean {
@@ -23,9 +33,6 @@ export class AppProfileSidebarComponent {
         this.layoutService.state.profileSidebarVisible = _val;
     }
 
-    onLogOut(){
-       this.router.navigate(['/']);
-    }
 
         // Méthode de déconnexion
   logout() {
@@ -37,5 +44,22 @@ export class AppProfileSidebarComponent {
         console.error('Erreur de déconnexion', err);
       }
     });
+
+    this.visible = false
   }
+
+  getContactById(){
+    this.contactService.getContactById(1).subscribe({
+      next:(res) => {
+        this.contact = res
+        console.log(this.contact);
+      },
+      error:(err) => {console.error("Erreur lor de la recuperation du contact", err)}
+    })
+  }
+
+
+  ngOnInit() {
+    this.getContactById()
+   }
 }

@@ -130,7 +130,7 @@ export class ContactService {
                 }),
                 catchError(this.handleError)
             );
-    }
+    } 
 
     affecterAgenceByReference(userId: number, reference: string): Observable<Contact> {
       return this.http.post<Contact>(`${this.apiUrl}/affecterByReference/${userId}`, { reference }, httpOption)

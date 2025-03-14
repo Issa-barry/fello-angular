@@ -61,7 +61,7 @@ export class ContactDetailComponent implements OnInit {
         private confirmationService: ConfirmationService,
         private activatedRoute: ActivatedRoute,
         private router: Router
-    ) {}
+    ) {} 
 
     toggleEditMode() {
       this.isEditing = !this.isEditing;
