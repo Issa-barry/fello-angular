@@ -31,18 +31,30 @@ export class LoginComponent implements OnInit {
     
     this.authService.login(credentials).subscribe({
         next: (response) => {
-            if (response.status === 200) {
                 this.router.navigate(['/dashboard']);
-            } else {
-                this.errorMessage = "La connexion a échoué. Vérifiez vos informations.";
-            }
         },
         error: (err) => {
-            console.error('Erreur de connexion :', err);
-            this.errorMessage = err.error.error
+            console.error('Erreur de connexion :', err.error);
+            this.errorMessage =  err.error.error
         }
     });
 }
+
+
+// login(): void {
+//   const credentials = { email: this.email, password: this.password };
+//   this.authService.login(credentials).subscribe(
+//     (response) => { 
+//       console.log('Connexion réussie :', response);
+//       this.router.navigate(['/dashboard']); 
+//     },
+//     (error) => {
+//       this.errorMessage = 'Échec de la connexion, vérifiez vos identifiants.';
+//       console.error('Erreur de connexion :', error);
+//     }
+//   );
+// }
+
 
 
   goToResetPassword(): void {

@@ -39,6 +39,7 @@ export class AuthService {
     return this.currentUser;
   }
 
+
   private handleError(error: HttpErrorResponse) {
     console.error('Erreur API:', error);
     let errorMessage = 'Une erreur inconnue est survenue';
@@ -70,56 +71,29 @@ export class AuthService {
     return throwError(() => new Error(errorMessage));
   }
  
-  // login(credentials: { email: string; password: string }): Observable<any> {
-  //   return this.http.post<any>(`${this.apiUrl}/login`, credentials, httpOption).pipe(
-  //     map((response) => {
-  //       this.tokenService.storeToken(response.access_token);
-  //        this.userId = response.user.id;
-  //        this.setUserId(this.userId);
-  //       localStorage.setItem('user_id', this.userId);
-  //       this.currentUserSubject.next({ access_token: response.access_token });
-  //       return response;
-  //     }),
-  //     catchError(this.handleError)
-  //   );
-  // }
-
   login(credentials: { email: string; password: string }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, credentials, httpOption).pipe(
       map((response) => {
         this.tokenService.storeToken(response.access_token);
-        localStorage.setItem('user_id', response.user.id);
+         this.userId = response.user.id;
+         this.setUserId(this.userId);
+        localStorage.setItem('user_id', this.userId);
         this.currentUserSubject.next({ access_token: response.access_token });
         return response;
       }),
       // catchError(this.handleError)
     );
   }
-  
-  // logout(): Observable<any> {
-  //   return this.http.post<any>(`${this.apiUrl}/logout`, {}).pipe(
-  //     map(() => {
-  //       this.tokenService.clearToken();
-  //       this.currentUserSubject.next(null);
-  //       localStorage.removeItem('user_id');
-  //       this.router.navigate(['/auth/login']);
-  //     }),
-  //     catchError(this.handleError('logout')) 
-  //   );
-  // }
-
+ 
   logout(): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/logout`, {}, httpOption).pipe(
+    return this.http.post<any>(`${this.apiUrl}/logout`, {}).pipe(
       map(() => {
         this.tokenService.clearToken();
         this.currentUserSubject.next(null);
         localStorage.removeItem('user_id');
         this.router.navigate(['/auth/login']);
       }),
-      catchError((error) => {
-        console.error('Erreur lors de la déconnexion:', error);
-        return throwError(() => new Error('Échec de la déconnexion. Vérifiez votre connexion.'));
-      })
+      // catchError(this.handleError('logout')) 
     );
   }
 
@@ -130,9 +104,9 @@ export class AuthService {
         console.log('Inscription réussie :', response);
         return response;
       }),
-      catchError(this.handleError)
+      // catchError(this.handleError('register', null))
     );
-  } 
+  }
 
   isAuthenticated(): boolean {
     return this.tokenService.hasToken();
@@ -149,7 +123,7 @@ export class AuthService {
   getUserId() {
    return localStorage.getItem('user_id');
   }
- 
+
 
   verifyToken(): Observable<boolean> {
     return this.tokenService.verifyToken().pipe(
