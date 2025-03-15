@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
         this.authService.login(credentials).subscribe({
             next: (response) => {
                 this.router.navigate(['/dashboard']);
+                console.clear();
             },
             error: (err) => {
                 console.error('Erreur de connexion :', err.error);
