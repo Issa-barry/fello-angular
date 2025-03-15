@@ -45,7 +45,6 @@ export class LoginComponent implements OnInit {
     }
 
     handleFelloClick(): void {
-        console.log('FELLO clicked!');
         this.router.navigate(['/some-page']);
     }
 }
