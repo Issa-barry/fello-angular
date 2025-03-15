@@ -221,7 +221,7 @@ export class ContactDetailComponent implements OnInit {
                 this.getAgenceById(this.contact.agence_id);
             }
         }, 500);
-    }
+    } 
 
     onGetContact(): void {
         this.loading = true;

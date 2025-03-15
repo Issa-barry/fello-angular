@@ -4,8 +4,8 @@
             <div class="flex flex-column sm:flex-row align-items-center gap-3">
                 <img src="assets/demo/images/avatar/circle/avatar-f-1.png" class="w-4rem h-4rem flex-shrink-0">
                 <div class="flex flex-column align-items-center sm:align-items-start">
-                    <span class="text-900 font-bold text-4xl">Welcome Isabel</span>
-                    <p class="text-600 m-0">Your last login was on 04/05/2022 at 10:24 am</p>
+                    <span class="text-900 font-bold text-4xl"> {{ contact.nom_complet }}</span>
+                    <p class="text-600 m-0">Votre dernière connexion a eu lieu le 04/05/2022 à 10h24.</p>
                 </div>
             </div>
             <div class="flex gap-2 sm:ml-auto">
@@ -22,12 +22,12 @@
                 <path d="M0 400L30 386.5C60 373 120 346 180 334.8C240 323.7 300 328.3 360 345.2C420 362 480 391 540 392C600 393 660 366 720 355.2C780 344.3 840 349.7 870 352.3L900 355L900 601L870 601C840 601 780 601 720 601C660 601 600 601 540 601C480 601 420 601 360 601C300 601 240 601 180 601C120 601 60 601 30 601L0 601Z" fill="var(--primary-500)" stroke-linecap="round" stroke-linejoin="miter"></path>
             </svg>
             <div class="z-2 relative text-white">
-                <div class="text-xl font-semibold mb-3">Debit Card</div>
+                <div class="text-xl font-semibold mb-3">Cash</div>
                 <div class="mb-1 font-semibold">Balance</div>
-                <div class="text-2xl mb-5 font-bold">$2.000,00</div>
+                <div class="text-2xl mb-5 font-bold">2 000 000 GNF</div>
                 <div class="flex align-items-center justify-content-between">
-                    <span class="text-lg">**** **** **** 1412</span>
-                    <span class="font-medium text-lg">12/26</span>
+                    <span class="text-900 text-lg">sur la période </span>
+                    <span class="text-600 font-medium text-lg">12/01/2024</span>
                 </div>
             </div>
         </div>
@@ -35,33 +35,48 @@
     <div class="col-12 md:col-6 xl:col-4">
         <div class="card h-full">
             <div class="flex align-items-center justify-content-between mb-3">
-                <div class="text-900 text-xl font-semibold">Credit Card</div>
-                <img src="assets/demo/images/banking/visa.svg" class="h-1rem">
+                <div class="text-900 text-xl font-semibold">PayCard GN</div>
+                <!-- <img src="assets/demo/images/banking/visa.svg" class="h-1rem"> -->
             </div>
-            <div class="text-600 mb-1 font-semibold">Debt</div>
-            <div class="text-900 text-2xl text-primary mb-5 font-bold">$1.500,00</div>
+            <div class="text-600 mb-1 font-semibold">Total</div>
+            <div class="text-900 text-2xl text-primary mb-5 font-bold">1 500 000 GNF</div>
             <div class="flex align-items-center justify-content-between">
-                <span class="text-900 text-lg">**** **** **** 1231</span>
-                <span class="text-600 font-medium text-lg">12/24</span>
+                <span class="text-900 text-lg">sur la période </span>
+                <span class="text-600 font-medium text-lg">12/01/2024</span>
             </div>
         </div>
     </div>
-    <div class="col-12 md:col-6 xl:col-2">
+    <div class="col-12 md:col-6 xl:col-4">
+        <div class="card h-full">
+            <div class="flex align-items-center justify-content-between mb-3">
+                <div class="text-900 text-xl font-semibold">Orange-Money </div>
+                <!-- <img src="assets/demo/images/banking/visa.svg" class="h-1rem"> -->
+            </div>
+            <div class="text-600 mb-1 font-semibold">Total</div>
+            <div class="text-900 text-2xl text-primary mb-5 font-bold">1 500 100 GNF</div>
+            <div class="flex align-items-center justify-content-between">
+                <span class="text-900 text-lg">sur la période </span>
+                <span class="text-600 font-medium text-lg">12/01/2024</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- <div class="col-12 md:col-6 xl:col-2">
         <div class="card h-full flex flex-column align-items-center justify-content-center">
             <i class="pi pi-dollar text-primary text-4xl mb-4"></i>
-            <span class="text-900 text-lg mb-4 font-medium">Primary</span>
+            <span class="text-900 text-lg mb-4 font-medium">Orange Money</span>
             <span class="text-900 text-2xl text-primary font-bold">$24,345.21</span>
         </div>
-    </div>
-    <div class="col-12 md:col-6 xl:col-2">
+    </div> -->
+    <!-- <div class="col-12 md:col-6 xl:col-2">
         <div class="card h-full flex flex-column align-items-center justify-content-center">
             <i class="pi pi-euro text-primary text-4xl mb-4"></i>
             <span class="text-900 text-lg mb-4 font-medium">Currency</span>
-            <span class="text-900 text-2xl text-primary font-bold">$10,416.11</span>
+            <span class="text-900 text-2xl text-primary font-bold">10 416 511 GNF</span>
         </div>
-    </div>
+    </div> -->
 
-    <div class="col-12 xl:col-4">
+    <!-- <div class="col-12 xl:col-4">
         <div class="card">
             <div class="text-900 text-xl font-semibold mb-3">Recent Transactions</div>
             <ul class="list-none p-0 m-0">
@@ -107,8 +122,8 @@
                 </li>
             </ul>
         </div>
-    </div>
-    <div class="col-12 xl:col-8">
+    </div> -->
+    <div class="col-12 xl:col-12">
         <div class="card">
             <div class="text-900 text-xl font-semibold mb-3">Overview</div>
             <p-chart type="line" [data]="chartData" [options]="chartOptions"></p-chart>

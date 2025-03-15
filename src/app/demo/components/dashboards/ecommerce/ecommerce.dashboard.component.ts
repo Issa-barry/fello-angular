@@ -43,7 +43,15 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
     ngOnInit(): void {
         this.weeks = [
             {
-                label: 'Last Week',
+                label: 'Aujourd\'hui',
+                value: 0,
+                data: [
+                    [100, 59, 80, 81, 56, 55, 40],
+                    [28, 2, 85, 19, 86, 27, 90],
+                ],
+            },
+            {
+                label: 'Cette semaine',
                 value: 0,
                 data: [
                     [65, 59, 80, 81, 56, 55, 40],
@@ -51,10 +59,18 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
                 ],
             },
             {
-                label: 'This Week',
+                label: 'Ce mois',
                 value: 1,
                 data: [
                     [35, 19, 40, 61, 16, 55, 30],
+                    [48, 78, 10, 29, 76, 77, 10],
+                ],
+            },
+            {
+                label: 'Cette années',
+                value: 1,
+                data: [
+                    [35, 19, 98, 75, 16, 55, 30],
                     [48, 78, 10, 29, 76, 77, 10],
                 ],
             },
@@ -84,10 +100,10 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
             documentStyle.getPropertyValue('--surface-border');
 
         this.barData = {
-            labels: ['MON', 'TUE', 'WED', 'THU', 'FRI', 'SAT', 'SUN'],
+            labels: ['LUN', 'MAR', 'MER', 'JEU', 'VEN', 'SAM', 'DIM'],
             datasets: [
                 {
-                    label: 'Revenue',
+                    label: 'Inscrit',
                     backgroundColor:
                         documentStyle.getPropertyValue('--primary-500'),
                     barThickness: 12,
@@ -95,7 +111,7 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
                     data: this.selectedWeek.data[0],
                 },
                 {
-                    label: 'Profit',
+                    label: 'Supprimer',
                     backgroundColor:
                         documentStyle.getPropertyValue('--primary-200'),
                     barThickness: 12,
@@ -106,7 +122,7 @@ export class EcommerceDashboardComponent implements OnInit, OnDestroy {
         };
 
         this.pieData = {
-            labels: ['Electronics', 'Fashion', 'Household'],
+            labels: ['Responssables', 'Clients', 'Agents', ],
             datasets: [
                 {
                     data: [300, 50, 100],
