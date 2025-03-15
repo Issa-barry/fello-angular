@@ -1,10 +1,23 @@
 <div class="card">
     <p-toast></p-toast>
-    <span class="text-900 text-xl font-bold mb-4 block">Informations du contact</span>
-   
+    <div class="flex flex-column sm:flex-row sm:align-items-center sm:justify-content-between py-5">
+        <span class="text-900 text-xl font-bold mb-4 block">Informations du contact</span>
+        <div>
+            <button (click)="toggleEditMode()"  [disabled]="isEditing" pButton pRipple label="Modifier" icon="pi pi-pencil" class="p-button-outlined p-button-primary mr-3"  ></button>
+            <button *ngIf="!contact.agence_id"  [disabled]="isEditing" pButton pRipple label="Afecter à une agence" icon="pi pi-tags" class="p-button-outlined p-button-primary" (click)="openAffecterAgenceDialog()"></button>
+            <!-- <button pButton pRipple label="Annuler le transfert" icon="pi pi-times-circle" class="p-button-outlined p-button-danger" ></button> --> 
+        <!-- Bouton Désaffecter (visible uniquement si une agence est affectée) -->
+                 <button *ngIf="contact.agence_id"  [disabled]="isEditing" pButton pRipple label="Désaffecter de cette agence" icon="pi pi-times" 
+                        class="p-button-outlined p-button-danger"
+                        [disabled]="loadingAgence"
+                        (click)="desaffecterAgence()">
+                </button>
+         </div>
+        
+    </div>
     <!-- <div class="flex justify-center items-center " *ngIf="loading">
         <p-progressSpinner></p-progressSpinner>
-    </div> -->
+    </div> --> 
 
     <p-progressBar mode="indeterminate" *ngIf="loading" class="w-full h-2"></p-progressBar>
 
@@ -97,11 +110,93 @@
                     <small *ngIf="errors['adresse.ville']">{{ errors['adresse.ville'] }}</small>
                 </div> 
 
+                <div class="field mb-4 col-12 md:col-12">
+                    <label for="agence" class="font-medium text-900">Agence du contact :</label>
                 
-                <div class="col-12">
+                    <!-- Vérifie si une agence est affectée -->
+                    <span *ngIf="contact.agence_id && agence?.nom_agence; else noAgence" class="font-medium text-xl text-blue-500">
+                        {{ agence.nom_agence }}
+                    </span>
+                
+                    <!-- Sinon, affiche le message d'absence d'agence -->
+                    <ng-template #noAgence>
+                        <span class="text-red-500 text-md"> Le contact n'est affecté à aucune agence.</span>
+                    </ng-template>
+                </div>
+                
+              
+                
+                <div class="col-12" *ngIf="isEditing">
                     <button pButton pRipple label="Enregistrer modification" class="w-auto mt-3" (click)="saveContact()"></button>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
+<!-- <p-dialog [(visible)]="productDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true" class="p-fluid"> 
+
+</p-dialog> -->
+<p-dialog [(visible)]="agenceDialog" [style]="{width: '450px'}" header="Product Details" [modal]="true" class="p-fluid">
+    <ng-template pTemplate="content">
+        <div class="grid formgrid"> 
+            <div class="col-12 field mb-6">
+                <label for="name">Saisir la reference de l'agence : </label>
+                <p-inputGroup class="mb-2">
+                    <input type="text" [(ngModel)]="reference" pInputText placeholder="Exemple: ST8574" class="w-full"[ngClass]="{'ng-invalid ng-dirty': !reference || errorMessage}"/>
+                    <button type="button" icon="pi pi-fw pi-check" pButton pRipple label="" [disabled]="!reference" [loading]="loadingAgence" (click)="onRecupererAgence()"></button>
+                </p-inputGroup>
+                <small *ngIf="errorMessage" class="alert alert-danger p-3 mt-3"> {{ errorMessage }}</small>
+        </div> 
+   </div> 
+
+   <hr *ngIf="codeRecuperer"/>
+
+<!-- Affichage des détails de l'agence SEULEMENT si la référence est saisie et récupérée -->
+<div *ngIf="codeRecuperer">
+    <div class="field">
+        <label for="name"> <strong>Nom</strong> : {{ agence.nom_agence }} </label>
+    </div>
+    <div class="field">
+        <label for="name"><strong>Phone</strong> : {{ agence.phone }} </label>
+    </div>
+    <div class="field">
+        <label for="name"><strong>Email</strong> : {{ agence.email }} </label>
+    </div>
+    <div class="field">
+        <label for="name"><strong>Pays</strong> : {{ agence.adresse.pays }} </label>
+    </div>
+    <div class="field">
+        <label for="name"><strong>Adresse</strong> : {{ agence.adresse.adresse }} </label>
+    </div>
+    <div class="field">
+        <label for="name"><strong>Ville</strong> : {{ agence.adresse.ville }} </label>
+    </div>
+    <div class="field">
+        <label for="name"><strong>Code postal</strong> : {{ agence.adresse.code_postal }} </label>
+    </div> 
+</div>
+
+        
+
+        <!-- <div class="field">
+            <label for="status">Inventory Status</label>
+            <p-dropdown [(ngModel)]="product.inventoryStatus" inputId="inventoryStatus" optionValue="label" [options]="statuses" placeholder="Select">
+                <ng-template pTemplate="selectedItem">
+                     <span *ngIf="product && product.inventoryStatus" [class]="'product-badge status-' + product.inventoryStatus.toString().toLowerCase()">{{product.inventoryStatus}}</span> 
+                </ng-template>
+                <ng-template let-option pTemplate="item">
+                     <span [class]="'product-badge status-' + option.value">{{option.label}}</span> 
+                </ng-template>
+            </p-dropdown>
+        </div> -->
+
+    </ng-template>
+
+    <ng-template pTemplate="footer">
+        <button pButton pRipple label="Annuler" icon="pi pi-times" class="p-button-text" (click)="hideDialog()"></button>
+        <button pButton pRipple label="Affecter" icon="pi pi-check" class="p-button-text" (click)="confirmationAffecterAgence()"></button>
+    </ng-template>
+</p-dialog>
+<p-confirmDialog></p-confirmDialog>

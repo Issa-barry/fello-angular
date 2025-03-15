@@ -15,6 +15,7 @@ import { Role } from "./Role";
     password_confirmation:string;
     role_id?:number;
     roles?: Role;
+    agence_id?:number;
     statut: string;
     role?: any;
     adresse: Adresse;

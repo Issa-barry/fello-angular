@@ -8,6 +8,7 @@ import { InputTextModule } from 'primeng/inputtext';
 import { RippleModule } from 'primeng/ripple';
 import { AppConfigModule } from 'src/app/layout/config/app.config.module';
 import { PasswordModule } from 'primeng/password';
+import { ToastModule } from 'primeng/toast';
 
 @NgModule({
     imports: [
@@ -18,7 +19,8 @@ import { PasswordModule } from 'primeng/password';
         InputTextModule,
         RippleModule,
         AppConfigModule,
-        PasswordModule
+        PasswordModule,
+        ToastModule
     ],
     declarations: [NewPasswordComponent]
 })
