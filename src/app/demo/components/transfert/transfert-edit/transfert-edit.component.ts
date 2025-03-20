@@ -52,22 +52,30 @@ export class TransfertEditComponent {
             'receveur_nom_complet',
         ];
     
+        this.errors = {}; // Réinitialisation des erreurs
+    
         for (const champ of champsObligatoires) {
             const valeurChamp = this.transfert[champ as keyof Transfert];
     
             if (!valeurChamp || (typeof valeurChamp === 'string' && valeurChamp.trim() === '')) {
-                this.messageService.add({
-                    severity: 'warn',
-                    summary: 'Attention',
-                    detail: `Veuillez remplir tous les champs obligatoires.`,
-                    life: 3000,
-                });
-                return false;
+                this.errors[champ] = `Le champ ${champ} est obligatoire.`;
             }
+        }
+    
+        if (Object.keys(this.errors).length > 0) {
+            this.messageService.add({
+                severity: 'warn',
+                summary: 'Attention',
+                detail: `Veuillez remplir tous les champs obligatoires.`,
+                life: 3000,
+            });
+    
+            return false;
         }
     
         return true;
     }
+    
     
 
     hideDialog() {
@@ -94,7 +102,6 @@ export class TransfertEditComponent {
 
     confirmationModificationReceveur() {
         this.submitted = true;
-        this.errors = {};
         if (!this.verifierChampsObligatoires()) {
             return;
         } else {

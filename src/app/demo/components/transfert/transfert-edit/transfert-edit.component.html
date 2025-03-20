@@ -27,7 +27,7 @@
                 <!-- RECEVEUR -->
                 <div class="col-12 field mb-4">
                     <span class="text-900 text-2xl block font-medium mb-4">Receveur</span>
-                    <input id="receveur_phone" [(ngModel)]="transfert.receveur_phone" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.receveur_phone || errors['receveur_phone']}" placeholder="Téléphone" type="text" class="p-inputtext w-full">
+                    <input id="receveur_phone" [(ngModel)]="transfert.receveur_phone" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.receveur_phone || errors['receveur_phone'] }" placeholder="Téléphone" type="text" class="p-inputtext w-full">
                     <small *ngIf="errors['receveur_phone']">{{ errors['receveur_phone'] }}</small>
                 </div>   
                 <div class="col-12 lg:col-12 field mb-4">
@@ -161,5 +161,6 @@
             </ng-template>
         </p-dialog>
         <p-toast></p-toast>
+        <p-confirmDialog></p-confirmDialog>
     </div>
 </div>
