@@ -1,3 +1,4 @@
+import { Devises } from "./Devise";
 
  export class Transfert {
     id?: number;
@@ -16,6 +17,9 @@
     expediteur_nom_complet: string;
     expediteur_phone: string;
     expediteur_email: string;
+    devise_cible : Devises;
+    devise_source : Devises;
+
     
  
     constructor()
@@ -33,5 +37,7 @@
         this.expediteur_nom_complet="";
         this.expediteur_phone="";
         this.expediteur_email="";
+        this.devise_cible = new Devises();
+        this.devise_source = new Devises()
     }
 }

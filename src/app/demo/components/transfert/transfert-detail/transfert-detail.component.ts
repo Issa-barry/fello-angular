@@ -23,7 +23,7 @@ export class TransfertDetailComponent implements OnInit {
     private transfertService: TransfertService,
     private confirmationService: ConfirmationService
   ) {
-    this.id = this.activatedRoute.snapshot.params['id']; // ✅ Initialisation directe
+    this.id = this.activatedRoute.snapshot.params['id']; // Initialisation directe
   }
 
   ngOnInit() {
@@ -136,3 +136,4 @@ export class TransfertDetailComponent implements OnInit {
     this.router.navigate(['/dashboard/transfert/edit/', this.id]);
   }
 }
+ 
