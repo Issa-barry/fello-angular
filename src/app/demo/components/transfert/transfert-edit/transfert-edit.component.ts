@@ -22,7 +22,6 @@ export class TransfertEditComponent {
     transfert: Transfert = new Transfert();
 
     envoieDialog: boolean = false;
-    ticketDialog: boolean = false;
     submitted: boolean = false;
     loading: boolean = false;
     errors: { [key: string]: string } = {};
@@ -80,17 +79,11 @@ export class TransfertEditComponent {
 
     hideDialog() {
         this.envoieDialog = false;
-        this.ticketDialog = false;
-        this.submitted = false;
-    }
-
-    openTicketDialog() {
-        this.ticketDialog = true;
+         this.submitted = false;
     }
 
     hideTicketDialog() {
-        this.ticketDialog = false;
-        this.submitted = false;
+         this.submitted = false;
     }
 
     verifierFormulaire() {
@@ -144,8 +137,7 @@ export class TransfertEditComponent {
                     });
                     this.loading = false;
                     this.envoieDialog = false;
-                    this.openTicketDialog();
-                },
+                 },
                 error: (error) => {
                     console.error(
                         'Erreur lors de la modification du transfert:',
