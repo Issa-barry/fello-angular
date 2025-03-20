@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
+import { Agence } from 'src/app/demo/models/agence';
 import { Transfert } from 'src/app/demo/models/transfert';
+import { AgenceService } from 'src/app/demo/service/agence/agence.service';
+import { ContactService } from 'src/app/demo/service/contact/contact.service';
 import { TransfertService } from 'src/app/demo/service/transfert/transfert.service';
 
 @Component({
@@ -13,6 +16,8 @@ import { TransfertService } from 'src/app/demo/service/transfert/transfert.servi
 export class TransfertDetailComponent implements OnInit {
   retraitTransfertsDialog: boolean = false;
   transfert: Transfert = new Transfert();
+  agent : any = {}
+  agence : Agence = new Agence();
   submited: boolean = false;
   id: number;
 
@@ -21,7 +26,10 @@ export class TransfertDetailComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private messageService: MessageService,
     private transfertService: TransfertService,
-    private confirmationService: ConfirmationService
+    private confirmationService: ConfirmationService,
+    private contactService: ContactService,
+    private agenceService: AgenceService,
+
   ) {
     this.id = this.activatedRoute.snapshot.params['id']; // Initialisation directe
   }
@@ -39,7 +47,9 @@ export class TransfertDetailComponent implements OnInit {
     this.transfertService.getTransfertById(this.id).subscribe({
       next: (resp) => {
         this.transfert = resp;
-        console.log("Transfert récupéré :", this.transfert);
+        console.log("Transfert récupéré :", this.transfert.agent_id);
+        const agent_id = this.transfert.agent_id!
+        this.getAgentById(agent_id)
       },
       error: (err) => {
         console.error("Erreur lors de la récupération du transfert:", err);
@@ -51,6 +61,35 @@ export class TransfertDetailComponent implements OnInit {
       }
     });
   }
+
+  getAgentById(id:number){
+      this.contactService.getContactById(id).subscribe({
+        next : (res) => {
+          this.agent = res
+          const agence_id = this.agent.agence_id
+
+        console.log("agent", this.agent);
+
+        this.getAgenceById(1)
+       
+        }, error: (err) => {
+          console.error("Erreur lors de la récupération du transfert:", err);
+        }
+      })
+  }
+
+  getAgenceById(id:number){
+    this.agenceService.getAgenceById(id).subscribe({
+      next : (res) => {
+        this.agence = res
+      console.log("agence", this.agence);
+     
+      }, error: (err) => {
+        console.error("Erreur lors de la récupération du transfert:", err);
+      }
+    })
+}
+
 
   /** Annuler un transfert */
   annulerTransfert(): void {

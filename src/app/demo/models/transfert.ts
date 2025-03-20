@@ -19,7 +19,7 @@ import { Devises } from "./Devise";
     expediteur_email: string;
     devise_cible : Devises;
     devise_source : Devises;
-
+    agent_id?:number;
     
  
     constructor()
@@ -38,6 +38,7 @@ import { Devises } from "./Devise";
         this.expediteur_phone="";
         this.expediteur_email="";
         this.devise_cible = new Devises();
-        this.devise_source = new Devises()
+        this.devise_source = new Devises();
+        
     }
 }
