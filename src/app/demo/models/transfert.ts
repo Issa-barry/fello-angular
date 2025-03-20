@@ -5,6 +5,7 @@
     statut?:string;
     frais?:number;
     total?:number;
+    taux_echange_id:number;
     devise_source_id: number;  // id = 2 = euro
     devise_cible_id: number;   // id  = 3 = franc guinéen
     montant_expediteur: number;
@@ -18,13 +19,14 @@
     expediteur_phone: string;
     expediteur_email: string;
     
-
+ 
     constructor()
     {
         this.devise_source_id = 2;
         this.devise_cible_id = 3;
         this.frais = 0;
         this.total=0;
+        this.taux_echange_id=1;
         this.montant_expediteur=0;
         this.montant_receveur=0;
         this.quartier="";
