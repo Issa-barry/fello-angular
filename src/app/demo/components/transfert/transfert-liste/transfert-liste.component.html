@@ -43,7 +43,7 @@
                         <th style="width: 3rem"><p-tableHeaderCheckbox></p-tableHeaderCheckbox></th>
                         <th pSortableColumn="id">Code <p-sortIcon field="id"></p-sortIcon></th>
                         <th pSortableColumn="receveur_nom">Receveur <p-sortIcon field="receveur_nom"></p-sortIcon></th>
-                        <th pSortableColumn="receveur_phone">Téléphone <p-sortIcon field="receveur_phone"></p-sortIcon></th>
+                        <th pSortableColumn="receveur_phone">Phone receveur <p-sortIcon field="receveur_phone"></p-sortIcon></th>
                         <th pSortableColumn="montant">Montant <p-sortIcon field="montant"></p-sortIcon></th>
                         <th pSortableColumn="expediteur_nom">Expéditeur <p-sortIcon field="expediteur_nom"></p-sortIcon></th>
                         <th pSortableColumn="statut">Statut <p-sortIcon field="statut"></p-sortIcon></th>
@@ -57,7 +57,7 @@
                         <td>{{ transfert.code || '/' }}</td>
                         <td>{{ transfert.receveur_nom_complet }}</td>
                         <td>{{ transfert.receveur_phone }}</td>
-                        <td>{{ transfert.montant_converti }} {{ transfert.devise_cible?.tag }}</td>
+                        <td>{{ transfert.montant_receveur }} {{ transfert.devise_cible?.tag }}</td>
                         <td>{{ transfert.expediteur_nom_complet }}</td>
                         <td>{{ transfert.statut }}</td>
                         <td>
