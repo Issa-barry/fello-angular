@@ -80,7 +80,6 @@ export class ContactNewComponent implements OnInit {
 
     onCountryChange(event: any) {
         const selectedCountry = event.value;
-        
   
         if (selectedCountry && selectedCountry === 'GUINEE-CONAKRY') { 
             this.isGuineeSelected = true;
@@ -99,7 +98,6 @@ export class ContactNewComponent implements OnInit {
     saveContact() {
         this.submitted = true;
         this.errors = {};
-        
 
         // Adapter la validation en fonction du pays sélectionné
         const isGuinee = this.isGuineeSelected; 
@@ -107,8 +105,7 @@ export class ContactNewComponent implements OnInit {
         if (
             !this.contact.role ||
             !this.contact.civilite ||
-            !this.contact.nom ||
-            !this.contact.prenom ||
+            !this.contact.nom_complet ||
             !this.contact.email ||
             !this.contact.phone ||
             !this.contact.password ||

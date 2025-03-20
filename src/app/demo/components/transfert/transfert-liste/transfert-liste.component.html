@@ -22,8 +22,8 @@
                      responsiveLayout="scroll" 
                      [paginator]="true" [rows]="10" [rowsPerPageOptions]="[10,20,30]" 
                      [(selection)]="selectedTransferts" selectionMode="multiple" [rowHover]="true" 
-                     [globalFilterFields]="['code','receveur_nom', 'receveur_prenom', 'receveur_phone',
-                     'expediteur_nom','expediteur_prenom','expediteur_phone','expediteur_email',
+                     [globalFilterFields]="['code','receveur_nom_complet', 'receveur_phone',
+                     'expediteur_nom_complet','expediteur_phone','expediteur_email',
                      'montant_converti','montant','statut']" 
                      dataKey="id">
 
@@ -55,10 +55,10 @@
                     <tr>
                         <td><p-tableCheckbox [value]="transfert"></p-tableCheckbox></td>
                         <td>{{ transfert.code || '/' }}</td>
-                        <td>{{ transfert.receveur_prenom }} {{ transfert.receveur_nom }}</td>
+                        <td>{{ transfert.receveur_nom_complet }}</td>
                         <td>{{ transfert.receveur_phone }}</td>
                         <td>{{ transfert.montant_converti }} {{ transfert.devise_cible?.tag }}</td>
-                        <td>{{ transfert.expediteur_prenom }} {{ transfert.expediteur_nom }}</td>
+                        <td>{{ transfert.expediteur_nom_complet }}</td>
                         <td>{{ transfert.statut }}</td>
                         <td>
                             <div class="flex">

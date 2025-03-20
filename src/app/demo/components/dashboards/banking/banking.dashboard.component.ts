@@ -2,6 +2,9 @@ import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Subscription, debounceTime } from 'rxjs';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 import { MessageService } from 'primeng/api';
+import { Contact } from 'src/app/demo/models/contact';
+import { ContactService } from 'src/app/demo/service/contact/contact.service';
+import { Role } from 'src/app/demo/models/Role';
 
 interface MonthlyPayment {
     name?: string;
@@ -12,7 +15,7 @@ interface MonthlyPayment {
 
 @Component({
     templateUrl: './banking.dashboard.component.html',
-    providers: [MessageService]
+    providers: [MessageService],
 })
 export class BankingDashboardComponent implements OnInit, OnDestroy {
     devises: any[] = [];
@@ -24,9 +27,14 @@ export class BankingDashboardComponent implements OnInit, OnDestroy {
 
     subscription: Subscription;
 
+    errors: { [key: string]: string } = {};
+    contact: Contact = new Contact();
+ 
     constructor(
-        private layoutService: LayoutService, 
-                ) {
+        private layoutService: LayoutService,
+        private contactService: ContactService,
+        private messageService: MessageService
+    ) {
         this.subscription = this.layoutService.configUpdate$
             .pipe(debounceTime(25))
             .subscribe((config) => {
@@ -35,7 +43,8 @@ export class BankingDashboardComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-       
+        this.getContactById(1)
+        
         this.initChart();
 
         this.payments = [
@@ -64,16 +73,12 @@ export class BankingDashboardComponent implements OnInit, OnDestroy {
                 paid: false,
                 date: '20/04/2022',
             },
-        ]; 
+        ];
     }
- 
-    
-   
 
-
-//   private showError(summary: string, detail: string): void {
-//     this.messageService.add({ severity: 'error', summary, detail });
-//   }
+    //   private showError(summary: string, detail: string): void {
+    //     this.messageService.add({ severity: 'error', summary, detail });
+    //   }
 
     initChart() {
         const documentStyle = getComputedStyle(document.documentElement);
@@ -169,4 +174,13 @@ export class BankingDashboardComponent implements OnInit, OnDestroy {
             this.subscription.unsubscribe();
         }
     }
+
+    getContactById(id: number): void {
+        this.contactService.getContactById(id).subscribe({
+            next: (response) => (this.contact = response),
+            error: (err) =>
+                console.error('Erreur lors de la récupération du contact:', err),
+        });
+    }
+
 }

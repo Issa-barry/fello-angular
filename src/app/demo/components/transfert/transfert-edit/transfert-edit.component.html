@@ -36,14 +36,10 @@
                     <span class="text-900 text-2xl block font-medium mb-4">Receveur</span>
                     <input id="receveur_phone" [(ngModel)]="transfert.receveur_phone" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.receveur_phone || errors['receveur_phone']}" placeholder="Téléphone" type="text" class="p-inputtext w-full">
                     <small *ngIf="errors['receveur_phone']">{{ errors['receveur_phone'] }}</small>
-                </div> 
+                </div>   
                 <div class="col-12 lg:col-6 field mb-4">
-                    <input id="receveur_prenom" [(ngModel)]="transfert.receveur_prenom" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.receveur_prenom || errors['receveur_prenom']}"  placeholder="Prenom" type="text" class="p-inputtext w-full">
-                    <small *ngIf="errors['receveur_prenom']">{{ errors['receveur_prenom'] }}</small>
-                </div>  
-                <div class="col-12 lg:col-6 field mb-4">
-                    <input id="receveur_nom" [(ngModel)]="transfert.receveur_nom" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.receveur_nom || errors['receveur_nom']}" placeholder="Nom" type="text" class="p-inputtext w-full">
-                    <small *ngIf="errors['receveur_nom']">{{ errors['receveur_nom'] }}</small>
+                    <input id="receveur_nom" [(ngModel)]="transfert.receveur_nom_complet" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.receveur_nom_complet || errors['receveur_nom_complet']}" placeholder="Nom" type="text" class="p-inputtext w-full">
+                    <small *ngIf="errors['receveur_nom']">{{ errors['receveur_nom_complet'] }}</small>
                 </div>
  
                 <!-- EXPEDITEUR -->
@@ -83,7 +79,7 @@
                             <span class="text-900 font-bold">Receveur</span>
                             <span class="text-900 font-bold">GNF {{ montantConverti }}</span>
                         </div>
-                        <div class="text-600 text-sm mb-2">{{ transfert.receveur_prenom }} {{ transfert.receveur_nom }}</div>
+                        <div class="text-600 text-sm mb-2">{{ transfert.receveur_nom_complet }}</div>
                         <div class="text-600 text-sm mb-2">{{ transfert.receveur_phone }}</div>
                     </div>
                 </div>
@@ -93,7 +89,7 @@
                             <span class="text-900 font-bold">Expéditeur</span>
                             <span class="text-900 font-bold">France</span>
                         </div>
-                        <div class="text-600 text-sm mb-2">{{ transfert.expediteur_prenom }} {{ transfert.expediteur_nom }}</div>
+                        <div class="text-600 text-sm mb-2">{{ transfert.expediteur_nom_complet }}</div>
                         <div class="text-600 text-sm mb-2">{{ transfert.expediteur_phone }}</div>
                         <div class="text-600 text-sm mb-2">{{ transfert.expediteur_email }}</div>
                     </div>
@@ -162,7 +158,7 @@
                             <div class="flex align-items-center justify-content-between mb-2">
                                 <span class="text-900 font-bold">Bénéficiaire</span>
                              </div>
-                            <div class="text-600 text-sm mb-2">{{ transfert.receveur_prenom }} {{ transfert.receveur_nom }}</div>
+                            <div class="text-600 text-sm mb-2"> {{ transfert.receveur_nom_complet }}</div>
                             <div class="text-600 text-sm mb-2">Tel : {{ transfert.receveur_phone }}</div>
                             <!-- <div class="text-600 text-sm mb-2">Montant : GNF {{ montantConverti }}</div> -->
                         </div>

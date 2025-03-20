@@ -19,9 +19,9 @@
                         {{ errorMessage }}
                     </small>
                     
-                </div>
+                </div> 
             </div>
-        </div>
+        </div> 
         <!-- RECAPITULATIF -->
         <div class="col-12 lg:col-6 px-4 py-4 md:px-6">
             <div class="pb-3 surface-border">
@@ -35,7 +35,7 @@
                             <span class="text-900 font-bold">Receveur</span>
                             <!-- <span class="text-900 font-bold">{{ transfert.montant_converti }}</span> -->
                         </div>
-                        <div class="text-600 text-sm mb-2" >{{ transfert.receveur_prenom }} {{ transfert.receveur_nom }}</div>
+                        <div class="text-600 text-sm mb-2" > {{ transfert.receveur_nom_complet }}</div>
                         <div class="text-600 text-sm mb-2">{{ transfert.receveur_phone}}</div>
                     </div>
                 </div>
@@ -45,7 +45,7 @@
                             <span class="text-900 font-bold">Expéditeur</span>
                             <span class="text-900 font-bold">France</span>
                         </div>
-                        <div class="text-600 text-sm mb-2">{{ transfert.expediteur_prenom }} {{ transfert.expediteur_nom }}</div>
+                        <div class="text-600 text-sm mb-2">{{ transfert.expediteur_nom_complet }}</div>
                         <div class="text-600 text-sm mb-2">{{ transfert.expediteur_phone }}</div>
                         <div class="text-600 text-sm mb-2">{{ transfert.expediteur_email }}</div>
 
@@ -82,7 +82,7 @@
         <p-dialog [(visible)]="retraitDialog" header="Confirmer" [modal]="true" [style]="{width:'550px'}">
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span>Voulez-vous confirmer le retrait de <b>{{ transfert.expediteur_prenom }} {{ transfert.expediteur_nom }}</b> ?</span>
+                <span>Voulez-vous confirmer le retrait de <b>{{ transfert.expediteur_nom_complet }}</b> ?</span>
             </div>
             <div class="flex align-items-center justify-content-center">
                 <span>Pour un montant de  <b>{{ transfert.montant_receveur }} GNF</b> ?</span>
@@ -93,5 +93,5 @@
             </ng-template>
         </p-dialog>
         <p-toast></p-toast>
-    </div>
+    </div> 
 </div>

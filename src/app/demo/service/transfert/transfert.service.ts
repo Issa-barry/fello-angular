@@ -51,14 +51,14 @@ export class TransfertService {
                 if (error.error && error.error.data) {
                     validationErrors = error.error.data;
                 }
-                break;
+                break; 
             case 0: 
                 errorMessage = 'Impossible de se connecter au serveur. Vérifiez votre connexion internet.';
                 break;
             default:
                 errorMessage = `Erreur serveur ${error.status}: ${error.message}`;
         }
-    }
+    } 
 
     return throwError(() => ({ message: errorMessage, validationErrors }));
 }

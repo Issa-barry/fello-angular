@@ -24,7 +24,7 @@ export class DevisesService {
   }
 
   getDevises(): Observable<any[]> {
-    return this.http.get<{ data: any[] }>(this.apiUrl).pipe(
+    return this.http.get<{ data: any[] }>(`${this.apiUrl}/all`).pipe(
       map(response => response.data), // Extraire les données de la réponse
       catchError(this.handleError('getDevises', [])) // Gérer les erreurs
     );

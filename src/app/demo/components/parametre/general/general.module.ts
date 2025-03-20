@@ -26,6 +26,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { AppConfigModule } from 'src/app/layout/config/app.config.module';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
   declarations: [GeneralComponent],
@@ -66,6 +67,7 @@ import { AppConfigModule } from 'src/app/layout/config/app.config.module';
 			InputTextModule,
 			RippleModule,
 			AppConfigModule,
+			 ConfirmDialogModule,
   ]
 })
 export class GeneralModule { }
