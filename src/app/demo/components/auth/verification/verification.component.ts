@@ -10,7 +10,7 @@ export class VerificationComponent {
     val2!: number;
 
     val3!: number;
-
+ 
     val4!: number;
 
     constructor(private layoutService: LayoutService) {}
