@@ -35,8 +35,8 @@ export class LoginComponent implements OnInit {
                 console.clear();
             },
             error: (err) => {
-                console.error('Erreur de connexion :', err.error);
-                this.errorMessage = err.error.error;
+                console.error('Erreur de connexion :', err);
+                this.errorMessage = err.error.error.email || 'Identifiants incorrects.'; 
             },
         });
     }

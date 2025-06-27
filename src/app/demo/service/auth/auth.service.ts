@@ -94,7 +94,7 @@ export class AuthService {
                         access_token: response.access_token,
                     });
                     return response;
-                })
+                }),
                 // catchError(this.handleError)
             );
     }
