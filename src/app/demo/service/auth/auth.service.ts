@@ -99,14 +99,15 @@ export class AuthService {
     }
 
     logout(): Observable<any> {
+        
         return this.http.post<any>(`${this.apiUrl}/logout`, {}).pipe(
             map(() => {
                 this.tokenService.clearToken();
                 this.currentUserSubject.next(null);
                 localStorage.removeItem('user_id');
                 this.router.navigate(['/auth/login']);
-            })
-            // catchError(this.handleError('logout'))
+            }),
+            catchError(this.handleError)
         );
     }
 

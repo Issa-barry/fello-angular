@@ -15,12 +15,13 @@ export class NewPasswordComponent {
     loading : boolean = false
     submitted = false;
     token: string = '';
+    email: string = '';
     errors: { [key: string]: string } = {};
     errorMessage: string = '';
 
  
     constructor(
-        private authService: AuthService,
+        private authService: AuthService, 
         private layoutService: LayoutService,
         private route: ActivatedRoute,
         private messageService: MessageService,
@@ -30,6 +31,7 @@ export class NewPasswordComponent {
     ngOnInit(): void {
         // Récupérer le token depuis l'URL
         this.token = this.route.snapshot.queryParams['token'] || '';
+        this.email = this.route.snapshot.queryParams['email'] || '';
     }
 
     get dark(): boolean {
@@ -48,7 +50,7 @@ export class NewPasswordComponent {
         this.errorMessage = '';
         
         const data = {
-            email: "i8699@example.com",
+            email: this.email,
             token: this.token,
             password: this.password,
             password_confirmation: this.confirmPassword,
@@ -58,7 +60,6 @@ export class NewPasswordComponent {
         this.authService.resetPassword(data).subscribe({
             next: (response) => {
             
-             
                 this.messageService.add({
                     severity: 'success',
                     summary: 'Succès',
