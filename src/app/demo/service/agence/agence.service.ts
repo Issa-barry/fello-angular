@@ -52,7 +52,7 @@ export class AgenceService {
       return this.http.get<{ success: boolean, data: Agence }>(`${this.apiUrl}/getById/${id}`).pipe(
         map(response => response.data),
         // catchError(this.handleError)
-      );
+      ); 
     }
  
 

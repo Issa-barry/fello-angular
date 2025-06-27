@@ -28,12 +28,7 @@ export class ForgotPasswordComponent {
         this.errorMessage = '';
         this.successMessage = '';
         this.loading = true;
-
-        if (!this.validateEmail(this.email)) {
-            this.errorMessage = 'Adresse email invalide.';
-            return;
-        }
-
+ 
         this.authService.sendResetPasswordLink(this.email).subscribe({
             next: (response) => {
                
@@ -47,8 +42,10 @@ export class ForgotPasswordComponent {
                     this.loading = false
             },
             error: (err) => {
+                console.log(err);
+                
                 this.errorMessage =
-                    err.error.error || "Erreur lors de l'envoi du lien.";
+                    err.error.data.email || "Erreur lors de l'envoi du lien.";
                     this.loading = false
             },
         });

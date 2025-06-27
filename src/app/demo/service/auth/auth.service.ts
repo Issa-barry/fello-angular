@@ -50,7 +50,8 @@ export class AuthService {
         let errorMessage = 'Une erreur inconnue est survenue';
 
         if (error.error instanceof ErrorEvent) {
-            errorMessage = `Erreur client : ${error.error.message}`;
+            errorMessage = `Erreur client : ${error.error.message}`; 
+
         } else {
             switch (error.status) {
                 case 400:
@@ -97,7 +98,7 @@ export class AuthService {
                 // catchError(this.handleError)
             );
     }
-
+ 
     logout(): Observable<any> {
         
         return this.http.post<any>(`${this.apiUrl}/logout`, {}).pipe(
