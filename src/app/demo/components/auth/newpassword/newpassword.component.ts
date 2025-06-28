@@ -72,9 +72,9 @@ export class NewPasswordComponent implements OnInit {
         this.submitted = false;
 
         this.confirmationService.confirm({
-            message: 'Cliquez sur "Se connecter" pour continuer.',
+            // message: message,
             header: message,
-            icon: 'pi pi-check-circle',
+            // icon: 'pi pi-check-circle',
             acceptLabel: 'Se connecter',
             rejectVisible: false,
             accept: () => this.router.navigate(['/auth/login']),
