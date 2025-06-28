@@ -1,27 +1,26 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { MessageService } from 'primeng/api';
-import { AuthService } from 'src/app/demo/service/auth/auth.service';
+import { PasswordService } from 'src/app/demo/service/auth/password/password.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
     templateUrl: './newpassword.component.html',
     providers: [MessageService],
 })
-export class NewPasswordComponent {
-    rememberMe: boolean = false;
-    password: string = '';
-    confirmPassword: string = '';
-    loading : boolean = false
+export class NewPasswordComponent implements OnInit {
+    password = '';
+    confirmPassword = '';
+    rememberMe = false;
+    loading = false;
     submitted = false;
-    token: string = '';
-    email: string = '';
+    token = '';
+    email = '';
     errors: { [key: string]: string } = {};
-    errorMessage: string = '';
+    errorMessage = '';
 
- 
     constructor(
-        private authService: AuthService, 
+        private passwordService: PasswordService,
         private layoutService: LayoutService,
         private route: ActivatedRoute,
         private messageService: MessageService,
@@ -29,9 +28,9 @@ export class NewPasswordComponent {
     ) {}
 
     ngOnInit(): void {
-        // Récupérer le token depuis l'URL
-        this.token = this.route.snapshot.queryParams['token'] || '';
-        this.email = this.route.snapshot.queryParams['email'] || '';
+        const queryParams = this.route.snapshot.queryParams;
+        this.token = queryParams['token'] || '';
+        this.email = queryParams['email'] || '';
     }
 
     get dark(): boolean {
@@ -41,53 +40,57 @@ export class NewPasswordComponent {
     resetPassword(): void {
         this.submitted = true;
         this.errors = {};
+        this.errorMessage = '';
 
         if (!this.password || !this.confirmPassword) {
             this.errorMessage = 'Tous les champs sont obligatoires.';
             return;
         }
- 
-        this.errorMessage = '';
-        
-        const data = {
+
+        this.loading = true;
+        const data = this.buildResetData();
+
+        this.passwordService.resetPassword(data).subscribe({
+            next: (response) => this.handleSuccess(response),
+            error: (error) => this.handleError(error),
+        });
+    }
+
+    private buildResetData() {
+        return {
             email: this.email,
             token: this.token,
             password: this.password,
             password_confirmation: this.confirmPassword,
         };
-
-        this.loading = true;
-        this.authService.resetPassword(data).subscribe({
-            next: (response) => {
-            
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès',
-                    detail: response.message  ,
-                    life: 7000,
-                });
-                this.loading = false
-                this.submitted = false;
-                //   this.successMessage = 'Votre mot de passe a été réinitialisé avec succès ! Redirection...';
-                setTimeout(() => this.router.navigate(['/auth/login']), 7000);
-            },
-            error: (err) => {
-                console.error(err)
-                if (err.error && err.error.errors) {
-                    this.errors = err.error.errors;
-                }
-
-                if (err.error && err.error.error) {
-                    this.errorMessage = err.error.error || "Une erreur s'est produite.";
-                }
-
-              
-              this.loading = false,
-              this.submitted = false;
-            }
-          });
-        
     }
 
-   
+    private handleSuccess(response: any) {
+        this.messageService.add({
+            severity: 'success',
+            summary: 'Succès',
+            detail: response.message,
+            life: 7000,
+        });
+        this.loading = false;
+        this.submitted = false;
+        setTimeout(() => this.router.navigate(['/auth/login']), 7000);
+    }
+
+    private handleError(err: any) {
+        console.error(err);
+        const validationErrors = err?.error?.data || {};
+        this.errors = {};
+
+        // Itère sur chaque champ avec erreur
+        for (const field in validationErrors) {
+            if (validationErrors.hasOwnProperty(field)) {
+                this.errors[field] = validationErrors[field].join(' ');
+            }
+        }
+
+        this.errorMessage = err?.error?.message || '';
+        this.loading = false;
+        this.submitted = false;
+    }
 }

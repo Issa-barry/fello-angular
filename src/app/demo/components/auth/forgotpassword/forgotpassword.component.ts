@@ -1,6 +1,6 @@
 import { Component } from '@angular/core';
 import { MessageService } from 'primeng/api';
-import { AuthService } from 'src/app/demo/service/auth/auth.service';
+import { PasswordService } from 'src/app/demo/service/auth/password/password.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
@@ -15,7 +15,7 @@ export class ForgotPasswordComponent {
     successMessage: string = '';
 
     constructor(
-        private authService: AuthService,
+        private passwordService: PasswordService,
         private layoutService: LayoutService,
         private messageService: MessageService,
     ) {}
@@ -29,7 +29,7 @@ export class ForgotPasswordComponent {
         this.successMessage = '';
         this.loading = true;
  
-        this.authService.sendResetPasswordLink(this.email).subscribe({
+        this.passwordService.sendResetPasswordLink(this.email).subscribe({
             next: (response) => {
                
                    this.successMessage = response.message
@@ -43,7 +43,6 @@ export class ForgotPasswordComponent {
             },
             error: (err) => {
                 console.log(err);
-                
                 this.errorMessage =
                     err.error.data.email || "Erreur lors de l'envoi du lien.";
                     this.loading = false
