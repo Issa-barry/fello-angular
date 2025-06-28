@@ -1,37 +1,36 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
-import { AuthService } from 'src/app/demo/service/auth/auth.service';
+import { ConfirmationService, MessageService } from 'primeng/api';
+import { PasswordService } from 'src/app/demo/service/auth/password/password.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
     templateUrl: './newpassword.component.html',
-    providers: [MessageService],
+    providers: [MessageService, ConfirmationService],
 })
-export class NewPasswordComponent {
-    rememberMe: boolean = false;
-    password: string = '';
-    confirmPassword: string = '';
-    loading : boolean = false
+export class NewPasswordComponent implements OnInit {
+    password = '';
+    confirmPassword = '';
+    loading = false;
     submitted = false;
-    token: string = '';
-    email: string = '';
+    token = '';
+    email = '';
     errors: { [key: string]: string } = {};
-    errorMessage: string = '';
+    errorMessage = '';
 
- 
     constructor(
-        private authService: AuthService, 
+        private passwordService: PasswordService,
         private layoutService: LayoutService,
         private route: ActivatedRoute,
         private messageService: MessageService,
+        private confirmationService: ConfirmationService,
         private router: Router
     ) {}
 
     ngOnInit(): void {
-        // Récupérer le token depuis l'URL
-        this.token = this.route.snapshot.queryParams['token'] || '';
-        this.email = this.route.snapshot.queryParams['email'] || '';
+        const { token = '', email = '' } = this.route.snapshot.queryParams;
+        this.token = token;
+        this.email = email;
     }
 
     get dark(): boolean {
@@ -40,54 +39,66 @@ export class NewPasswordComponent {
 
     resetPassword(): void {
         this.submitted = true;
-        this.errors = {};
+        this.clearErrors();
 
-        if (!this.password || !this.confirmPassword) {
+        if (!this.isFormValid()) {
             this.errorMessage = 'Tous les champs sont obligatoires.';
             return;
         }
- 
-        this.errorMessage = '';
-        
-        const data = {
+
+        this.loading = true;
+
+        this.passwordService.resetPassword(this.buildResetData()).subscribe({
+            next: (response) => this.showSuccessDialog(response.message),
+            error: (error) => this.showValidationErrors(error),
+        });
+    }
+
+    private isFormValid(): boolean {
+        return this.password.trim() !== '' && this.confirmPassword.trim() !== '';
+    }
+
+    private buildResetData() {
+        return {
             email: this.email,
             token: this.token,
             password: this.password,
             password_confirmation: this.confirmPassword,
         };
-
-        this.loading = true;
-        this.authService.resetPassword(data).subscribe({
-            next: (response) => {
-            
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès',
-                    detail: response.message  ,
-                    life: 7000,
-                });
-                this.loading = false
-                this.submitted = false;
-                //   this.successMessage = 'Votre mot de passe a été réinitialisé avec succès ! Redirection...';
-                setTimeout(() => this.router.navigate(['/auth/login']), 7000);
-            },
-            error: (err) => {
-                console.error(err)
-                if (err.error && err.error.errors) {
-                    this.errors = err.error.errors;
-                }
-
-                if (err.error && err.error.error) {
-                    this.errorMessage = err.error.error || "Une erreur s'est produite.";
-                }
-
-              
-              this.loading = false,
-              this.submitted = false;
-            }
-          });
-        
     }
 
-   
+    private showSuccessDialog(message: string): void {
+        this.loading = false;
+        this.submitted = false;
+
+        this.confirmationService.confirm({
+            message: 'Cliquez sur "Se connecter" pour continuer.',
+            header: message,
+            icon: 'pi pi-check-circle',
+            acceptLabel: 'Se connecter',
+            rejectVisible: false,
+            accept: () => this.router.navigate(['/auth/login']),
+        });
+    }
+
+    private showValidationErrors(err: any): void {
+        console.error(err);
+        const validationErrors = err?.error?.data || {};
+        this.errors = {};
+
+        for (const field in validationErrors) {
+            if (validationErrors.hasOwnProperty(field)) {
+                this.errors[field] = validationErrors[field].join(' ');
+            }
+        }
+
+        this.errorMessage = err?.error?.message || '';
+        this.loading = false;
+        this.submitted = false;
+    }
+
+    private clearErrors(): void {
+        this.errors = {};
+        this.errorMessage = '';
+    }
 }

@@ -9,6 +9,8 @@ import { RippleModule } from 'primeng/ripple';
 import { AppConfigModule } from 'src/app/layout/config/app.config.module';
 import { PasswordModule } from 'primeng/password';
 import { ToastModule } from 'primeng/toast';
+import { DialogModule } from 'primeng/dialog';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
     imports: [
@@ -20,7 +22,9 @@ import { ToastModule } from 'primeng/toast';
         RippleModule,
         AppConfigModule,
         PasswordModule,
-        ToastModule
+        ToastModule,
+        ConfirmDialogModule,
+        DialogModule
     ],
     declarations: [NewPasswordComponent]
 })

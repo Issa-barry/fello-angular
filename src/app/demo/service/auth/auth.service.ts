@@ -152,35 +152,4 @@ export class AuthService {
         );
     }
 
-    sendResetPasswordLink(email: any): Observable<any> {
-        return this.http
-            .post<any>(
-                `${this.apiUrl}/sendResetPasswordLink`,
-                { email },
-                httpOption
-            )
-            .pipe(
-                map((response) => {
-                    console.log('Envoie reussi :', response);
-                    return response;
-                })
-                // catchError(this.handleError)
-            );
-    }
-
-    resetPassword(data: {
-        email: string;
-        token: string;
-        password: string;
-        password_confirmation: string;
-    }): Observable<any> {
-        return this.http
-            .post<any>(`${this.apiUrl}/ResetPassword`, data, httpOption)
-            .pipe(
-                map((response) => {
-                    console.log('Changement de mot de passe reussi :', response);
-                    return response;
-                })
-            );
-    }
 }
