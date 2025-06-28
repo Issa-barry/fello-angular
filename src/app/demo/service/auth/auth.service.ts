@@ -108,7 +108,7 @@ export class AuthService {
                 localStorage.removeItem('user_id');
                 this.router.navigate(['/auth/login']);
             }),
-            catchError(this.handleError)
+            catchError(this.handleError) 
         );
     }
 
