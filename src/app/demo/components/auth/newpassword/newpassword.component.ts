@@ -1,12 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { MessageService } from 'primeng/api';
+import { ConfirmationService, MessageService } from 'primeng/api';
 import { PasswordService } from 'src/app/demo/service/auth/password/password.service';
 import { LayoutService } from 'src/app/layout/service/app.layout.service';
 
 @Component({
     templateUrl: './newpassword.component.html',
-    providers: [MessageService],
+    providers: [MessageService, ConfirmationService],
 })
 export class NewPasswordComponent implements OnInit {
     password = '';
@@ -18,12 +18,14 @@ export class NewPasswordComponent implements OnInit {
     email = '';
     errors: { [key: string]: string } = {};
     errorMessage = '';
+    resetPasswordDialog = false;
 
     constructor(
         private passwordService: PasswordService,
         private layoutService: LayoutService,
         private route: ActivatedRoute,
         private messageService: MessageService,
+        private confirmationService: ConfirmationService,
         private router: Router
     ) {}
 
@@ -35,6 +37,16 @@ export class NewPasswordComponent implements OnInit {
 
     get dark(): boolean {
         return this.layoutService.config().colorScheme !== 'light';
+    }
+
+    openDialog(): void {
+        this.resetPasswordDialog = true;
+    }
+
+    /** Ferme tous les dialogues et réinitialise le formulaire */
+    hideDialog(): void {
+        this.resetPasswordDialog = false;
+        this.submitted = false;
     }
 
     resetPassword(): void {
@@ -66,15 +78,22 @@ export class NewPasswordComponent implements OnInit {
     }
 
     private handleSuccess(response: any) {
-        this.messageService.add({
-            severity: 'success',
-            summary: 'Succès',
-            detail: response.message,
-            life: 7000,
-        });
         this.loading = false;
         this.submitted = false;
-        setTimeout(() => this.router.navigate(['/auth/login']), 7000);
+
+        this.confirmationService.confirm({
+            message: ' Cliquez sur "Se connecter" pour continuer.',
+            header: response.message,
+            icon: 'pi pi-check-circle',
+            acceptLabel: 'Se connecter',
+            rejectVisible: false,
+            accept: () => {
+                this.router.navigate(['/auth/login']);
+            },
+            reject: () => {
+                this.resetPasswordDialog = false;
+            },
+         });
     }
 
     private handleError(err: any) {
