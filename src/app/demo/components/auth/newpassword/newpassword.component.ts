@@ -11,14 +11,12 @@ import { LayoutService } from 'src/app/layout/service/app.layout.service';
 export class NewPasswordComponent implements OnInit {
     password = '';
     confirmPassword = '';
-    rememberMe = false;
     loading = false;
     submitted = false;
     token = '';
     email = '';
     errors: { [key: string]: string } = {};
     errorMessage = '';
-    resetPasswordDialog = false;
 
     constructor(
         private passwordService: PasswordService,
@@ -30,42 +28,34 @@ export class NewPasswordComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
-        const queryParams = this.route.snapshot.queryParams;
-        this.token = queryParams['token'] || '';
-        this.email = queryParams['email'] || '';
+        const { token = '', email = '' } = this.route.snapshot.queryParams;
+        this.token = token;
+        this.email = email;
     }
 
     get dark(): boolean {
         return this.layoutService.config().colorScheme !== 'light';
     }
 
-    openDialog(): void {
-        this.resetPasswordDialog = true;
-    }
-
-    /** Ferme tous les dialogues et réinitialise le formulaire */
-    hideDialog(): void {
-        this.resetPasswordDialog = false;
-        this.submitted = false;
-    }
-
     resetPassword(): void {
         this.submitted = true;
-        this.errors = {};
-        this.errorMessage = '';
+        this.clearErrors();
 
-        if (!this.password || !this.confirmPassword) {
+        if (!this.isFormValid()) {
             this.errorMessage = 'Tous les champs sont obligatoires.';
             return;
         }
 
         this.loading = true;
-        const data = this.buildResetData();
 
-        this.passwordService.resetPassword(data).subscribe({
-            next: (response) => this.handleSuccess(response),
-            error: (error) => this.handleError(error),
+        this.passwordService.resetPassword(this.buildResetData()).subscribe({
+            next: (response) => this.showSuccessDialog(response.message),
+            error: (error) => this.showValidationErrors(error),
         });
+    }
+
+    private isFormValid(): boolean {
+        return this.password.trim() !== '' && this.confirmPassword.trim() !== '';
     }
 
     private buildResetData() {
@@ -77,31 +67,25 @@ export class NewPasswordComponent implements OnInit {
         };
     }
 
-    private handleSuccess(response: any) {
+    private showSuccessDialog(message: string): void {
         this.loading = false;
         this.submitted = false;
 
         this.confirmationService.confirm({
-            message: ' Cliquez sur "Se connecter" pour continuer.',
-            header: response.message,
+            message: 'Cliquez sur "Se connecter" pour continuer.',
+            header: message,
             icon: 'pi pi-check-circle',
             acceptLabel: 'Se connecter',
             rejectVisible: false,
-            accept: () => {
-                this.router.navigate(['/auth/login']);
-            },
-            reject: () => {
-                this.resetPasswordDialog = false;
-            },
-         });
+            accept: () => this.router.navigate(['/auth/login']),
+        });
     }
 
-    private handleError(err: any) {
+    private showValidationErrors(err: any): void {
         console.error(err);
         const validationErrors = err?.error?.data || {};
         this.errors = {};
 
-        // Itère sur chaque champ avec erreur
         for (const field in validationErrors) {
             if (validationErrors.hasOwnProperty(field)) {
                 this.errors[field] = validationErrors[field].join(' ');
@@ -111,5 +95,10 @@ export class NewPasswordComponent implements OnInit {
         this.errorMessage = err?.error?.message || '';
         this.loading = false;
         this.submitted = false;
+    }
+
+    private clearErrors(): void {
+        this.errors = {};
+        this.errorMessage = '';
     }
 }
