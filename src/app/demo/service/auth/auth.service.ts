@@ -50,7 +50,8 @@ export class AuthService {
         let errorMessage = 'Une erreur inconnue est survenue';
 
         if (error.error instanceof ErrorEvent) {
-            errorMessage = `Erreur client : ${error.error.message}`;
+            errorMessage = `Erreur client : ${error.error.message}`; 
+
         } else {
             switch (error.status) {
                 case 400:
@@ -93,20 +94,21 @@ export class AuthService {
                         access_token: response.access_token,
                     });
                     return response;
-                })
+                }),
                 // catchError(this.handleError)
             );
     }
-
+ 
     logout(): Observable<any> {
+        
         return this.http.post<any>(`${this.apiUrl}/logout`, {}).pipe(
             map(() => {
                 this.tokenService.clearToken();
                 this.currentUserSubject.next(null);
                 localStorage.removeItem('user_id');
                 this.router.navigate(['/auth/login']);
-            })
-            // catchError(this.handleError('logout'))
+            }),
+            catchError(this.handleError) 
         );
     }
 

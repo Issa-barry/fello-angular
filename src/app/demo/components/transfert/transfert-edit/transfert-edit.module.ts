@@ -14,6 +14,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { DialogModule } from 'primeng/dialog';
 import { ToastModule } from 'primeng/toast';
 import { TransfertEditComponent } from './transfert-edit.component';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
 
 @NgModule({
     declarations: [TransfertEditComponent],
@@ -31,6 +32,7 @@ import { TransfertEditComponent } from './transfert-edit.component';
         InputGroupAddonModule,
         DialogModule,
         ToastModule,
+        ConfirmDialogModule
     ],
 })
 export class TransfertEditModule {}

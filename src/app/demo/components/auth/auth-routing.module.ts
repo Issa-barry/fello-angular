@@ -11,8 +11,10 @@ import { RouterModule } from '@angular/router';
         { path: 'newpassword', loadChildren: () => import('./newpassword/newpassword.module').then(m => m.NewPasswordModule) },
         { path: 'verification', loadChildren: () => import('./verification/verification.module').then(m => m.VerificationModule) },
         { path: 'lockscreen', loadChildren: () => import('./lockscreen/lockscreen.module').then(m => m.LockScreenModule) },
+        { path: 'validation', loadChildren: () => import('./validation-register/validation-register.module').then(m => m.ValidationRegisterModule) },
         { path: '**', redirectTo: '/notfound' }
     ])],
     exports: [RouterModule]
 })
 export class AuthRoutingModule { }
+  

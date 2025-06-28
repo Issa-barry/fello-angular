@@ -101,9 +101,15 @@ export class TransfertService {
     );
   }
 
+  
+  updateTransfertByCode(code: string, transfert: Transfert): Observable<Transfert> {
+    return this.http.put<Transfert>(`${this.apiUrl}/updateByCode/${code}`, transfert, httpOption).pipe(
+      catchError(this.handleError)
+    );
+  }
 
-  updateTransfert(id: number, transfert: Transfert): Observable<Transfert> {
-    return this.http.put<Transfert>(`${this.apiUrl}/${id}`, transfert, httpOption).pipe(
+  updateTransfertById(id: number, transfert: Transfert): Observable<Transfert> {
+    return this.http.put<Transfert>(`${this.apiUrl}/updateById/${id}`, transfert, httpOption).pipe(
       catchError(this.handleError)
     );
   }

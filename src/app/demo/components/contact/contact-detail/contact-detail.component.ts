@@ -327,7 +327,7 @@ export class ContactDetailComponent implements OnInit {
                 });
             },
         });
-    }
+    } 
 
     affecterAgence(): void {
         if (!this.contact.id || !this.reference) {

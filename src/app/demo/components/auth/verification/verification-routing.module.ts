@@ -8,4 +8,4 @@ import { VerificationComponent } from './verification.component';
     ])],
     exports: [RouterModule]
 })
-export class VerificationRoutingModule { }
+export class VerificationRoutingModule { } 

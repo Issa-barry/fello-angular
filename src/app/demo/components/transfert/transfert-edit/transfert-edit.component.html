@@ -22,62 +22,32 @@
                           >
                         </p-dropdown>
                     <small *ngIf="errors['quartier']">{{ errors['quartier'] }}</small>
-                </div>   
-                <!--                 
-                <div class="col-12 field mb-4">
-                    <span class="text-900 text-2xl block font-medium mb-4">Montant</span>
-                    <input id="receveur_phone" [(ngModel)]="transfert.montant" (input)="calculFraisTotal()" [ngClass]="{'ng-invalid ng-dirty': submitted && !transfert.montant || errors['montant']}"  placeholder="Montant" type="number" class="p-inputtext w-full">
-                    <small *ngIf="errors['montant']">{{ errors['montant'] }}</small>
-                </div> 
-                 -->
+                </div>    
 
                 <!-- RECEVEUR -->
                 <div class="col-12 field mb-4">
                     <span class="text-900 text-2xl block font-medium mb-4">Receveur</span>
-                    <input id="receveur_phone" [(ngModel)]="transfert.receveur_phone" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.receveur_phone || errors['receveur_phone']}" placeholder="Téléphone" type="text" class="p-inputtext w-full">
+                    <input id="receveur_phone" [(ngModel)]="transfert.receveur_phone" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.receveur_phone || errors['receveur_phone'] }" placeholder="Téléphone" type="text" class="p-inputtext w-full">
                     <small *ngIf="errors['receveur_phone']">{{ errors['receveur_phone'] }}</small>
                 </div>   
-                <div class="col-12 lg:col-6 field mb-4">
-                    <input id="receveur_nom" [(ngModel)]="transfert.receveur_nom_complet" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.receveur_nom_complet || errors['receveur_nom_complet']}" placeholder="Nom" type="text" class="p-inputtext w-full">
-                    <small *ngIf="errors['receveur_nom']">{{ errors['receveur_nom_complet'] }}</small>
+                <div class="col-12 lg:col-12 field mb-4">
+                    <input id="receveur_nom_complet" [(ngModel)]="transfert.receveur_nom_complet" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.receveur_nom_complet || errors['receveur_nom_complet']}" placeholder="Nom complet" type="text" class="p-inputtext w-full">
+                    <small *ngIf="errors['receveur_nom_complet']">{{ errors['receveur_nom_complet'] }}</small>
                 </div>
- 
-                <!-- EXPEDITEUR -->
-                <!-- <div class="col-12 field mb-4">
-                    <span class="text-900 text-2xl block font-medium mb-4">Expediteur</span>
-                    <input id="expediteur_phone" [(ngModel)]="transfert.expediteur_phone" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.expediteur_phone || errors['expediteur_phone']}" placeholder="Téléphone" type="text" class="p-inputtext w-full">
-                    <small *ngIf="errors['expediteur_phone']">{{ errors['expediteur_phone'] }}</small>
-                </div> 
-                <div class="col-12 lg:col-6 field mb-4">
-                    <input id="expediteur_prenom" [(ngModel)]="transfert.expediteur_prenom" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.expediteur_prenom || errors['expediteur_prenom']}" placeholder="Prénom" type="text" class="p-inputtext w-full">
-                    <small *ngIf="errors['expediteur_prenom']">{{ errors['expediteur_prenom'] }}</small>
-                </div>
-                <div class="col-12 lg:col-6 field mb-4">
-                    <input id="expediteur_nom" [(ngModel)]="transfert.expediteur_nom" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.expediteur_nom || errors['expediteur_nom']}" placeholder="Nom" type="text" class="p-inputtext w-full">
-                    <small *ngIf="errors['expediteur_nom']">{{ errors['expediteur_nom'] }}</small>
-                </div>
-                <div class="col-12 field mb-2">
-                    <input id="expediteur_email" [(ngModel)]="transfert.expediteur_email" [ngClass]="{'ng-invalid ng-dirty' : submitted && !transfert.expediteur_email || errors['expediteur_email']}" placeholder="Email" type="text" class="p-inputtext w-full mb-4">
-                    <small *ngIf="errors['expediteur_email']">{{ errors['expediteur_email'] }}</small>
-                </div> -->
-                 
-                <!-- <div class="col-12 flex flex-column lg:flex-row justify-content-center align-items-center lg:justify-content-end my-6">
-                    <button pButton pRipple class="p-button-secondary p-button-outlined mt-3 lg:mt-0 w-full lg:w-auto flex-order-2 lg:flex-order-1 lg:mr-4" label="Annuler" icon="pi pi-fw pi-arrow-left"></button>
-                </div> -->
             </div>
         </div>
 
         <!-- RECAPITULATIF -->
         <div class="col-12 lg:col-6 px-4 py-4 md:px-6">
             <div class="pb-3 surface-border">
-                <span class="text-900 font-medium text-xl">Ticket</span>
+                <span class="text-900 font-medium text-xl">Ticket : {{ transfert.code }}</span>
             </div>
             <div>
                 <div class="flex flex-column lg:flex-row flex-wrap lg:align-items-center py-2 mt-3 surface-border">
                     <div class="flex-auto lg:ml-3">
                         <div class="flex align-items-center justify-content-between mb-3">
                             <span class="text-900 font-bold">Receveur</span>
-                            <span class="text-900 font-bold">GNF {{ montantConverti }}</span>
+                            <!-- <span class="text-900 font-bold">GNF  </span> -->
                         </div>
                         <div class="text-600 text-sm mb-2">{{ transfert.receveur_nom_complet }}</div>
                         <div class="text-600 text-sm mb-2">{{ transfert.receveur_phone }}</div>
@@ -96,22 +66,26 @@
                 </div>
                 <div class="py-2 mt-3">
                     <div class="flex justify-content-between align-items-center mb-3">
+                        <span class="text-900 font-medium">Montant à récupérer</span>
+                        <span class="text-900 font-bold"> {{ transfert.montant_receveur }} {{ transfert.devise_cible.tag }}</span>
+                    </div>
+                    <div class="flex justify-content-between align-items-center mb-3">
                         <span class="text-900 font-medium">Montant envoyé</span>
-                        <span class="text-900 font-bold">€ {{ transfert.montant_expediteur }}</span>
+                        <span class="text-900 font-bold"> {{ transfert.montant_expediteur }} {{ transfert.devise_source.tag }}</span>
                     </div>
                     <div class="flex justify-content-between align-items-center mb-3">
                         <span class="text-900 font-medium">Frais</span>
-                        <span class="text-900">€ {{ frais }}</span>
+                        <span class="text-900"> {{ transfert.frais }} {{ transfert.devise_source.tag }}</span>
                     </div>
                     <div class="flex justify-content-between align-items-center mb-3">
                         <span class="text-900 font-bold">Total</span>
-                        <span class="text-900 font-medium text-xl text-primary font-bold">{{ total }}</span>
+                        <span class="text-900 font-medium text-xl text-primary font-bold">{{ transfert.total }} {{ transfert.devise_source.tag }}</span>
                     </div>
                 </div>
                 
                 <!-- <button pButton pRipple class="col-12 my-2" label="openTicket" icon="pi pi-fw pi-check" (click)="openTicketDialog()"></button> -->
                    
-                <button pButton pRipple class="col-12"   label="Enregistrer les modifications" icon="pi pi-fw pi-check" (click)="verifierFormulaire()"></button>
+                <button pButton pRipple class="col-12"   label="Enregistrer les modifications" icon="pi pi-fw pi-check" (click)="confirmationModificationReceveur()"></button>
             </div>
              
         </div>
@@ -125,10 +99,10 @@
          >
             <div class="flex align-items-center justify-content-center">
                 <i class="pi pi-exclamation-triangle mr-3" style="font-size: 2rem"></i>
-                <span>Montan : <b>1 200 000 GNF</b></span>
+                <span>Montan : <b>{{ transfert.montant_receveur }} {{ transfert.devise_cible.tag }}</b></span>
             </div>
             <div class="flex align-items-center justify-content-center">
-                <span>à  <b>Asma BALDE</b> ?</span>
+                <span>à  <b>{{ transfert.receveur_nom_complet }}</b> ?</span>
             </div>
             <ng-template pTemplate="footer">
                 <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Non" (click)="hideDialog()"></button>
@@ -136,56 +110,8 @@
             </ng-template>
         </p-dialog>
 
-        <p-dialog [(visible)]="ticketDialog"  [closable]="false"  header="Ticket de retrait" [modal]="true" [style]="{width:'450px'}">
-            <div class=""> 
-                <div>
-                    <div class="flex flex-column lg:flex-row flex-wrap lg:align-items-center py-0 mt-2 surface-border">
-                        <div class="flex-auto lg:ml-3">
-                            <div class="flex align-items-center justify-content-between mb-2">
-                                <span class="text-900 font-bold">CODE : <span class="text-600"> FG875</span> </span>
-                             </div>
-                          </div>
-                    </div>
-                    <div class="flex flex-column lg:flex-row flex-wrap lg:align-items-center py-0 mt-2 surface-border">
-                        <div class="flex-auto lg:ml-3">
-                            <div class="flex align-items-center justify-content-between mb-2">
-                                <span class="text-900 font-bold">Montant : <span class="text-600"> {{ montantConverti }} GNF</span> </span>
-                             </div>
-                          </div>
-                    </div>
-                    <div class="flex flex-column lg:flex-row flex-wrap lg:align-items-center py-2 mt-1 surface-border">
-                        <div class="flex-auto lg:ml-3">
-                            <div class="flex align-items-center justify-content-between mb-2">
-                                <span class="text-900 font-bold">Bénéficiaire</span>
-                             </div>
-                            <div class="text-600 text-sm mb-2"> {{ transfert.receveur_nom_complet }}</div>
-                            <div class="text-600 text-sm mb-2">Tel : {{ transfert.receveur_phone }}</div>
-                            <!-- <div class="text-600 text-sm mb-2">Montant : GNF {{ montantConverti }}</div> -->
-                        </div>
-                    </div>
-                    <div class="flex flex-column lg:flex-row flex-wrap lg:align-items-center py-2 mt-1 surface-border">
-                        <div class="flex-auto lg:ml-3">
-                            <div class="flex align-items-center justify-content-between mb-2">
-                                <span class="text-900 font-bold">Agence</span>
-                                <!-- <span class="text-900 font-bold">Conakry</span> -->
-                            </div>
-                            <div class="text-600 text-sm mb-2">Tel : 666 17 70 06</div>
-                            <div class="text-600 text-sm mb-2">Adresse : Cosa pharmacie / Conakry</div>
-                        </div>
-                    </div>
-                    <div class="py-2 mt-3"> 
-                        <div class="flex justify-content-between align-items-center mb-3">
-                            <span class="text-900 font-medium">Date d'envoie</span>
-                            <span class="text-900"> 08/03/20258</span>
-                        </div> 
-                    </div> 
-                </div>
-                 
-            </div>
-            <ng-template pTemplate="footer">
-                <button pButton pRipple icon="pi pi-times" class="p-button-text" label="Fermer" (click)="hideTicketDialog()"></button>
-            </ng-template>
-        </p-dialog>
+         
         <p-toast></p-toast>
+        <p-confirmDialog></p-confirmDialog>
     </div>
 </div>

@@ -21,7 +21,7 @@ export class TransfertEnvoieComponent implements OnInit {
 
     transfert: Transfert = new Transfert();
     total = 0;
-    frais = 0;
+    frais = 0; 
     readonly tauxDeFrais = 0.05; // 5%
     montantConverti = 0;
     readonly tauxConversion = 9500; // 1 euro = 9500 GNF
@@ -120,7 +120,7 @@ export class TransfertEnvoieComponent implements OnInit {
             },
         });
     }
-
+ 
     /** Ouvre le dialogue du ticket */
     openTicketDialog(): void {
         this.ticketDialog = true;
