@@ -22,7 +22,7 @@ export class ContactNewComponent implements OnInit {
     errors: { [key: string]: string } = {};
     isGuineeSelected: boolean = false;
     loading = false; 
-  
+   
     constructor(
         private router: Router,
         private contactService: ContactService,

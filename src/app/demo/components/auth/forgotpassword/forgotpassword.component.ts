@@ -12,7 +12,7 @@ export class ForgotPasswordComponent {
     errorMessage = '';
     emailValid = true;
     loading = false;
-    successMessage: string = '';
+    successMessage: string = ''; 
 
     constructor(
         private passwordService: PasswordService,

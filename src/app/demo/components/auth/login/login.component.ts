@@ -18,7 +18,7 @@ export class LoginComponent implements OnInit {
         private layoutService: LayoutService
     ) {}
 
-    ngOnInit(): void {}
+    ngOnInit(): void {} 
 
     get dark(): boolean {
         return this.layoutService.config().colorScheme !== 'light';

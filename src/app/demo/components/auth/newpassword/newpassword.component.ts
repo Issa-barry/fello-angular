@@ -13,7 +13,7 @@ export class NewPasswordComponent implements OnInit {
     confirmPassword = '';
     loading = false;
     submitted = false;
-    token = '';
+    token = ''; 
     email = '';
     errors: { [key: string]: string } = {};
     errorMessage = '';

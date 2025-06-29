@@ -20,6 +20,7 @@ export class AgenceNewComponent implements OnInit {
     loading: boolean = false;
     isGuineeSelected: boolean = false;
     cols: any[] = [];
+    errorMessage: string = '';
 
     statuses: any[] = [];
     countries: any[] = [];
@@ -74,30 +75,7 @@ export class AgenceNewComponent implements OnInit {
             !this.agence.adresse.ville
         );
     }
-
-    handleApiErrors(err: any): void {
-        if (err.error && err.error.errors) {
-            this.apiErrors = err.error.errors; // Associer les erreurs aux champs
-            Object.keys(err.error.errors).forEach((key) => {
-                const errorMessages = err.error.errors[key];
-                this.messageService.add({
-                    severity: 'error',
-                    summary: `Erreur sur le champ ${key}`,
-                    detail: errorMessages.join(', '),
-                    life: 5000,
-                });
-            });
-        } else {
-            this.apiErrors = {}; // Réinitialiser
-            this.messageService.add({
-                severity: 'error',
-                summary: 'Erreur',
-                detail: "Une erreur inattendue s'est produite.",
-                life: 5000,
-            });
-        }
-    }
-
+ 
     isValidPhone: boolean = true;
     validatePhone() {
         if (this.agence.phone) {
@@ -140,9 +118,9 @@ export class AgenceNewComponent implements OnInit {
     saveAgence() {
         this.submitted = true;
         
-        this.validatePays();
-        this.validateCodePostal();
-        this.validatePhone();
+        // this.validatePays();
+        // this.validateCodePostal();
+        // this.validatePhone();
         const codePostalStr = String(this.agence.adresse.code_postal);
 
         if (!this.isValidCodePostal) { return; }
@@ -156,11 +134,9 @@ export class AgenceNewComponent implements OnInit {
             this.agence.email &&
             this.agence.adresse.ville
         ) {
-            console.log("Agence à créer:", this.agence);
-
             this.agenceService.createAgence(this.agence).subscribe({
-                next: () => {
-                    //  this.getAllAgences();
+                next: (res) => {
+                     console.log("Agence créée avec succès:", res);
                     this.messageService.add({
                         severity: 'success',
                         summary: 'Succès',
@@ -169,17 +145,23 @@ export class AgenceNewComponent implements OnInit {
                     });
                 },
                 error: (err) => {
-                    console.error(
-                        "Erreur lors de la création de l'agence:",
-                        err
-                    );
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: 'Erreur',
-                        detail: "Création de l'agence échouée",
-                        life: 3000,
-                    });
-                },
+  this.loading = false;
+
+  if (err.validationErrors) {
+    this.apiErrors = err.validationErrors;
+    this.errorMessage = err.message;
+  } else {
+    this.errorMessage = err.message || "Une erreur est survenue.";
+  }
+
+  this.messageService.add({
+    severity: 'error',
+    summary: 'Erreur',
+    detail: this.errorMessage,
+    life: 5000,
+  });
+}
+
             });
          }
     }
