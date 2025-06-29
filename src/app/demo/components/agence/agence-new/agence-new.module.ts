@@ -17,6 +17,7 @@ import { InputGroupAddonModule } from 'primeng/inputgroupaddon';
 import { PasswordModule } from 'primeng/password';
 import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { CalendarModule } from 'primeng/calendar';
 
 @NgModule({
     declarations: [AgenceNewComponent],
@@ -36,6 +37,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
         PasswordModule,
         ToastModule,
         ProgressSpinnerModule,
+        CalendarModule
     ],
 })
 export class AgenceNewModule {}

@@ -7,18 +7,11 @@
          
         <div class="col-12 lg:col-10">
             <div class="grid formgrid p-fluid">
-                    <div class="field mb-4 col-12 md:col-6">
+               <div class="field mb-4 col-12 md:col-12">
                     <label for="nom_complet" class="font-medium text-900">Reference du Responssable</label>
                     <input id="nom_complet" type="text" pInputText [(ngModel)]="contact.nom_complet" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.nom_complet || errors['nom_complet']}">
                      <small *ngIf="errors['nom_complet']">{{ errors['nom_complet'] }}</small>
-                </div>  
-                <div class="field mb-4 col-12 md:col-6">
-                    <label for="country" class="font-medium text-900" >Date de création</label> 
-                    <p-dropdown id="civilite" [options]="civiliteOptions" optionLabel="label" optionValue="value"
-                         [(ngModel)]="contact.civilite" placeholder="Sélectionnez une civilité" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.civilite || errors['civilite']}">
-                    </p-dropdown>
-                    <small *ngIf="errors['civilite']">{{ errors['civilite'] }}</small>
-                </div>
+                </div>   
                 <div class="field mb-4 col-12 md:col-12">
                     <label for="nom_complet" class="font-medium text-900">Nom de l'agence</label>
                     <input id="nom_complet" type="text" pInputText [(ngModel)]="contact.nom_complet" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.nom_complet || errors['nom_complet']}">
