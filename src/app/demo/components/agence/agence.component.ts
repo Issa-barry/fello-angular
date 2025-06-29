@@ -3,8 +3,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Agence } from '../../models/agence';
 import { AgenceService } from '../../service/agence/agence.service';
-
- 
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-agence',
@@ -16,7 +15,7 @@ import { AgenceService } from '../../service/agence/agence.service';
 export class AgenceComponent implements OnInit {
   
   submitted: boolean = false;
-
+ 
   cols: any[] = [];
 
   statuses: any[] = []; 
@@ -35,6 +34,7 @@ export class AgenceComponent implements OnInit {
  
   constructor(
     private agenceService: AgenceService,
+     private router: Router,
     private messageService: MessageService, 
     private confirmationService: ConfirmationService) { 
       
@@ -45,6 +45,14 @@ export class AgenceComponent implements OnInit {
             { label: 'GUINEE-CONAKRY', value: 'Guinée-Conakry' },
             { label: 'FRANCE', value: 'France' },
         ];
+    }
+
+  onGotToNewAgence() {
+        this.router.navigate(['/dashboard/agence/new-agence']);
+    }
+
+    onGotToContactAgence(agence: Agence) {
+        this.router.navigate(['/dashboard/contact/agence-detail', agence.id]);
     }
 
 getAllAgences(): void {

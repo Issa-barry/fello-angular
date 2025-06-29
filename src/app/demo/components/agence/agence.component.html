@@ -5,10 +5,10 @@
             <p-toolbar styleClass="mb-4">
                 <ng-template pTemplate="left">
                     <div class="my-2">
-                        <button pButton pRipple label="Nouveau" icon="pi pi-plus" class="p-button-primaray mr-2" (click)="openNew()"></button>
+                        <button pButton pRipple label="Nouveau" icon="pi pi-plus" class="p-button-primaray mr-2" (click)="onGotToNewAgence()"></button>
                         <button pButton pRipple label="" icon="pi pi-trash" class="p-button-danger" (click)="deleteSelectedAgences()" [disabled]="!selectedAgences || !selectedAgences.length"></button>
                     </div>
-                </ng-template>
+                </ng-template> 
 
                 <ng-template pTemplate="right">
                      <button pButton pRipple label="Export" icon="pi pi-download" class="p-button-help" (click)="dt.exportCSV()"></button>
