@@ -160,6 +160,6 @@ export class ContactNewComponent implements OnInit {
                     life: 5000,
                 });
             },
-        });
+        }); 
     }
 }

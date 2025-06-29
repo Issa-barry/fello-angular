@@ -21,7 +21,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
 @NgModule({
   declarations: [ContactNewComponent],
   imports: [
-    CommonModule,
+    CommonModule, 
     ContactNewRoutingModule,
     FormsModule,
     ProfileCreateRoutingModule,
