@@ -1,19 +1,19 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
-import { Agence } from '../../models/agence';
-import { AgenceService } from '../../service/agence/agence.service';
-import { Router } from '@angular/router';
+import { Agence } from 'src/app/demo/models/agence';
+import { AgenceService } from 'src/app/demo/service/agence/agence.service';
+ 
 
 @Component({
-  selector: 'app-agence',
- 
-  templateUrl: './agence.component.html',
-  styleUrl: './agence.component.scss',
-  providers: [MessageService, ConfirmationService]
+  selector: 'app-agence-liste',
+  templateUrl: './agence-liste.component.html',
+  styleUrl: './agence-liste.component.scss',
+    providers: [MessageService, ConfirmationService]
 })
-export class AgenceComponent implements OnInit {
-  
+export class AgenceListeComponent implements OnInit {
+  loading: boolean = false;
   submitted: boolean = false;
  
   cols: any[] = [];
@@ -46,14 +46,14 @@ export class AgenceComponent implements OnInit {
             { label: 'FRANCE', value: 'France' },
         ];
     }
-
+  
   onGotToNewAgence() {
         this.router.navigate(['/dashboard/agence/new-agence']);
     }
 
     onGotToContactAgence(agence: Agence) {
         this.router.navigate(['/dashboard/contact/agence-detail', agence.id]);
-    }
+    } 
 
 getAllAgences(): void {
   this.agenceService.getAgences().subscribe({

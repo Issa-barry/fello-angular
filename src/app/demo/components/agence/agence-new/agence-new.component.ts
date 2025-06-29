@@ -2,164 +2,185 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ConfirmationService, MessageService } from 'primeng/api';
 import { Civilite } from 'src/app/demo/enums/civilite.enum';
+import { Agence } from 'src/app/demo/models/agence';
 import { Contact } from 'src/app/demo/models/contact';
 import { Role } from 'src/app/demo/models/Role';
+import { AgenceService } from 'src/app/demo/service/agence/agence.service';
 import { ContactService } from 'src/app/demo/service/contact/contact.service';
 import { RoleService } from 'src/app/demo/service/role/role.service';
 
-
 @Component({
-  selector: 'app-agence-new',
-  templateUrl: './agence-new.component.html',
-  styleUrl: './agence-new.component.scss',
+    selector: 'app-agence-new',
+    templateUrl: './agence-new.component.html',
+    styleUrl: './agence-new.component.scss',
     providers: [MessageService, ConfirmationService],
 })
 export class AgenceNewComponent implements OnInit {
-    countries: any[] = [];
     submitted: boolean = false;
-    contact: Contact = new Contact();
-    roles: Role[] = [];
-    errors: { [key: string]: string } = {};
+    loading: boolean = false;
     isGuineeSelected: boolean = false;
-    loading = false; 
-  
+    cols: any[] = [];
+
+    statuses: any[] = [];
+    countries: any[] = [];
+
+    rowsPerPageOptions = [5, 10, 20];
+
+    agences: Agence[] = [];
+    selectedAgences: Agence[] = [];
+    agence: Agence = new Agence();
+    agenceDialog: boolean = false;
+    optionPays: any[] = [];
+    deleteAgenceDialog: boolean = false;
+    deleteAgencesDialog: boolean = false;
+    apiErrors: { [key: string]: string[] } = {};
+    errors: { [key: string]: string } = {};
+
     constructor(
+        private agenceService: AgenceService,
         private router: Router,
-        private contactService: ContactService,
-        private roleService: RoleService,
         private messageService: MessageService,
         private confirmationService: ConfirmationService
     ) {}
-
     ngOnInit() {
         this.countries = [
             { name: 'GUINEE-CONAKRY', code: 'GN', value: 'GUINEE-CONAKRY' },
             { name: 'France', code: 'FR', value: 'FRANCE' },
         ];
-        this.getAllRoles();
     }
-
-    /**************************
-     * ROLE
-     **************************/
-    getAllRoles(): void {
-
-        this.roleService.getRoles().subscribe({
-            next: (response) => {
-                this.roles = response;
-            },
-        });
-    }
-
-    //Civilité :  Convertir l'énumération en tableau d'options
-    civiliteOptions = Object.values(Civilite).map((civ) => ({
-        label: civ,
-        value: civ,
-    }));
-
-    // Vérifier si le pays Guinée est sélectionné
-    // onCountryChange() {
-
-    //     console.log('this.contact.adresse.pays:', this.contact.adresse.pays);
-        
-    //     if (this.contact.adresse.pays && typeof this.contact.adresse.pays === 'object') {
-    //         this.isGuineeSelected = this.contact.adresse.pays === 'GUINEE-CONAKRY';
-
-            
-    //         console.log('isGuineeSelected:', this.isGuineeSelected);
-            
-    //         // Réinitialiser les champs en fonction du pays
-    //         if (this.isGuineeSelected) {
-    //             this.contact.adresse.code_postal = 'null';
-    //             this.contact.adresse.quartier = '';
-    //         } else {
-    //             this.contact.adresse.quartier = 'null';
-    //         }
-    //     }
-    // }
 
     onCountryChange(event: any) {
         const selectedCountry = event.value;
-  
-        if (selectedCountry && selectedCountry === 'GUINEE-CONAKRY') { 
-            this.isGuineeSelected = true;
-            this.contact.adresse.adresse = 'GUINEE-CONAKRY';
-            this.contact.adresse.code_postal = '00224'; 
-        } else { 
-            this.isGuineeSelected = false; 
-            this.contact.adresse.ville = '';
-            this.contact.adresse.quartier = '';
 
-           
+        if (selectedCountry && selectedCountry === 'GUINEE-CONAKRY') {
+            this.isGuineeSelected = true;
+            this.agence.adresse.adresse = 'GUINEE-CONAKRY';
+            this.agence.adresse.code_postal = '00224';
+        } else {
+            this.isGuineeSelected = false;
+            this.agence.adresse.ville = '';
+            this.agence.adresse.quartier = '';
         }
     }
-    
 
-    saveContact() {
-        this.submitted = true;
-        this.errors = {};
+    isFormInvalid(): boolean {
+        return (
+            !this.agence.nom_agence ||
+            !this.agence.phone ||
+            !this.agence.email ||
+            !this.agence.adresse ||
+            !this.agence.adresse.adresse ||
+            !this.agence.adresse.code_postal ||
+            !this.agence.adresse.ville
+        );
+    }
 
-        // Adapter la validation en fonction du pays sélectionné
-        const isGuinee = this.isGuineeSelected; 
-
-        if (
-            !this.contact.role ||
-            !this.contact.civilite ||
-            !this.contact.nom_complet ||
-            !this.contact.email ||
-            !this.contact.phone ||
-            !this.contact.password ||
-            !this.contact.password_confirmation ||
-            !this.contact.adresse ||
-            !this.contact.adresse.pays ||
-            !this.contact.adresse.ville 
-            // (isGuinee ? !this.contact.adresse.quartier : !this.contact.adresse.code_postal)
-        ) {
-            this.messageService.add({
-                severity: 'warn',
-                summary: 'Attention',
-                detail: 'Veuillez remplir tous les champs obligatoires.',
-                life: 3000,
-            });
-            return;
-        }
-
-        this.contact.role = String(this.contact.role.name);
-        this.contact.adresse.pays = String(this.contact.adresse.pays);
-        
-        if (!isGuinee) {
-            this.contact.adresse.code_postal = String(this.contact.adresse.code_postal);
-        }
-
-        this.contactService.createContact(this.contact).subscribe({
-            next: () => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès',
-                    detail: 'Contact créé avec succès',
-                    life: 3000,
-                });
-
-                this.contact = new Contact();
-                this.submitted = false;
-                this.errors = {};
-                 
-                this.router.navigate(['/dashboard/contact']);
-            },
-            error: (err) => {
-                console.error('Erreur lors de la création du contact:', err);
-
-                if (err.error && err.error.errors) {
-                    this.errors = err.error.errors;
-                }
-
+    handleApiErrors(err: any): void {
+        if (err.error && err.error.errors) {
+            this.apiErrors = err.error.errors; // Associer les erreurs aux champs
+            Object.keys(err.error.errors).forEach((key) => {
+                const errorMessages = err.error.errors[key];
                 this.messageService.add({
                     severity: 'error',
-                    summary: 'Erreur',
-                    detail: 'Création du contact échouée. Vérifiez les champs.',
+                    summary: `Erreur sur le champ ${key}`,
+                    detail: errorMessages.join(', '),
                     life: 5000,
                 });
-            },
-        }); 
+            });
+        } else {
+            this.apiErrors = {}; // Réinitialiser
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Erreur',
+                detail: "Une erreur inattendue s'est produite.",
+                life: 5000,
+            });
+        }
+    }
+
+    isValidPhone: boolean = true;
+    validatePhone() {
+        if (this.agence.phone) {
+      const phoneRegex = /^(?:\+|00)?(\d{1,3})[-.\s]?\d{10,}$/;
+            this.isValidPhone = phoneRegex.test(this.agence.phone);
+        } else {
+            this.isValidPhone = false;
+        }
+    }
+
+    isValidPays: boolean = true;
+
+    isValidCodePostal: boolean = true;
+
+    validateCodePostal() {
+        if (
+            this.agence.adresse &&
+            this.agence.adresse.code_postal !== undefined
+        ) {
+            const codePostalStr = String(this.agence.adresse.code_postal);
+            this.isValidCodePostal = /^\d{5}$/.test(codePostalStr);
+        } else {
+            this.isValidCodePostal = false;
+        }
+    }
+
+    isCodePostalDisabled: boolean = false;
+
+    validatePays() {
+        this.isValidPays = !!this.agence.adresse.pays;
+        // Si le pays sélectionné est "Guinée-Conakry", fixer le code postal à "00000" et le rendre non modifiable
+        if (this.agence.adresse.pays === 'GUINEE-CONAKRY') {
+            this.agence.adresse.code_postal = '00000';
+            this.isCodePostalDisabled = true;
+        } else {
+            this.isCodePostalDisabled = false;
+        }
+    }
+
+    saveAgence() {
+        this.submitted = true;
+        
+        this.validatePays();
+        this.validateCodePostal();
+        this.validatePhone();
+        const codePostalStr = String(this.agence.adresse.code_postal);
+
+        if (!this.isValidCodePostal) { return; }
+         if (this.agence.adresse && this.agence.adresse.code_postal !== undefined ) {
+            this.agence.adresse.code_postal = String( this.agence.adresse.code_postal );
+        }
+         if (
+            this.agence.responsable_id &&
+            this.agence.nom_agence &&
+            this.agence.phone &&
+            this.agence.email &&
+            this.agence.adresse.ville
+        ) {
+            console.log("Agence à créer:", this.agence);
+
+            this.agenceService.createAgence(this.agence).subscribe({
+                next: () => {
+                    //  this.getAllAgences();
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Succès',
+                        detail: 'Agence créée avec succès',
+                        life: 3000,
+                    });
+                },
+                error: (err) => {
+                    console.error(
+                        "Erreur lors de la création de l'agence:",
+                        err
+                    );
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Erreur',
+                        detail: "Création de l'agence échouée",
+                        life: 3000,
+                    });
+                },
+            });
+         }
     }
 }

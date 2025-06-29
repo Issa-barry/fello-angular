@@ -10,6 +10,7 @@ import { Adresse } from "./adresse";
     // date_creation?:Date;
     adresse: Adresse;
     statut:string;
+    responsable_id?: number;
     constructor()
     {
         this.nom_agence = "";

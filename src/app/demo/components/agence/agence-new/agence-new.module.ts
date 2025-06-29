@@ -18,6 +18,7 @@ import { PasswordModule } from 'primeng/password';
 import { ToastModule } from 'primeng/toast';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { CalendarModule } from 'primeng/calendar';
+import { TableModule } from 'primeng/table';
 
 @NgModule({
     declarations: [AgenceNewComponent],
@@ -37,7 +38,8 @@ import { CalendarModule } from 'primeng/calendar';
         PasswordModule,
         ToastModule,
         ProgressSpinnerModule,
-        CalendarModule
+        CalendarModule,
+        TableModule
     ],
 })
 export class AgenceNewModule {}

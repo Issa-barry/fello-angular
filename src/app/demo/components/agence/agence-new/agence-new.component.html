@@ -7,30 +7,33 @@
          
         <div class="col-12 lg:col-10">
             <div class="grid formgrid p-fluid">
-               <div class="field mb-4 col-12 md:col-12">
-                    <label for="nom_complet" class="font-medium text-900">Reference du Responssable</label>
-                    <input id="nom_complet" type="text" pInputText [(ngModel)]="contact.nom_complet" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.nom_complet || errors['nom_complet']}">
-                     <small *ngIf="errors['nom_complet']">{{ errors['nom_complet'] }}</small>
+                <div class="field mb-4 col-12 md:col-12">
+                    <label for="nom_agence" class="font-medium text-900">Reference du Responssable</label>
+                    <input id="nom_agence" type="text" pInputText [(ngModel)]="agence.responsable_id" [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.responsable_id || errors['responsable_id']}">
+                     <small *ngIf="errors['responsable_id']">{{ errors['responsable_id'] }}</small>
                 </div>   
                 <div class="field mb-4 col-12 md:col-12">
-                    <label for="nom_complet" class="font-medium text-900">Nom de l'agence</label>
-                    <input id="nom_complet" type="text" pInputText [(ngModel)]="contact.nom_complet" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.nom_complet || errors['nom_complet']}">
-                     <small *ngIf="errors['nom_complet']">{{ errors['nom_complet'] }}</small>
+                    <label for="nom_agence" class="font-medium text-900">Nom de l'agence</label>
+                    <input id="nom_agence" type="text" pInputText [(ngModel)]="agence.nom_agence" [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.nom_agence || errors['nom_agence']}">
+                     <small *ngIf="errors['nom_agence']">{{ errors['nom_agence'] }}</small>
                 </div> 
+
+               
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="email" class="font-medium text-900">Email</label>
-                    <input id="email" type="text" [(ngModel)]="contact.email" 
-                    [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.email || errors['email']}" pInputText>
+                    <input id="email" type="text" [(ngModel)]="agence.email" 
+                    [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.email || errors['email']}" pInputText>
                     <small *ngIf="errors['email']">{{ errors['email'] }}</small>
                 </div>
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="phone" class="font-medium text-900">Phone</label>
-                    <input id="phone" type="text" [(ngModel)]="contact.phone" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.phone || errors['phone']}" pInputText>
-                    <small *ngIf="errors['phone']">{{ errors['phone'] }}</small>
+                    <input id="phone" type="text" [(ngModel)]="agence.phone" [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.phone || errors['phone']}" pInputText>
+                    <small *ngIf="errors['phone']">{{ errors['phone'] }}</small> 
                 </div> 
-                <div class="field mb-4 col-12 md:col-12">
+                
+                 <div class="field mb-4 col-12 md:col-12">
                     <label for="country" class="font-medium text-900" >Pays</label>
-                    <p-dropdown [(ngModel)]="contact.adresse.pays" 
+                    <p-dropdown [(ngModel)]="agence.adresse.pays" 
                                 inputId="country"
                                 [options]="countries"
                                 optionLabel="name" 
@@ -38,7 +41,7 @@
                                 [filter]="true"  
                                 filterBy="name" 
                                 [showClear]="true" placeholder="Select a Country"
-                                [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.pays || errors['adresse.pays']}"
+                                [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.pays || errors['adresse.pays']}"
                                 (onChange)="onCountryChange($event)">
                         <ng-template let-country pTemplate="item">
                             <div class="flex align-items-center">
@@ -48,40 +51,41 @@
                         </ng-template>
                     </p-dropdown>
                     <small *ngIf="errors['adresse.pays']">{{ errors['adresse.pays'] }}</small>
-                </div>
+                </div>  
              
                 <!-- Champ adresse (visible seulement si le pays n'est pas Guinée) -->
+
                 <div *ngIf="!isGuineeSelected" class="field mb-4 col-12 md:col-12">
                     <label for="adresse" class="font-medium text-900">Adresse</label>
-                    <input id="adresse" type="text" [(ngModel)]="contact.adresse.adresse" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.adresse || errors['adresse.adresse']}" pInputText >
+                    <input id="adresse" type="text" [(ngModel)]="agence.adresse.adresse" [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.adresse || errors['adresse.adresse']}" pInputText >
                     <small *ngIf="errors['adresse.adresse']">{{ errors['adresse.adresse'] }}</small>
                 </div>
-
                 <!-- Champ code postal (visible seulement si le pays n'est pas Guinée) -->
                 <div *ngIf="!isGuineeSelected" class="field mb-4 col-12 md:col-6">
                     <label for="city" class="font-medium text-900">Code Postal</label>
-                    <input id="city" type="text" pInputText [(ngModel)]="contact.adresse.code_postal" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.code_postal || errors['adresse.code_postal']}" >
+                    <input id="city" type="text" pInputText [(ngModel)]="agence.adresse.code_postal" [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.code_postal || errors['adresse.code_postal']}" >
                     <small *ngIf="errors['adresse.code_postal']">{{ errors['adresse.code_postal'] }}</small>
                 </div>
 
                 <!-- Champ quartier (visible seulement si le pays est Guinée) -->
                 <div *ngIf="isGuineeSelected" class="field mb-4 col-12 md:col-6">
                     <label for="quartier" class="font-medium text-900">Quartier</label>
-                    <input id="quartier" type="text" pInputText [(ngModel)]="contact.adresse.quartier" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.quartier || errors['adresse.quartier']}" >
+                    <input id="quartier" type="text" pInputText [(ngModel)]="agence.adresse.quartier" [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.quartier || errors['adresse.quartier']}" >
                     <small *ngIf="errors['adresse.quartier']">{{ errors['adresse.quartier'] }}</small>
                 </div>
 
                 <div class="field mb-4 col-12 md:col-6">
                     <label for="state" class="font-medium text-900" >Ville</label>
-                    <input id="state" type="text" [(ngModel)]="contact.adresse.ville" [ngClass]="{'ng-invalid ng-dirty' : submitted && !contact.adresse.ville || errors['adresse.ville']}"  pInputText>
+                    <input id="state" type="text" [(ngModel)]="agence.adresse.ville" [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.ville || errors['adresse.ville']}"  pInputText>
                     <small *ngIf="errors['adresse.ville']">{{ errors['adresse.ville'] }}</small>
                 </div> 
 
                 
                 <div class="col-12">
-                    <button pButton pRipple label="Créer l'agence" class="w-auto mt-3" (click)="saveContact()"></button>
+                    <button pButton pRipple label="Créer l'agence" class="w-auto mt-3" (click)="saveAgence()"></button>
                 </div>
             </div>
         </div>
     </div>
+    
 </div>
