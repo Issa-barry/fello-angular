@@ -57,8 +57,10 @@ export class AgenceListeComponent implements OnInit {
 
 getAllAgences(): void {
   this.agenceService.getAgences().subscribe({
-    next: (response) => {
+    next: (response) => {  
       this.agences = response;  
+      console.log(this.agences[0].responsable.nom_complet);
+      
     },
     error: (err) => {
       console.error('Erreur lors de la récupération des agences:', err);

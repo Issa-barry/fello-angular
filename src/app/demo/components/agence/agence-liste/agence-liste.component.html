@@ -16,10 +16,12 @@
             </p-toolbar>
             <!-- <p-table #dt [value]="agences" [columns]="cols" responsiveLayout="scroll" [rows]="10" [globalFilterFields]="['name','country.name','representative.name','status']" [rows]="10" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedProducts" selectionMode="multiple" [rowHover]="true" dataKey="id"> -->
 
-            <p-table #dt [value]="agences" [columns]="cols" responsiveLayout="scroll" [rows]="10"   [globalFilterFields]="['nom_agence','adresse.adresse','representative.name','status']" [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedAgences" selectionMode="multiple" [rowHover]="true" dataKey="id">
+            <p-table #dt [value]="agences" [columns]="cols" responsiveLayout="scroll" [rows]="10"   
+                         [globalFilterFields]="['reference','nom_agence','adresse.adresse','phone','statut']" 
+                         [paginator]="true" [rowsPerPageOptions]="[10,20,30]" [showCurrentPageReport]="true" currentPageReportTemplate="Showing {first} to {last} of {totalRecords} entries" [(selection)]="selectedAgences" selectionMode="multiple" [rowHover]="true" dataKey="id">
                 <ng-template pTemplate="caption">
                     <div class="flex flex-column md:flex-row md:justify-content-between md:align-items-center">
-                        <h5 class="m-0">Manage Products</h5>
+                        <h5 class="m-0">Liste Agences</h5>
                         <span class="block mt-2 md:mt-0 p-input-icon-left">
                             <i class="pi pi-search"></i>
                             <input pInputText type="text" (input)="onGlobalFilter(dt, $event)" placeholder="Search..."  class="w-full sm:w-auto"/>
@@ -35,6 +37,8 @@
                         <th pSortableColumn="nom_agence">Nom <p-sortIcon field="nom_agence"></p-sortIcon></th>
                          <th pSortableColumn="phone">Phone <p-sortIcon field="phone"></p-sortIcon></th>
                          <th pSortableColumn="adresse.adresse">Adresse <p-sortIcon field="adresse.adresse"></p-sortIcon></th>
+                         <th pSortableColumn="responsable.nom_complet">Responssable <p-sortIcon field="adresse.adresse"></p-sortIcon></th>
+
                          <th pSortableColumn="inventoryStatus">Status <p-sortIcon field="inventoryStatus"></p-sortIcon></th>
                          <th>Action</th>
                         <th></th>
@@ -60,6 +64,10 @@
                             <span class="p-column-title">Adresse</span>
                             {{agence.adresse.adresse}}
                         </td>
+                          <td style="width:20%; min-width:8rem;">
+                            <span class="p-column-title">Adresse</span>
+                            {{agence.responsable.nom_complet}}
+                        </td>
                         <td style="width:14%; min-width: 10rem;"><span class="p-column-title">Status</span>
                                 <span [class]="'product-badge status-'">
                                     {{agence.statut.toLowerCase()}}
@@ -78,6 +86,12 @@
 
         <p-dialog [(visible)]="agenceDialog" [style]="{width: '450px'}" header="Agence Details" [modal]="true" class="p-fluid">
           <ng-template pTemplate="content"> 
+           
+                    <div class="field">
+                    <label for="responsable">Responsable </label>
+                    <input type="text" pInputText id="responsable" [(ngModel)]="agence.responsable.nom_complet" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.responsable.nom_complet}"/>
+                    <small class="ng-dirty ng-invalid" *ngIf="submitted && !agence.responsable.nom_complet">Le nom est obligatoire.</small>
+                </div>  
                 <div class="field">
                     <label for="nom_agence">Nom</label>
                     <input type="text" pInputText id="nom_agence" [(ngModel)]="agence.nom_agence" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.nom_agence}"/>
@@ -116,7 +130,7 @@
                     </small>
                 </div> 
 
-                
+
                 <div class="field">
                     <label for="adresse">Adresse</label>
                     <input type="text" pInputText id="adresse" [(ngModel)]="agence.adresse.adresse" required autofocus [ngClass]="{'ng-invalid ng-dirty' : submitted && !agence.adresse.adresse}"/>

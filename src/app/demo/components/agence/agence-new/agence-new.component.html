@@ -13,22 +13,22 @@
         <div class="col-12 lg:col-10">
             <div class="grid formgrid p-fluid">
                 <div class="field mb-4 col-12 md:col-12">
-                    <label for="responsable_id" class="font-medium text-900"
+                    <label for="responsable_reference" class="font-medium text-900"
                         >Référence du Responsable</label
                     >
                     <input
-                        id="responsable_id"
+                        id="responsable_reference"
                         type="text"
                         pInputText
-                        [(ngModel)]="agence.responsable_id"
+                        [(ngModel)]="agence.responsable_reference"
                         [ngClass]="{
                             'ng-invalid ng-dirty':
-                                (submitted && !agence.responsable_id) ||
-                                apiErrors['responsable_id']
+                                (submitted && !agence.responsable_reference) ||
+                                apiErrors['responsable_reference']
                         }"
                     />
-                    <small *ngIf="apiErrors['responsable_id']">{{
-                        apiErrors["responsable_id"]
+                    <small *ngIf="apiErrors['responsable_reference']">{{
+                        apiErrors["responsable_reference"]
                     }}</small>
                 </div>
 

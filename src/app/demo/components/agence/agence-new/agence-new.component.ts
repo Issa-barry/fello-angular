@@ -21,7 +21,7 @@ export class AgenceNewComponent implements OnInit {
     isGuineeSelected: boolean = false;
     cols: any[] = [];
     errorMessage: string = '';
-
+ 
     statuses: any[] = [];
     countries: any[] = [];
 
@@ -128,7 +128,7 @@ export class AgenceNewComponent implements OnInit {
             this.agence.adresse.code_postal = String( this.agence.adresse.code_postal );
         }
          if (
-            this.agence.responsable_id &&
+            this.agence.responsable_reference &&
             this.agence.nom_agence &&
             this.agence.phone &&
             this.agence.email &&
