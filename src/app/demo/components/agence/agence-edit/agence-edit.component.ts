@@ -15,68 +15,66 @@ export class AgenceEditComponent implements OnInit {
     submitted = false;
     loading = false;
     isGuineeSelected = false;
-    id: number = this.activatedRoute.snapshot.params['id'];
+    apiErrors: { [key: string]: string[] } = {};
+    errorMessage = '';
+
+    id!: number;
+
     countries = [
         { name: 'GUINEE-CONAKRY', code: 'GN', value: 'GUINEE-CONAKRY' },
         { name: 'France', code: 'FR', value: 'FRANCE' },
     ];
-    apiErrors: { [key: string]: string[] } = {};
-    errorMessage = '';
 
     constructor(
         private route: ActivatedRoute,
         private agenceService: AgenceService,
         private messageService: MessageService,
-        private activatedRoute: ActivatedRoute,
         private router: Router
     ) {}
 
     ngOnInit(): void {
-        const id = this.route.snapshot.paramMap.get('id');
-        if (id) {
-            this.agenceService.getAgenceById(+id).subscribe({
-                next: (data) => {
-                    this.agence = data;
-                    console.log('agence', this.agence);
-
-                      this.agence.responsable_reference = data.responsable?.reference || '';
-                    
-                    this.isGuineeSelected = this.agence.adresse.pays === 'GUINEE-CONAKRY';
-                },
-                error: (err) => {
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: 'Erreur',
-                        detail: "Impossible de charger l'agence",
-                    });
-                },
-            });
+        this.id = +this.route.snapshot.paramMap.get('id')!;
+        if (this.id) {
+            this.loadAgence(this.id);
         }
     }
 
-    onCountryChange(event: any) {
+    loadAgence(id: number): void {
+        this.agenceService.getAgenceById(id).subscribe({
+            next: (data) => {
+                this.agence = data;
+                this.agence.responsable_reference = data.responsable?.reference || '';
+                this.isGuineeSelected = data.adresse.pays === 'GUINEE-CONAKRY';
+            },
+            error: () => {
+                this.messageService.add({
+                    severity: 'error',
+                    summary: 'Erreur',
+                    detail: "Impossible de charger l'agence",
+                });
+            },
+        });
+    }
+
+    onCountryChange(event: any): void {
         const selectedCountry = event.value;
-        if (selectedCountry === 'GUINEE-CONAKRY') {
-            this.isGuineeSelected = true;
+        this.isGuineeSelected = selectedCountry === 'GUINEE-CONAKRY';
+        if (this.isGuineeSelected) {
             this.agence.adresse.code_postal = '00000';
         } else {
-            this.isGuineeSelected = false;
             this.agence.adresse.quartier = '';
         }
     }
 
-    updateAgence() {
+    updateAgence(): void {
         this.submitted = true;
         if (!this.agence.id) return;
 
         const agenceToUpdate = { ...this.agence };
-        // if (agenceToUpdate.responsable.reference) {
-        //     delete agenceToUpdate.responsable;
-        // }
+        delete (agenceToUpdate as any).responsable; // uniquement responsable_reference envoyé
 
-        console.log('agenceToUpdate', agenceToUpdate);
-        
-
+         console.log('agenceToUpdate:', agenceToUpdate.adresse);
+         
         this.agenceService.updateAgence(this.id, agenceToUpdate).subscribe({
             next: () => {
                 this.messageService.add({
@@ -85,7 +83,7 @@ export class AgenceEditComponent implements OnInit {
                     detail: 'Agence modifiée avec succès',
                 });
             },
-            error: (err) => { 
+            error: (err) => {
                 this.apiErrors = err.error?.errors || {};
                 this.messageService.add({
                     severity: 'error',
