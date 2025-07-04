@@ -11,14 +11,13 @@ import { Contact } from "./contact";
     adresse: Adresse;
    responsable: Contact;  
     statut:string;
-    responsable_reference?:string;
-
+responsable_reference?: string;
     constructor()
     {
         this.nom_agence = "";
         this.phone = "";
         this.email = "";
-        this.statut="attente";
+         this.statut="attente";
         this.adresse = new Adresse();
          this.responsable = new Contact();
 

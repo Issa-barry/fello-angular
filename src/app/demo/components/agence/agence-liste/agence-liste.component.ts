@@ -4,283 +4,297 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Agence } from 'src/app/demo/models/agence';
 import { AgenceService } from 'src/app/demo/service/agence/agence.service';
- 
 
 @Component({
-  selector: 'app-agence-liste',
-  templateUrl: './agence-liste.component.html',
-  styleUrl: './agence-liste.component.scss',
-    providers: [MessageService, ConfirmationService]
+    selector: 'app-agence-liste',
+    templateUrl: './agence-liste.component.html',
+    styleUrl: './agence-liste.component.scss',
+    providers: [MessageService, ConfirmationService],
 })
 export class AgenceListeComponent implements OnInit {
-  loading: boolean = false;
-  submitted: boolean = false;
- 
-  cols: any[] = [];
+    loading: boolean = false;
+    isEditing: boolean = false;
 
-  statuses: any[] = []; 
+    submitted: boolean = false;
 
-  rowsPerPageOptions = [5, 10, 20];
+    cols: any[] = [];
 
-  agences: Agence[] = [];
-  selectedAgences: Agence[] = [];
-  agence: Agence = new Agence();
-  agenceDialog: boolean = false;
-  optionPays: any[] = [];
-  deleteAgenceDialog: boolean = false;
-  deleteAgencesDialog: boolean = false;
-  apiErrors: { [key: string]: string[] } = {};
-  
- 
-  constructor(
-    private agenceService: AgenceService,
-     private router: Router,
-    private messageService: MessageService, 
-    private confirmationService: ConfirmationService) { 
-      
-    }
+    statuses: any[] = [];
+
+    rowsPerPageOptions = [5, 10, 20];
+
+    agences: Agence[] = [];
+    selectedAgences: Agence[] = [];
+    agence: Agence = new Agence();
+    agenceDialog: boolean = false;
+    optionPays: any[] = [];
+    deleteAgenceDialog: boolean = false;
+    deleteAgencesDialog: boolean = false;
+    apiErrors: { [key: string]: string[] } = {};
+
+    constructor(
+        private agenceService: AgenceService,
+        private router: Router,
+        private messageService: MessageService,
+        private confirmationService: ConfirmationService
+    ) {}
     ngOnInit() {
-      this.getAllAgences(); 
+        this.getAllAgences();
         this.optionPays = [
             { label: 'GUINEE-CONAKRY', value: 'Guinée-Conakry' },
             { label: 'FRANCE', value: 'France' },
         ];
     }
-  
-  onGotToNewAgence() {
+
+    onGotToNewAgence() {
         this.router.navigate(['/dashboard/agence/new-agence']);
+    }
+
+    onGotToEditAgence(agence: Agence) {
+        this.router.navigate(['/dashboard/agence/agence-edit', agence.id]);
     }
 
     onGotToContactAgence(agence: Agence) {
         this.router.navigate(['/dashboard/contact/agence-detail', agence.id]);
-    } 
-
-getAllAgences(): void {
-  this.agenceService.getAgences().subscribe({
-    next: (response) => {  
-      this.agences = response;  
-      console.log(this.agences[0].responsable.nom_complet);
-      
-    },
-    error: (err) => {
-      console.error('Erreur lors de la récupération des agences:', err);
     }
-  });
-}
 
-hideDialog() {
-  this.agenceDialog = false;
-  this.submitted = false;
-}
-
-openNew() {
-   this.agence = new Agence();
-   this.submitted = false;
-   this.agenceDialog = true;
-}
-
-openEditAgence(agence: Agence) {
-this.agence = { ...agence };  // Copie de l'agence à éditer
-this.agenceDialog = true;
-}
-
-
-openDeleteAgence(agence: Agence) {
-  this.agence = { ...agence };
-  this.deleteAgenceDialog = true;
-}
-
-  deleteSelectedAgences() {
-      this.deleteAgencesDialog = true;
-  }
-
-  confirmDeleteSelected() {
-      this.deleteAgencesDialog = false;
-       this.messageService.add({ severity: 'success', summary: 'Successful', detail: '  Deleted', life: 3000 });
-   }
-
-  confirmDelete( ) { 
-    this.deleteAgenceDialog = false;
-      
-    if (this.agence.id !== undefined) { 
-        this.agenceService.deleteAgence(this.agence.id).subscribe({
-            next: () => {
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès',
-                    detail: 'Agence supprimée avec succès',
-                    life: 3000
-                });
-                this.getAllAgences(); 
+    getAllAgences(): void {
+        this.agenceService.getAgences().subscribe({
+            next: (response) => {
+                this.agences = response;
+                console.log(this.agences);
             },
             error: (err) => {
-                console.error('Erreur lors de la suppression de l\'agence:', err);
+                console.error(
+                    'Erreur lors de la récupération des agences:',
+                    err
+                );
+            }, 
+        });
+    }
+
+    hideDialog() {
+        this.agenceDialog = false;
+        this.submitted = false;
+    }
+
+    openNew() {
+        this.agence = new Agence();
+        this.submitted = false;
+        this.agenceDialog = true;
+    }
+
+    // openEditAgence(agence: Agence) {
+    // this.agence = { ...agence };  // Copie de l'agence à éditer
+    // this.agenceDialog = true;
+    // }
+
+    openEditAgence(agence: Agence) {
+        this.agence = { ...agence };
+        this.agenceDialog = true;
+        this.isEditing = false; // lecture seule au départ
+    }
+
+    enableEdit() {
+        this.isEditing = true;
+    }
+
+    cancelEdit() {
+        this.isEditing = false;
+        this.agenceDialog = false;
+    }
+
+    openDeleteAgence(agence: Agence) {
+        this.agence = { ...agence };
+        this.deleteAgenceDialog = true;
+    }
+
+    deleteSelectedAgences() {
+        this.deleteAgencesDialog = true;
+    }
+
+    confirmDeleteSelected() {
+        this.deleteAgencesDialog = false;
+        this.messageService.add({
+            severity: 'success',
+            summary: 'Successful',
+            detail: '  Deleted',
+            life: 3000,
+        });
+    }
+
+    confirmDelete() {
+        this.deleteAgenceDialog = false;
+
+        if (this.agence.id !== undefined) {
+            this.agenceService.deleteAgence(this.agence.id).subscribe({
+                next: () => {
+                    this.messageService.add({
+                        severity: 'success',
+                        summary: 'Succès',
+                        detail: 'Agence supprimée avec succès',
+                        life: 3000,
+                    });
+                    this.getAllAgences();
+                },
+                error: (err) => {
+                    console.error(
+                        "Erreur lors de la suppression de l'agence:",
+                        err
+                    );
+                    this.messageService.add({
+                        severity: 'error',
+                        summary: 'Erreur',
+                        detail: "La suppression de l'agence a échoué",
+                        life: 3000,
+                    });
+                },
+            });
+        } else {
+            console.error("Impossible de supprimer : ID d'agence non défini.");
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Erreur',
+                detail: "Impossible de supprimer l'agence : ID non défini.",
+                life: 3000,
+            });
+        }
+    }
+
+    isFormInvalid(): boolean {
+        return (
+            !this.agence.nom_agence ||
+            !this.agence.phone ||
+            !this.agence.email ||
+            !this.agence.adresse ||
+            !this.agence.adresse.adresse ||
+            !this.agence.adresse.code_postal ||
+            !this.agence.adresse.ville
+        );
+    }
+
+    handleApiErrors(err: any): void {
+        if (err.error && err.error.errors) {
+            this.apiErrors = err.error.errors; // Associer les erreurs aux champs
+            Object.keys(err.error.errors).forEach((key) => {
+                const errorMessages = err.error.errors[key];
                 this.messageService.add({
                     severity: 'error',
-                    summary: 'Erreur',
-                    detail: 'La suppression de l\'agence a échoué',
-                    life: 3000
+                    summary: `Erreur sur le champ ${key}`,
+                    detail: errorMessages.join(', '),
+                    life: 5000,
                 });
-            }
-        });
-    } else {
-        console.error('Impossible de supprimer : ID d\'agence non défini.');
-        this.messageService.add({
-            severity: 'error',
-            summary: 'Erreur',
-            detail: 'Impossible de supprimer l\'agence : ID non défini.',
-            life: 3000
-        });
+            });
+        } else {
+            this.apiErrors = {}; // Réinitialiser
+            this.messageService.add({
+                severity: 'error',
+                summary: 'Erreur',
+                detail: "Une erreur inattendue s'est produite.",
+                life: 5000,
+            });
+        }
     }
-}
+    isValidPhone: boolean = true;
 
-
-isFormInvalid(): boolean {
-  return (
-      !this.agence.nom_agence ||
-      !this.agence.phone ||
-      !this.agence.email ||
-      !this.agence.adresse ||
-      !this.agence.adresse.adresse ||
-      !this.agence.adresse.code_postal ||
-      !this.agence.adresse.ville
-  );
-}
-    
-handleApiErrors(err: any): void {
-  if (err.error && err.error.errors) {
-      this.apiErrors = err.error.errors; // Associer les erreurs aux champs
-      Object.keys(err.error.errors).forEach((key) => {
-          const errorMessages = err.error.errors[key];
-          this.messageService.add({
-              severity: 'error',
-              summary: `Erreur sur le champ ${key}`,
-              detail: errorMessages.join(', '),
-              life: 5000
-          });
-      });
-  } else {
-      this.apiErrors = {}; // Réinitialiser
-      this.messageService.add({
-          severity: 'error',
-          summary: 'Erreur',
-          detail: 'Une erreur inattendue s\'est produite.',
-          life: 5000
-      });
-  }
-}
-isValidPhone: boolean = true;
-
-validatePhone() {
-    if (this.agence.phone) {
-        // Regex acceptant :
-        // - Numéro local : "622000000" (8 chiffres minimum)
-        // - Numéro international avec + : "+225 07 12 34 56" (indicatif suivi d'au moins 8 chiffres)
-        // - Numéro international avec 00 : "00225 07 12 34 56" (même règle que +)
-        const phoneRegex = /^(?:\+|00)?(\d{1,3})[-.\s]?\d{10,}$/;
-        this.isValidPhone = phoneRegex.test(this.agence.phone);
-    } else {
-        this.isValidPhone = false;
+    validatePhone() {
+        if (this.agence.phone) {
+            // Regex acceptant :
+            // - Numéro local : "622000000" (8 chiffres minimum)
+            // - Numéro international avec + : "+225 07 12 34 56" (indicatif suivi d'au moins 8 chiffres)
+            // - Numéro international avec 00 : "00225 07 12 34 56" (même règle que +)
+            const phoneRegex = /^(?:\+|00)?(\d{1,3})[-.\s]?\d{10,}$/;
+            this.isValidPhone = phoneRegex.test(this.agence.phone);
+        } else {
+            this.isValidPhone = false;
+        }
     }
-}
 
+    isValidPays: boolean = true;
 
+    isValidCodePostal: boolean = true;
 
-isValidPays: boolean = true;
-
-isValidCodePostal: boolean = true; 
- 
-   validateCodePostal() {
-    if (this.agence.adresse && this.agence.adresse.code_postal !== undefined) {
-        const codePostalStr = String(this.agence.adresse.code_postal);
-        this.isValidCodePostal = /^\d{5}$/.test(codePostalStr);
-    } else {
-        this.isValidCodePostal = false;
+    validateCodePostal() {
+        if (
+            this.agence.adresse &&
+            this.agence.adresse.code_postal !== undefined
+        ) {
+            const codePostalStr = String(this.agence.adresse.code_postal);
+            this.isValidCodePostal = /^\d{5}$/.test(codePostalStr);
+        } else {
+            this.isValidCodePostal = false;
+        }
     }
-}
 
-isCodePostalDisabled: boolean = false;
+    isCodePostalDisabled: boolean = false;
 
-validatePays() {
-    this.isValidPays = !!this.agence.adresse.pays; 
+    validatePays() {
+        this.isValidPays = !!this.agence.adresse.pays;
 
-    // Si le pays sélectionné est "Guinée-Conakry", fixer le code postal à "00000" et le rendre non modifiable
-    if (this.agence.adresse.pays === "GUINEE-CONAKRY") {
-        this.agence.adresse.code_postal = "00000";
-        this.isCodePostalDisabled = true;
-    } else {
-        this.isCodePostalDisabled = false;
+        // Si le pays sélectionné est "Guinée-Conakry", fixer le code postal à "00000" et le rendre non modifiable
+        if (this.agence.adresse.pays === 'GUINEE-CONAKRY') {
+            this.agence.adresse.code_postal = '00000';
+            this.isCodePostalDisabled = true;
+        } else {
+            this.isCodePostalDisabled = false;
+        }
     }
-}
 
-
-  saveAgence() {
+   saveAgence() {
     this.submitted = true;
     this.validatePays();
     this.validateCodePostal();
     this.validatePhone();
 
-        const codePostalStr = String(this.agence.adresse.code_postal);
-        if (!this.isValidCodePostal) {
-            return; 
-        }
+    if (!this.isValidCodePostal || !this.isValidPhone || !this.isValidPays) {
+        return;
+    }
 
-        if (this.agence.adresse && this.agence.adresse.code_postal !== undefined) {
-            this.agence.adresse.code_postal = String(this.agence.adresse.code_postal);
-        }
+    // Forcer le code postal en string
+    if (this.agence.adresse?.code_postal !== undefined) {
+        this.agence.adresse.code_postal = String(this.agence.adresse.code_postal);
+    }
 
-    if (this.agence.id && this.agence.nom_agence && this.agence.phone && this.agence.email && this.agence.adresse.ville) { // Modification
-   
-        this.agenceService.updateAgence(this.agence.id, this.agence).subscribe({
-            next: () => {
-                this.getAllAgences(); 
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès', 
-                    detail: 'Agence modifiée avec succès',
-                    life: 3000
-                });
-            },
-            error: (err) => {
-                console.error('Erreur lors de la modification de l\'agence:', err);
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Erreur',
-                    detail: 'Modification de l\'agence échouée',
-                    life: 3000
-                });
-            }
-        });
-        this.agenceDialog = false;
-        
-    } else if(this.agence.nom_agence && this.agence.phone && this.agence.email && this.agence.adresse.ville) { // Création
-      
-        this.agenceService.createAgence(this.agence).subscribe({
-            next: () => {
-                 this.getAllAgences(); 
-                this.messageService.add({
-                    severity: 'success',
-                    summary: 'Succès',
-                    detail: 'Agence créée avec succès',
-                    life: 3000
-                });
-            },
-            error: (err) => { 
-                console.error('Erreur lors de la création de l\'agence:', err);
-                this.messageService.add({
-                    severity: 'error',
-                    summary: 'Erreur',
-                    detail: 'Création de l\'agence échouée',
-                    life: 3000
-                });
-            }
-        });
-        this.agenceDialog = false;
+    // Si c’est une mise à jour
+    if (
+        this.agence.id &&
+        // this.agence.responsable.reference &&
+        this.agence.nom_agence &&
+        this.agence.phone &&
+        this.agence.email &&
+        this.agence.adresse.ville
+    ) {
+        const agenceToUpdate = { ...this.agence };
+        // agenceToUpdate.responsable = undefined;
+console.log(this.agence.responsable);
+
+        // this.agenceService.updateAgence(agenceToUpdate.id!, agenceToUpdate).subscribe({
+        //     next: () => {
+                
+        //         this.messageService.add({
+        //             severity: 'success',
+        //             summary: 'Succès',
+        //             detail: 'Agence modifiée avec succès',
+        //             life: 3000,
+        //         });
+        //         this.agenceDialog = false;
+        //         this.isEditing = false;
+        //         console.log(agenceToUpdate);
+                
+        //         this.getAllAgences();
+        //     },
+        //     error: (err) => {
+        //         this.handleApiErrors(err);
+        //     },
+        // });
     }
 }
 
-  onGlobalFilter(table: Table, event: Event) {
-      table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
-  }
+
+    onGlobalFilter(table: Table, event: Event) {
+        table.filterGlobal(
+            (event.target as HTMLInputElement).value,
+            'contains'
+        );
+    }
 }
- 
