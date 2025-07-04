@@ -13,9 +13,8 @@ import { AgenceService } from 'src/app/demo/service/agence/agence.service';
 })
 export class AgenceListeComponent implements OnInit {
     loading: boolean = false;
-    isEditing: boolean = false;
-
-    submitted: boolean = false;
+ 
+    submitted: boolean = false; 
 
     cols: any[] = [];
 
@@ -92,16 +91,6 @@ export class AgenceListeComponent implements OnInit {
     openEditAgence(agence: Agence) {
         this.agence = { ...agence };
         this.agenceDialog = true;
-        this.isEditing = false; // lecture seule au départ
-    }
-
-    enableEdit() {
-        this.isEditing = true;
-    }
-
-    cancelEdit() {
-        this.isEditing = false;
-        this.agenceDialog = false;
     }
 
     openDeleteAgence(agence: Agence) {

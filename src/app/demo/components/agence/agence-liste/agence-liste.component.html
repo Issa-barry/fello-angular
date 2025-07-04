@@ -168,248 +168,63 @@
 
         <p-dialog
             [(visible)]="agenceDialog"
-            [style]="{ width: '450px' }"
-            header="Agence Details"
+            header="Détails de l'agence"
             [modal]="true"
+            [style]="{ width: '450px' }"
             class="p-fluid"
         >
             <ng-template pTemplate="content">
-                <!-- Responssable -->
-                <!-- Affichage en lecture seule -->
-                <div class="field" *ngIf="!isEditing">
-                    <label for="responsable">Responsable</label>
-                    <input
-                        type="text"
-                        pInputText
-                        id="responsable"
-                        [value]="agence.responsable?.nom_complet"
-                        readonly
-                    />
+                <div class="mb-3" *ngIf="agence.responsable">
+                    <strong>Responsable :</strong>
+                    <a
+                        [routerLink]="[
+                            '/dashboard/contact/contact-detail',
+                            agence.responsable.id
+                        ]"
+                        class="text-primary font-medium"
+                        style="text-decoration: underline"
+                    >
+                        {{ agence.responsable.nom_complet }}
+                    </a>
+                </div>
+                <div class="mb-3">
+                    <strong>Référence :</strong> {{ agence.reference }}
+                </div>
+                <div class="mb-3">
+                    <strong>Nom de l'agence :</strong> {{ agence.nom_agence }}
                 </div>
 
-                <!-- Saisie de la référence en mode édition -->
-                <div class="field" *ngIf="isEditing">
-                    <label for="responsable_reference"
-                        >Référence Responsable</label
-                    >
-                    <input
-                        type="text"
-                        pInputText
-                        id="responsable_reference"
-                        [(ngModel)]="agence.responsable.reference"
-                        required
-                        autofocus
-                        [ngClass]="{
-                            'ng-invalid ng-dirty':
-                                submitted && !agence.responsable.reference
-                        }"
-                    />
-                    <small
-                        class="ng-dirty ng-invalid"
-                        *ngIf="submitted && !agence.responsable.reference"
-                    >
-                        La référence du responsable est obligatoire.
-                    </small>
+                <div class="mb-3">
+                    <strong>Email :</strong> {{ agence.email }}
                 </div>
-
-                <!-- Nom agence -->
-                <div class="field">
-                    <label for="nom_agence">Nom</label>
-                    <input
-                        type="text"
-                        pInputText
-                        id="nom_agence"
-                        [(ngModel)]="agence.nom_agence"
-                        required
-                        autofocus
-                        [readonly]="!isEditing"
-                        [ngClass]="{
-                            'ng-invalid ng-dirty':
-                                submitted && !agence.nom_agence
-                        }"
-                    />
-                    <small
-                        class="ng-dirty ng-invalid"
-                        *ngIf="submitted && !agence.nom_agence"
-                        >Le nom est obligatoire.</small
-                    >
+                <div class="mb-3">
+                    <strong>Téléphone :</strong> {{ agence.phone }}
                 </div>
-                <div class="field">
-                    <label for="phone">Phone</label>
-                    <input
-                        type="text"
-                        pInputText
-                        id="phone"
-                        (ngModelChange)="validatePhone()"
-                        [(ngModel)]="agence.phone"
-                        required
-                        autofocus
-                        [readonly]="!isEditing"
-                        [ngClass]="{
-                            'ng-invalid ng-dirty': submitted && !isValidPhone
-                        }"
-                    />
-                    <small class="ng-dirty ng-invalid" *ngIf="!agence.phone"
-                        >Le numéro de téléphone est obligatoire.</small
-                    >
-                    <small
-                        class="error-message"
-                        *ngIf="submitted && !isValidPhone"
-                    >
-                        Veuillez entrer un numéro de téléphone valide (ex: +224
-                        622 00 00 00).
-                    </small>
+                <div class="mb-3">
+                    <strong>Pays :</strong> {{ agence.adresse?.pays }}
                 </div>
-                <div class="field">
-                    <label for="email">Email</label>
-                    <input
-                        type="text"
-                        pInputText
-                        id="email"
-                        [(ngModel)]="agence.email"
-                        required
-                        autofocus
-                        [readonly]="!isEditing"
-                        [ngClass]="{
-                            'ng-invalid ng-dirty': submitted && !agence.email
-                        }"
-                    />
-                    <small
-                        class="ng-dirty ng-invalid"
-                        *ngIf="submitted && !agence.email"
-                        >L'email est obligatoire.</small
-                    >
+                <div class="mb-3">
+                    <strong>Quartier :</strong> {{ agence.adresse?.quartier }}
                 </div>
-
-                <div class="field">
-                    <label for="pays">Pays</label>
-                    <p-dropdown
-                        [(ngModel)]="agence.adresse.pays"
-                        inputId="pays"
-                        optionValue="label"
-                        [options]="optionPays"
-                        placeholder="Sélectionner un pays"
-                        (ngModelChange)="validatePays()"
-                        [readonly]="!isEditing"
-                        [ngClass]="{
-                            'ng-invalid ng-dirty':
-                                submitted && !agence.adresse.pays
-                        }"
-                    >
-                        <ng-template let-option pTemplate="item">
-                            <span [class]="option.value">{{
-                                option.label
-                            }}</span>
-                        </ng-template>
-                    </p-dropdown>
-                    <small
-                        class="error-message"
-                        *ngIf="submitted && !isValidPays"
-                    >
-                        Le choix du pays est obligatoire.
-                    </small>
+                <div class="mb-3">
+                    <strong>Ville :</strong> {{ agence.adresse?.ville }}
                 </div>
-
-                <div class="field">
-                    <label for="adresse">Adresse</label>
-                    <input
-                        type="text"
-                        pInputText
-                        id="adresse"
-                        [(ngModel)]="agence.adresse.adresse"
-                        required
-                        autofocus
-                        [readonly]="!isEditing"
-                        [ngClass]="{
-                            'ng-invalid ng-dirty':
-                                submitted && !agence.adresse.adresse
-                        }"
-                    />
-                    <small
-                        class="ng-dirty ng-invalid"
-                        *ngIf="submitted && !agence.adresse.adresse"
-                        >L'adresse est obligatoire.</small
-                    >
+                <div class="mb-3">
+                    <strong>Adresse :</strong> {{ agence.adresse?.adresse }}
                 </div>
-                <div class="formgrid grid">
-                    <div class="field col">
-                        <label for="quantity">Code Postal</label>
-                        <p-inputNumber
-                            id="code_postal"
-                            [disabled]="isCodePostalDisabled"
-                            [(ngModel)]="agence.adresse.code_postal"
-                            (ngModelChange)="validateCodePostal()"
-                            [readonly]="!isEditing"
-                            [ngClass]="{
-                                'ng-invalid ng-dirty':
-                                    (submitted &&
-                                        !agence.adresse.code_postal) ||
-                                    !isValidCodePostal
-                            }"
-                        ></p-inputNumber>
-                        <small
-                            class="ng-dirty ng-invalid"
-                            *ngIf="submitted && !agence.adresse.code_postal"
-                            >Le code postal est obligatoire.</small
-                        >
-                        <small class="ng-invalid" *ngIf="!isValidCodePostal">
-                            Le code postal doit contenir exactement 5 chiffres.
-                        </small>
-                    </div>
-
-                    <div class="field col">
-                        <label for="quantity">Ville</label>
-                        <input
-                            type="text"
-                            pInputText
-                            id="ville"
-                            [(ngModel)]="agence.adresse.ville"
-                            required
-                            autofocus
-                            [readonly]="!isEditing"
-                            [ngClass]="{
-                                'ng-invalid ng-dirty':
-                                    submitted && !agence.adresse.ville
-                            }"
-                        />
-                        <small
-                            class="ng-dirty ng-invalid"
-                            *ngIf="submitted && !agence.adresse.ville"
-                            >La ville est obligatoire.</small
-                        >
-                    </div>
+                <div class="mb-3">
+                    <strong>Code Postal :</strong>
+                    {{ agence.adresse?.code_postal }}
                 </div>
             </ng-template>
 
             <ng-template pTemplate="footer">
                 <button
-                    *ngIf="!isEditing"
                     pButton
-                    pRipple
                     label="Modifier"
                     icon="pi pi-pencil"
                     class="p-button-text"
                     (click)="onGotToEditAgence(agence)"
-                ></button>
-
-                <button
-                    *ngIf="isEditing"
-                    pButton
-                    pRipple
-                    label="Annuler"
-                    icon="pi pi-times"
-                    class="p-button-text"
-                    (click)="cancelEdit()"
-                ></button>
-
-                <button
-                    *ngIf="isEditing"
-                    pButton
-                    pRipple
-                    label="Enregistrer"
-                    icon="pi pi-check"
-                    class="p-button-text"
-                    (click)="saveAgence()"
                 ></button>
             </ng-template>
         </p-dialog>
