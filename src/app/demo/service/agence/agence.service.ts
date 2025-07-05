@@ -94,4 +94,18 @@ export class AgenceService {
       .delete<void>(`${this.apiUrl}/deleteById/${id}`, httpOption)
       .pipe(catchError(this.handleError));
   }
+
+  updateStatut(id: number, statut: 'active' | 'attente' | 'bloque' | 'archive'): Observable<Agence> {
+  return this.http
+    .patch<{ success: boolean; data: Agence }>(
+      `${this.apiUrl}/${id}/statutUpdate`,
+      { statut },
+      httpOption
+    )
+    .pipe(
+      map((res) => res.data),
+      catchError(this.handleError)
+    );
+}
+
 }

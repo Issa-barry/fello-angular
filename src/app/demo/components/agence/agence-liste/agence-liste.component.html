@@ -32,7 +32,6 @@
             <p-table
                 #dt
                 [value]="agences"
-                [columns]="cols"
                 responsiveLayout="scroll"
                 [rows]="10"
                 [globalFilterFields]="[
@@ -142,12 +141,42 @@
                                     (click)="openEditAgence(agence)"
                                 ></button>
                                 <button
+                                    *ngIf="agence.statut === 'attente'"
+                                    pButton
+                                    pRipple
+                                    icon="pi pi-check"
+                                    class="p-button-rounded p-button-info mr-2"
+                                    (click)="validerAgence(agence)"
+                                    title="Valider cette agence"
+                                ></button>
+
+                                <button
+                                    *ngIf="agence.statut === 'active'"
+                                    pButton
+                                    pRipple
+                                    icon="pi pi-lock-open"
+                                    class="p-button-rounded p-button-warning mr-2"
+                                    (click)="bloquerAgence(agence)"
+                                    title="Bloquer cette agence"
+                                ></button>
+
+                                <button
+                                    *ngIf="agence.statut === 'bloque'"
+                                    pButton
+                                    pRipple
+                                    icon="pi pi-lock"
+                                    class="p-button-rounded p-button-danger mr-2"
+                                    (click)="debloquerAgence(agence)"
+                                    title="Débloquer cette agence"
+                                ></button>
+
+                                <!-- <button
                                     pButton
                                     pRipple
                                     icon="pi pi-trash"
-                                    class="p-button-rounded p-button-warning"
+                                    class="p-button-rounded p-button-danger"
                                     (click)="openDeleteAgence(agence)"
-                                ></button>
+                                ></button> -->
                             </div>
                         </td>
                     </tr>
@@ -177,7 +206,7 @@
                     </a>
                 </div>
                 <div class="mb-3">
-                    <strong>Référence :</strong> {{ agence.reference }}
+                    <strong>Référence-agence :</strong> {{ agence.reference }}
                 </div>
                 <div class="mb-3">
                     <strong>Nom de l'agence :</strong> {{ agence.nom_agence }}

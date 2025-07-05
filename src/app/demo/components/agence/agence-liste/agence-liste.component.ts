@@ -4,6 +4,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Agence } from 'src/app/demo/models/agence';
 import { AgenceService } from 'src/app/demo/service/agence/agence.service';
+import { StatutAgence } from 'src/app/demo/enums/statut.enum';
 
 @Component({
     selector: 'app-agence-liste',
@@ -12,24 +13,28 @@ import { AgenceService } from 'src/app/demo/service/agence/agence.service';
     providers: [MessageService, ConfirmationService],
 })
 export class AgenceListeComponent implements OnInit {
-    loading: boolean = false;
- 
-    submitted: boolean = false; 
-
-    cols: any[] = [];
-
-    statuses: any[] = [];
-
-    rowsPerPageOptions = [5, 10, 20];
-
     agences: Agence[] = [];
     selectedAgences: Agence[] = [];
     agence: Agence = new Agence();
-    agenceDialog: boolean = false;
-    optionPays: any[] = [];
-    deleteAgenceDialog: boolean = false;
-    deleteAgencesDialog: boolean = false;
+
+    agenceDialog = false;
+    deleteAgenceDialog = false;
+    deleteAgencesDialog = false;
+
     apiErrors: { [key: string]: string[] } = {};
+    submitted = false;
+    loading = false;
+
+    isValidPhone = true;
+    isValidPays = true;
+    isValidCodePostal = true;
+    isCodePostalDisabled = false;
+
+    rowsPerPageOptions = [5, 10, 20];
+    optionPays = [
+        { label: 'GUINEE-CONAKRY', value: 'Guinée-Conakry' },
+        { label: 'FRANCE', value: 'France' },
+    ];
 
     constructor(
         private agenceService: AgenceService,
@@ -37,14 +42,12 @@ export class AgenceListeComponent implements OnInit {
         private messageService: MessageService,
         private confirmationService: ConfirmationService
     ) {}
+
     ngOnInit() {
         this.getAllAgences();
-        this.optionPays = [
-            { label: 'GUINEE-CONAKRY', value: 'Guinée-Conakry' },
-            { label: 'FRANCE', value: 'France' },
-        ];
     }
 
+    // 🔁 Navigation
     onGotToNewAgence() {
         this.router.navigate(['/dashboard/agence/new-agence']);
     }
@@ -54,39 +57,16 @@ export class AgenceListeComponent implements OnInit {
     }
 
     onGotToContactAgence(agence: Agence) {
-        this.router.navigate(['/dashboard/contact/agence-detail', agence.id]);
+        this.router.navigate(['/dashboard/contact/contact-detail', agence.id]);
     }
 
-    getAllAgences(): void {
+    // 🔁 CRUD
+    getAllAgences() {
         this.agenceService.getAgences().subscribe({
-            next: (response) => {
-                this.agences = response;
-                console.log(this.agences);
-            },
-            error: (err) => {
-                console.error(
-                    'Erreur lors de la récupération des agences:',
-                    err
-                );
-            }, 
+            next: (res) => (this.agences = res),
+            error: (err) => console.error('Erreur de chargement :', err),
         });
     }
-
-    hideDialog() {
-        this.agenceDialog = false;
-        this.submitted = false;
-    }
-
-    openNew() {
-        this.agence = new Agence();
-        this.submitted = false;
-        this.agenceDialog = true;
-    }
-
-    // openEditAgence(agence: Agence) {
-    // this.agence = { ...agence };  // Copie de l'agence à éditer
-    // this.agenceDialog = true;
-    // }
 
     openEditAgence(agence: Agence) {
         this.agence = { ...agence };
@@ -104,124 +84,60 @@ export class AgenceListeComponent implements OnInit {
 
     confirmDeleteSelected() {
         this.deleteAgencesDialog = false;
-        this.messageService.add({
-            severity: 'success',
-            summary: 'Successful',
-            detail: '  Deleted',
-            life: 3000,
-        });
+        this.showMessage('success', 'Suppression multiple', 'Agences supprimées.');
     }
 
     confirmDelete() {
         this.deleteAgenceDialog = false;
+        if (!this.agence.id) return;
 
-        if (this.agence.id !== undefined) {
-            this.agenceService.deleteAgence(this.agence.id).subscribe({
-                next: () => {
-                    this.messageService.add({
-                        severity: 'success',
-                        summary: 'Succès',
-                        detail: 'Agence supprimée avec succès',
-                        life: 3000,
-                    });
-                    this.getAllAgences();
-                },
-                error: (err) => {
-                    console.error(
-                        "Erreur lors de la suppression de l'agence:",
-                        err
-                    );
-                    this.messageService.add({
-                        severity: 'error',
-                        summary: 'Erreur',
-                        detail: "La suppression de l'agence a échoué",
-                        life: 3000,
-                    });
-                },
-            });
-        } else {
-            console.error("Impossible de supprimer : ID d'agence non défini.");
-            this.messageService.add({
-                severity: 'error',
-                summary: 'Erreur',
-                detail: "Impossible de supprimer l'agence : ID non défini.",
-                life: 3000,
-            });
-        }
+        this.agenceService.deleteAgence(this.agence.id).subscribe({
+            next: () => {
+                this.showMessage('success', 'Succès', 'Agence supprimée.');
+                this.getAllAgences();
+            },
+            error: () => {
+                this.showMessage('error', 'Erreur', 'Suppression échouée.');
+            },
+        });
     }
 
-    isFormInvalid(): boolean {
-        return (
-            !this.agence.nom_agence ||
-            !this.agence.phone ||
-            !this.agence.email ||
-            !this.agence.adresse ||
-            !this.agence.adresse.adresse ||
-            !this.agence.adresse.code_postal ||
-            !this.agence.adresse.ville
-        );
+    // 🔁 Statuts avec Enum
+    validerAgence(agence: Agence) {
+        this.updateStatutAgence(agence, StatutAgence.ACTIVE, 'success', 'validée');
     }
 
-    handleApiErrors(err: any): void {
-        if (err.error && err.error.errors) {
-            this.apiErrors = err.error.errors; // Associer les erreurs aux champs
-            Object.keys(err.error.errors).forEach((key) => {
-                const errorMessages = err.error.errors[key];
-                this.messageService.add({
-                    severity: 'error',
-                    summary: `Erreur sur le champ ${key}`,
-                    detail: errorMessages.join(', '),
-                    life: 5000,
-                });
-            });
-        } else {
-            this.apiErrors = {}; // Réinitialiser
-            this.messageService.add({
-                severity: 'error',
-                summary: 'Erreur',
-                detail: "Une erreur inattendue s'est produite.",
-                life: 5000,
-            });
-        }
+    bloquerAgence(agence: Agence) {
+        this.updateStatutAgence(agence, StatutAgence.BLOQUE, 'warn', 'bloquée');
     }
-    isValidPhone: boolean = true;
 
+    debloquerAgence(agence: Agence) {
+        this.updateStatutAgence(agence, StatutAgence.ACTIVE, 'info', 'débloquée');
+    }
+
+    private updateStatutAgence(agence: Agence, statut: StatutAgence, severity: string, action: string) {
+        if (!agence.id) return;
+
+        this.agenceService.updateStatut(agence.id, statut).subscribe({
+            next: (updated) => {
+                this.showMessage(severity, 'Statut modifié', `Agence "${updated.nom_agence}" ${action}.`);
+                this.getAllAgences();
+            },
+            error: (err) => {
+                this.showMessage('error', 'Erreur', err.message || `Échec de la modification du statut.`);
+            },
+        });
+    }
+
+    // ✅ Validation formulaire
     validatePhone() {
-        if (this.agence.phone) {
-            // Regex acceptant :
-            // - Numéro local : "622000000" (8 chiffres minimum)
-            // - Numéro international avec + : "+225 07 12 34 56" (indicatif suivi d'au moins 8 chiffres)
-            // - Numéro international avec 00 : "00225 07 12 34 56" (même règle que +)
-            const phoneRegex = /^(?:\+|00)?(\d{1,3})[-.\s]?\d{10,}$/;
-            this.isValidPhone = phoneRegex.test(this.agence.phone);
-        } else {
-            this.isValidPhone = false;
-        }
+        const regex = /^(?:\+|00)?(\d{1,3})[-.\s]?\d{10,}$/;
+        this.isValidPhone = regex.test(this.agence.phone || '');
     }
-
-    isValidPays: boolean = true;
-
-    isValidCodePostal: boolean = true;
-
-    validateCodePostal() {
-        if (
-            this.agence.adresse &&
-            this.agence.adresse.code_postal !== undefined
-        ) {
-            const codePostalStr = String(this.agence.adresse.code_postal);
-            this.isValidCodePostal = /^\d{5}$/.test(codePostalStr);
-        } else {
-            this.isValidCodePostal = false;
-        }
-    }
-
-    isCodePostalDisabled: boolean = false;
 
     validatePays() {
-        this.isValidPays = !!this.agence.adresse.pays;
-
-        // Si le pays sélectionné est "Guinée-Conakry", fixer le code postal à "00000" et le rendre non modifiable
-        if (this.agence.adresse.pays === 'GUINEE-CONAKRY') {
+        this.isValidPays = !!this.agence.adresse?.pays;
+        if (this.agence.adresse?.pays === 'GUINEE-CONAKRY') {
             this.agence.adresse.code_postal = '00000';
             this.isCodePostalDisabled = true;
         } else {
@@ -229,61 +145,38 @@ export class AgenceListeComponent implements OnInit {
         }
     }
 
-   saveAgence() {
-    this.submitted = true;
-    this.validatePays();
-    this.validateCodePostal();
-    this.validatePhone();
-
-    if (!this.isValidCodePostal || !this.isValidPhone || !this.isValidPays) {
-        return;
+    validateCodePostal() {
+        const cp = this.agence.adresse?.code_postal?.toString() || '';
+        this.isValidCodePostal = /^\d{5}$/.test(cp);
     }
 
-    // Forcer le code postal en string
-    if (this.agence.adresse?.code_postal !== undefined) {
-        this.agence.adresse.code_postal = String(this.agence.adresse.code_postal);
+    // 🧠 Utilitaires
+    hideDialog() {
+        this.agenceDialog = false;
+        this.submitted = false;
     }
 
-    // Si c’est une mise à jour
-    if (
-        this.agence.id &&
-        // this.agence.responsable.reference &&
-        this.agence.nom_agence &&
-        this.agence.phone &&
-        this.agence.email &&
-        this.agence.adresse.ville
-    ) {
-        const agenceToUpdate = { ...this.agence };
-        // agenceToUpdate.responsable = undefined;
-console.log(this.agence.responsable);
-
-        // this.agenceService.updateAgence(agenceToUpdate.id!, agenceToUpdate).subscribe({
-        //     next: () => {
-                
-        //         this.messageService.add({
-        //             severity: 'success',
-        //             summary: 'Succès',
-        //             detail: 'Agence modifiée avec succès',
-        //             life: 3000,
-        //         });
-        //         this.agenceDialog = false;
-        //         this.isEditing = false;
-        //         console.log(agenceToUpdate);
-                
-        //         this.getAllAgences();
-        //     },
-        //     error: (err) => {
-        //         this.handleApiErrors(err);
-        //     },
-        // });
+    isFormInvalid(): boolean {
+        const a = this.agence;
+        return !a.nom_agence || !a.phone || !a.email || !a.adresse?.adresse || !a.adresse.code_postal || !a.adresse.ville;
     }
-}
 
+    showMessage(severity: string, summary: string, detail: string) {
+        this.messageService.add({ severity, summary, detail, life: 3000 });
+    }
+
+    handleApiErrors(err: any) {
+        this.apiErrors = err.error?.errors || {};
+        if (Object.keys(this.apiErrors).length) {
+            for (const key in this.apiErrors) {
+                this.showMessage('error', `Erreur champ ${key}`, this.apiErrors[key].join(', '));
+            }
+        } else {
+            this.showMessage('error', 'Erreur', 'Une erreur inattendue est survenue.');
+        }
+    }
 
     onGlobalFilter(table: Table, event: Event) {
-        table.filterGlobal(
-            (event.target as HTMLInputElement).value,
-            'contains'
-        );
+        table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
     }
 }
