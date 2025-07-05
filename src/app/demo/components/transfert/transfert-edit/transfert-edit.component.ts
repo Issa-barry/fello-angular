@@ -21,7 +21,7 @@ export class TransfertEditComponent {
 
     transfert: Transfert = new Transfert();
 
-    envoieDialog: boolean = false;
+    envoieDialog: boolean = false; 
     submitted: boolean = false;
     loading: boolean = false;
     errors: { [key: string]: string } = {};
