@@ -5,6 +5,7 @@ import { MessageService } from 'primeng/api';
 import { Contact } from 'src/app/demo/models/contact';
 import { ContactService } from 'src/app/demo/service/contact/contact.service';
 import { Role } from 'src/app/demo/models/Role';
+import { TransfertService } from 'src/app/demo/service/transfert/transfert.service';
 
 interface MonthlyPayment {
     name?: string;
@@ -29,11 +30,12 @@ export class BankingDashboardComponent implements OnInit, OnDestroy {
 
     errors: { [key: string]: string } = {};
     contact: Contact = new Contact();
- 
+
     constructor(
         private layoutService: LayoutService,
         private contactService: ContactService,
-        private messageService: MessageService
+        private messageService: MessageService,
+        private transfertService: TransfertService
     ) {
         this.subscription = this.layoutService.configUpdate$
             .pipe(debounceTime(25))
@@ -43,8 +45,9 @@ export class BankingDashboardComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.getContactById(1)
-        
+        this.getContactById(1);
+        this.loadStatistiques();
+
         this.initChart();
 
         this.payments = [
@@ -179,8 +182,36 @@ export class BankingDashboardComponent implements OnInit, OnDestroy {
         this.contactService.getContactById(id).subscribe({
             next: (response) => (this.contact = response),
             error: (err) =>
-                console.error('Erreur lors de la récupération du contact:', err),
+                console.error(
+                    'Erreur lors de la récupération du contact:',
+                    err
+                ),
         });
     }
 
+    /**global stats */
+    stats: {
+        total_envoye: number;
+        total_recu: number;
+        total_general: number;
+        nb_transferts: number;
+    } = {
+        total_envoye: 0,
+        total_recu: 0,
+        total_general: 0,
+        nb_transferts: 0,
+    };
+
+    loadStatistiques(): void {
+        this.transfertService.getStatistiquesGlobales().subscribe({
+            next: (res) => {
+                this.stats = res;
+                console.log('Statistiques globales:', this.stats);
+                
+            },
+            error: (err) => {
+                console.error('Erreur lors du chargement des stats', err);
+            },
+        });
+    }
 }
