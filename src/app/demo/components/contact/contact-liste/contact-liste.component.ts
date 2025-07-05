@@ -233,7 +233,7 @@ export class ContactListeComponent implements OnInit {
       }
   
 
-     // 🔁 Statuts avec Enum
+     // Statuts avec Enum
       validerContact(contact: Contact) {
           this.updateStatutContact(contact, Statut.ACTIVE, 'success', 'validée');
       }
