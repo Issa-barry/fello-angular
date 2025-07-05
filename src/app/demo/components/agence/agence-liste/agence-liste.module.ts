@@ -18,6 +18,7 @@ import { RadioButtonModule } from 'primeng/radiobutton';
 import { InputNumberModule } from 'primeng/inputnumber';
 import { DialogModule } from 'primeng/dialog';
 import { ProgressBarModule } from 'primeng/progressbar';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @NgModule({
     declarations: [AgenceListeComponent],
@@ -39,6 +40,7 @@ import { ProgressBarModule } from 'primeng/progressbar';
         InputNumberModule,
         DialogModule,
         ProgressBarModule,
+        SkeletonModule,
      ],
 })
 export class AgenceListeModule {}

@@ -60,14 +60,21 @@ export class AgenceListeComponent implements OnInit {
         this.router.navigate(['/dashboard/contact/contact-detail', agence.id]);
     }
 
-    // 🔁 CRUD
-    getAllAgences() {
-        this.agenceService.getAgences().subscribe({
-            next: (res) => (this.agences = res),
-            error: (err) => console.error('Erreur de chargement :', err),
-        });
-    }
-
+    skeletonRows = Array.from({ length: 5 }, () => ({}));
+    //  CRUD
+   getAllAgences() {
+    this.loading = true;
+    this.agenceService.getAgences().subscribe({
+        next: (res) => {
+            this.agences = res;
+            this.loading = false;
+        },
+        error: (err) => {
+            console.error('Erreur de chargement :', err);
+            this.loading = false;
+        },
+    });
+}
     openEditAgence(agence: Agence) {
         this.agence = { ...agence };
         this.agenceDialog = true;
@@ -94,6 +101,7 @@ export class AgenceListeComponent implements OnInit {
         this.agenceService.deleteAgence(this.agence.id).subscribe({
             next: () => {
                 this.showMessage('success', 'Succès', 'Agence supprimée.');
+                this.agenceDialog = false;
                 this.getAllAgences();
             },
             error: () => {
@@ -174,7 +182,7 @@ export class AgenceListeComponent implements OnInit {
         } else {
             this.showMessage('error', 'Erreur', 'Une erreur inattendue est survenue.');
         }
-    }
+    } 
 
     onGlobalFilter(table: Table, event: Event) {
         table.filterGlobal((event.target as HTMLInputElement).value, 'contains');
