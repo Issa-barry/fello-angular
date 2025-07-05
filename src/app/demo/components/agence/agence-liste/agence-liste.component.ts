@@ -74,7 +74,7 @@ export class AgenceListeComponent implements OnInit {
             this.loading = false;
         },
     });
-}
+} 
     openEditAgence(agence: Agence) {
         this.agence = { ...agence };
         this.agenceDialog = true;

@@ -149,4 +149,17 @@ export class ContactService {
                 catchError(this.handleError)
             );
     }
+
+      updateStatut(id: number, statut: 'active' | 'attente' | 'bloque' | 'archive'): Observable<Contact> {
+      return this.http
+        .patch<{ success: boolean; data: Contact }>(
+          `${this.apiUrl}/${id}/statutUpdate`,
+          { statut },
+          httpOption
+        )
+        .pipe(
+          map((res) => res.data),
+          catchError(this.handleError)
+        );
+    }
 }

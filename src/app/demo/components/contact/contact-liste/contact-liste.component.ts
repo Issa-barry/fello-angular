@@ -7,6 +7,7 @@ import { Contact } from '../../../models/contact';
 import { Role } from '../../../models/Role';
 import { ContactService } from '../../../service/contact/contact.service';
 import { RoleService } from '../../../service/role/role.service';
+import { StatutAgence } from 'src/app/demo/enums/statut.enum';
 
 @Component({
   selector: 'app-contact-liste',
@@ -212,4 +213,36 @@ export class ContactListeComponent implements OnInit {
   onGotToContactDetail(contact: Contact): void {
     this.router.navigate(['/dashboard/contact/contact-detail', contact.id]);
   }
+   showMessage(severity: string, summary: string, detail: string) {
+        this.messageService.add({ severity, summary, detail, life: 3000 });
+    }
+
+
+  private updateStatutContact(contact: Contact, statut: StatutAgence, severity: string, action: string) {
+          if (!contact.id) return;
+  
+          this.contactService.updateStatut(contact.id, statut).subscribe({
+              next: (updated) => {
+                  this.showMessage(severity, 'Statut modifié', `Contact "${updated.nom_complet}" ${action}.`);
+                  this.getAllContacts();
+              },
+              error: (err) => {
+                  this.showMessage('error', 'Erreur', err.message || `Échec de la modification du statut.`);
+              },
+          });
+      }
+  
+
+     // 🔁 Statuts avec Enum
+      validerContact(contact: Contact) {
+          this.updateStatutContact(contact, StatutAgence.ACTIVE, 'success', 'validée');
+      }
+
+      bloquerContact(contact: Contact) {
+          this.updateStatutContact(contact, StatutAgence.BLOQUE, 'warn', 'bloquée');
+      }
+
+      debloquerContact(contact: Contact) {
+          this.updateStatutContact(contact, StatutAgence.ACTIVE, 'success', 'débloquée');
+      }
 }
