@@ -20,6 +20,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
 import { DividerModule } from 'primeng/divider';
 import { PanelModule } from 'primeng/panel';
+import { SkeletonModule } from 'primeng/skeleton';
 
 @NgModule({ 
   declarations: [ContactDetailComponent],
@@ -41,7 +42,8 @@ import { PanelModule } from 'primeng/panel';
         ProgressSpinnerModule,
         DialogModule,ConfirmDialogModule,
         DividerModule,
-        PanelModule
+        PanelModule,
+        SkeletonModule
   ]
 })
 export class ContactDetailModule { }

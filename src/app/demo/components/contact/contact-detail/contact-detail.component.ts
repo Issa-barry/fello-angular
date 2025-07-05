@@ -34,6 +34,9 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
     isEditing = false;
     loading = false;
     loadingAgence = false;
+    loadingRoles = false;
+    loadingContact = false;
+    loadingAgenceSection = false;
     submitted = false;
     codeRecuperer = false;
     paysAChanger = false;
@@ -77,8 +80,11 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
     }
 
     getAllRoles(): void {
+        this.loadingRoles = true;
         const sub = this.roleService.getRoles().subscribe({
-            next: roles => this.roles = roles
+            next: roles => this.roles = roles,
+            error: () => {},
+            complete: () => this.loadingRoles = false
         });
         this.subscriptions.add(sub);
     }
@@ -92,7 +98,7 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
     }
 
     onGetContact(): void {
-        this.loading = true;
+        this.loadingContact = true;
         const sub = this.contactService.getContactById(this.id).subscribe({
             next: resp => {
                 this.contact = resp;
@@ -101,7 +107,7 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
                 if (this.contact.agence_id) this.getAgenceById(this.contact.agence_id);
             },
             error: err => console.error('Erreur récupération contact :', err),
-            complete: () => this.loading = false
+            complete: () => this.loadingContact = false
         });
         this.subscriptions.add(sub);
     }
@@ -110,7 +116,8 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
         if (!this.contact.adresse) {
             this.contact.adresse = { pays: '', ville: '', code_postal: '', adresse: '', quartier: '', complement_adresse: '', region: '' };
         }
-        this.isGuineeSelected = this.contact.adresse.pays === this.GUINEE;
+        const pays = this.contact.adresse.pays?.trim().toLowerCase();
+        this.isGuineeSelected = pays === this.GUINEE.toLowerCase();
         Object.assign(this.adresseCache, this.contact.adresse);
     }
 
@@ -121,7 +128,7 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
     onCountryChange(event: { value: string }): void {
         const pays = event.value;
         this.paysAChanger = true;
-        this.isGuineeSelected = pays === this.GUINEE;
+        this.isGuineeSelected = pays.toLowerCase() === this.GUINEE.toLowerCase();
         this.isGuineeSelected ? this.setAddressData(pays, '00224', this.GUINEE) : this.restorePreviousAddress(pays);
     }
 
@@ -204,7 +211,7 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
 
     getAgenceById(id: number): void {
         if (!id) return;
-        this.loadingAgence = true;
+        this.loadingAgenceSection = true;
         const sub = this.agenceService.getAgenceById(id).subscribe({
             next: resp => {
                 this.agence = resp ?? new Agence();
@@ -216,7 +223,7 @@ export class ContactDetailComponent implements OnInit, OnDestroy {
                 this.agence = new Agence();
                 this.codeRecuperer = false;
             },
-            complete: () => this.loadingAgence = false
+            complete: () => this.loadingAgenceSection = false
         });
         this.subscriptions.add(sub);
     }
