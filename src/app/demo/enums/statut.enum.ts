@@ -1,4 +1,4 @@
-export enum StatutAgence {
+export enum Statut {
   ACTIVE = 'active',
   ATTENTE = 'attente',
   BLOQUE = 'bloque',

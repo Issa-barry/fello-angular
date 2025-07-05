@@ -7,7 +7,7 @@ import { Contact } from '../../../models/contact';
 import { Role } from '../../../models/Role';
 import { ContactService } from '../../../service/contact/contact.service';
 import { RoleService } from '../../../service/role/role.service';
-import { StatutAgence } from 'src/app/demo/enums/statut.enum';
+import { Statut } from 'src/app/demo/enums/statut.enum';
 
 @Component({
   selector: 'app-contact-liste',
@@ -218,7 +218,7 @@ export class ContactListeComponent implements OnInit {
     }
 
 
-  private updateStatutContact(contact: Contact, statut: StatutAgence, severity: string, action: string) {
+  private updateStatutContact(contact: Contact, statut: Statut, severity: string, action: string) {
           if (!contact.id) return;
   
           this.contactService.updateStatut(contact.id, statut).subscribe({
@@ -235,14 +235,14 @@ export class ContactListeComponent implements OnInit {
 
      // 🔁 Statuts avec Enum
       validerContact(contact: Contact) {
-          this.updateStatutContact(contact, StatutAgence.ACTIVE, 'success', 'validée');
+          this.updateStatutContact(contact, Statut.ACTIVE, 'success', 'validée');
       }
 
       bloquerContact(contact: Contact) {
-          this.updateStatutContact(contact, StatutAgence.BLOQUE, 'warn', 'bloquée');
+          this.updateStatutContact(contact, Statut.BLOQUE, 'warn', 'bloquée');
       }
 
       debloquerContact(contact: Contact) {
-          this.updateStatutContact(contact, StatutAgence.ACTIVE, 'success', 'débloquée');
+          this.updateStatutContact(contact, Statut.ACTIVE, 'success', 'débloquée');
       }
 }

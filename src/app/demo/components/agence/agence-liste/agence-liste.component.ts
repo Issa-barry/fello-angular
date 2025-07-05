@@ -4,7 +4,7 @@ import { ConfirmationService, MessageService } from 'primeng/api';
 import { Table } from 'primeng/table';
 import { Agence } from 'src/app/demo/models/agence';
 import { AgenceService } from 'src/app/demo/service/agence/agence.service';
-import { StatutAgence } from 'src/app/demo/enums/statut.enum';
+import { Statut } from 'src/app/demo/enums/statut.enum';
 
 @Component({
     selector: 'app-agence-liste',
@@ -112,18 +112,18 @@ export class AgenceListeComponent implements OnInit {
 
     // 🔁 Statuts avec Enum
     validerAgence(agence: Agence) {
-        this.updateStatutAgence(agence, StatutAgence.ACTIVE, 'success', 'validée');
+        this.updateStatutAgence(agence, Statut.ACTIVE, 'success', 'validée');
     }
 
     bloquerAgence(agence: Agence) {
-        this.updateStatutAgence(agence, StatutAgence.BLOQUE, 'warn', 'bloquée');
+        this.updateStatutAgence(agence, Statut.BLOQUE, 'warn', 'bloquée');
     }
 
     debloquerAgence(agence: Agence) {
-        this.updateStatutAgence(agence, StatutAgence.ACTIVE, 'info', 'débloquée');
+        this.updateStatutAgence(agence, Statut.ACTIVE, 'info', 'débloquée');
     }
 
-    private updateStatutAgence(agence: Agence, statut: StatutAgence, severity: string, action: string) {
+    private updateStatutAgence(agence: Agence, statut: Statut, severity: string, action: string) {
         if (!agence.id) return;
 
         this.agenceService.updateStatut(agence.id, statut).subscribe({
