@@ -18,9 +18,11 @@ export class TransfertListeComponent implements OnInit {
   transfertDialog: boolean = false;
   deleteTransfertsDialog: boolean = false;
   transfert!: Transfert;
+   loading = false;
+   skeletonRows = Array.from({ length: 5 }, () => ({}));
 
   constructor(
-    private router: Router,
+    private router: Router, 
     private transfertService: TransfertService,
     private messageService: MessageService,
     private confirmationService: ConfirmationService
@@ -30,11 +32,15 @@ export class TransfertListeComponent implements OnInit {
     this.getAllTransferts();
   }
 
-  /** 🔹 Récupérer la liste des transferts */
+
+  /** Récupérer la liste des transferts */
   getAllTransferts(): void {
+      this.loading = true;
+
     this.transfertService.getTransferts().subscribe({
       next: (response) => {
         this.transferts = response;
+        this.loading = false;
       },
       error: (err) => {
         console.error('Erreur lors de la récupération des transferts:', err);

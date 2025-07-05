@@ -21,6 +21,7 @@ import { AppConfigModule } from 'src/app/layout/config/app.config.module';
 import { PasswordModule } from 'primeng/password';
 import { ContactListeComponent } from './contact-liste.component';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
+import { SkeletonModule } from 'primeng/skeleton';
 
 
 @NgModule({
@@ -48,6 +49,7 @@ import { ProgressSpinnerModule } from 'primeng/progressspinner';
         AppConfigModule,
         PasswordModule,
         ProgressSpinnerModule,
+        SkeletonModule,
   ]
 })
 export class ContactListeModule { }
