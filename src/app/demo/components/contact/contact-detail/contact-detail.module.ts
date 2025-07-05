@@ -18,6 +18,8 @@ import { ContactDetailComponent } from './contact-detail.component';
 import { ProgressSpinnerModule } from 'primeng/progressspinner';
 import { DialogModule } from 'primeng/dialog';
 import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { DividerModule } from 'primeng/divider';
+import { PanelModule } from 'primeng/panel';
 
 @NgModule({ 
   declarations: [ContactDetailComponent],
@@ -38,6 +40,8 @@ import { ConfirmDialogModule } from 'primeng/confirmdialog';
         ToastModule, 
         ProgressSpinnerModule,
         DialogModule,ConfirmDialogModule,
+        DividerModule,
+        PanelModule
   ]
 })
 export class ContactDetailModule { }

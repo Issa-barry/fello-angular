@@ -77,6 +77,17 @@ export class AgenceService {
       );
   }
 
+  // agence.service.ts
+getAgenceByReference(reference: string): Observable<Agence> {
+    return this.http.get<{ success: boolean; data: Agence }>(
+        `${this.apiUrl}/getByReference/${reference}`
+    ).pipe(
+        map(response => response.data),
+        catchError(this.handleError)
+    );
+}
+
+
   createAgence(agence: Agence): Observable<Agence> {
     return this.http
       .post<Agence>(`${this.apiUrl}/create`, agence, httpOption)

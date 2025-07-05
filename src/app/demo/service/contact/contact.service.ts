@@ -137,7 +137,7 @@ export class ContactService {
           .pipe(
               catchError(this.handleError)
           );
-  }
+  } 
   
     desaffecterAgence(contactId: number): Observable<Contact> {
         return this.http
